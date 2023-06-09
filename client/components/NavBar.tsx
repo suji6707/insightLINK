@@ -1,4 +1,6 @@
 import { useTheme } from "next-themes";
+import Link from "next/link";
+// Assets
 import { AiTwotoneBell } from "react-icons/ai";
 import { BiUser } from "react-icons/bi";
 import { BsShare, BsSunFill, BsFillMoonFill } from "react-icons/bs";
@@ -8,7 +10,9 @@ export default function NavBar() {
   const currentTheme = theme === "system" ? systemTheme : theme;
   return (
     <div className="flex flex-row text-3xl p-7 justify-between ">
-      <h1>insightLINK</h1>
+      <Link href="/dashboard">
+        <h1>insightLINK</h1>{" "}
+      </Link>
       <div className="flex flex-row w-1/6 justify-between">
         <BsShare size={30} />
         <AiTwotoneBell size={30} />
