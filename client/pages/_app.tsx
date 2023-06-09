@@ -1,7 +1,6 @@
-// import "../styles/globals.css";
+import "../styles/globals.css";
 import { ThemeProvider } from "next-themes";
 import { AppProps } from "next/app";
-import "tailwindcss/tailwind.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
