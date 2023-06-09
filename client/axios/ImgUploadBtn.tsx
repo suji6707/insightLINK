@@ -2,8 +2,9 @@ import axios from "axios";
 
 export const POSTImg = (data: any) => {
   axios
-    .post("http://localhost:3000" + `upload/${1}`, data, {
+    .post("http://localhost:3000/" + `upload/${1}`, data, {
       headers: {
+        "Content-Type": "multipart/form-data",
         token: 1,
       },
     })
