@@ -3,6 +3,7 @@ import './dotenv.js';
 import http from 'http';
 import cors from 'cors';
 
+
 // import postRoutes from "./routes/posts.js"   // 내 포스트 보여주는 화면
 import uploadRouter from './routes/uploads.js';  // 사진 업로드 화면
 
