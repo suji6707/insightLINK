@@ -1,29 +1,66 @@
 import express from "express";
-import multer from "multer";
 import '../dotenv.js';
+import multer from "multer";
+/* MULTER-S3 ADDED */
+import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
+import multerS3 from "multer-s3";
 /* OCR LINE ADDED */
 import { db } from "../connect.js";
 import { processOCR } from "../services/naverOCR.js";
 import path from "path";
 /* OCR ENDED */
 
-/* Multer */
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    if (file.fieldname == 'photos_text') { 
-      cb(null, "static/texts/");
-    } else {
-      cb(null, "static/images/");
-    } 
+const s3 = new S3Client({
+  region: 'ap-northeast-2',
+  credentials: {
+    accessKeyId: process.env.S3_ACCESS_KEY,
+    secretAccessKey: process.env.S3_SECRET_KEY,
   },
-  filename: function (req, file, cb) {  
+  correctClockSkew: true,
+});
+
+// (async () => {
+//   const response = await client.send(new GetObjectCommand({
+//     Bucket: 'sw-jungle-s3',
+//     Key: function (req, file, cb) {
+//       const ext = path.extname(file.originalname);
+//       cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
+//     }
+//   }));
+//   console.log(response);
+// })();
+
+/* Multer */
+const storage = multerS3({
+  s3: s3,
+  bucket: 'sw-jungle-s3',
+  metadata: function (req, file, cb) {
+    cb(null, {fieldName: file.fieldname});
+  },
+  key: function (req, file, cb) {
     const ext = path.extname(file.originalname);
     cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
-  },
-});
+  }
+})
+
+/* Multer- 이전 버전*/
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     if (file.fieldname == 'photos_text') { 
+//       cb(null, "static/texts/");
+//     } else {
+//       cb(null, "static/images/");
+//     } 
+//   },
+//   filename: function (req, file, cb) {  
+//     const ext = path.extname(file.originalname);
+//     cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
+//   },
+// });
 
 const upload = multer({ storage: storage });
 const router = express.Router();
+
 
 
 /* Multer */
