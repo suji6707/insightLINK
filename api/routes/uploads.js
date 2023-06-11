@@ -9,6 +9,11 @@ import { db } from '../connect.js';
 import { processOCR } from '../services/naverOCR.js';
 import path from 'path';
 /* OCR ENDED */
+/* Langchain LINE ADDED */
+import { OpenAI } from 'langchain/llms/openai';
+/* Langchain ENDED */
+
+
 
 const s3 = new S3Client({
   region: 'ap-northeast-2',
@@ -83,18 +88,26 @@ async (req, res) => {
     try {
       connection = await db.getConnection();
       // const table = req.files.fieldname === 'photos_text' ? 'posts_text' : 'posts_img';
-      const q1 = 'INSERT INTO posts_text (text, img) VALUES (?, ?)';
-      const q2 = 'INSERT INTO posts_img_only (img) VALUES (?)';
+      const q1 = 'INSERT INTO posts_text (text, img, tag) VALUES (?, ?, ?)';
+      // const q2 = 'INSERT INTO posts_img_only (img) VALUES (?)';
 
       /** TO DO
-       * photos_text 필드로 업로드된 파일은 posts_text 테이블로 processOCR 결과물, img 저장
+       * (변경전)photos_text 필드로 업로드된 파일은 posts_text 테이블로 processOCR 결과물, img 저장
+       * -> (변경후) 모든 이미지를 S3로 저장, sumText.length != 0 인 것만 OCR 및 태그 추출 후 저장하기
       */ 
       for (let i = 0; i < req.files.photos_text.length; i++) {  // 개별 파일마다 처리해 저장해야 함. text/img 전용 파일 개수가 다름
         /* http://localhost:8000/static/파일명.jpg */
-        const imgUrl = process.env.MY_PROXY + req.files.photos_text[i].path;
+        const imgUrl = req.files.photos_text[i].location;
+        // console.log(imgUrl);
         const sumText = await processOCR(imgUrl);          
         console.log(sumText);
-        const [ result ] = await connection.query(q1, [ sumText, imgUrl ]);
+        const model = new OpenAI({ temperature: 0 });
+        const chatAnswer = await model.call(
+          `Given a short piece of information, please recommend up to 4 key tags \
+          in Korean for the content. The information you need starts from here ${sumText}`,
+        );
+        console.log(chatAnswer);
+        const [ result ] = await connection.query(q1, [ sumText, imgUrl, chatAnswer ]);
 
         // if (result.insertId) res.send('photos uploaded!');
         // else throw new Error('upload failed');
