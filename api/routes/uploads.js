@@ -1,13 +1,13 @@
-import express from "express";
+import express from 'express';
 import '../dotenv.js';
-import multer from "multer";
+import multer from 'multer';
 /* MULTER-S3 ADDED */
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
-import multerS3 from "multer-s3";
+import multerS3 from 'multer-s3';
 /* OCR LINE ADDED */
-import { db } from "../connect.js";
-import { processOCR } from "../services/naverOCR.js";
-import path from "path";
+import { db } from '../connect.js';
+import { processOCR } from '../services/naverOCR.js';
+import path from 'path';
 /* OCR ENDED */
 
 const s3 = new S3Client({
@@ -40,8 +40,8 @@ const storage = multerS3({
   key: function (req, file, cb) {
     const ext = path.extname(file.originalname);
     cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
-  }
-})
+  },
+});
 
 /* Multer- 이전 버전*/
 // const storage = multer.diskStorage({
@@ -66,25 +66,25 @@ const router = express.Router();
 /* Multer */
 router.get('/', (req, res) => {
   res.sendFile(path.join(path.resolve(), './multipart.html'));
-})
+});
 
 router.post('/', upload.fields(
   [
     { name: 'photos_text', maxCount: 10 },
-    { name: 'photos_img_only', maxCount: 10 }
-  ]
+    { name: 'photos_img_only', maxCount: 10 },
+  ],
 ),
 async (req, res) => {
   if (req.files) {
-    console.log("files uploaded");
+    console.log('files uploaded');
     console.log(req.files); 
 
     let connection = null;
     try {
       connection = await db.getConnection();
       // const table = req.files.fieldname === 'photos_text' ? 'posts_text' : 'posts_img';
-      const q1 = `INSERT INTO posts_text (text, img) VALUES (?, ?)`;
-      const q2 = `INSERT INTO posts_img_only (img) VALUES (?)`;
+      const q1 = 'INSERT INTO posts_text (text, img) VALUES (?, ?)';
+      const q2 = 'INSERT INTO posts_img_only (img) VALUES (?)';
 
       /** TO DO
        * photos_text 필드로 업로드된 파일은 posts_text 테이블로 processOCR 결과물, img 저장
@@ -93,8 +93,8 @@ async (req, res) => {
         /* http://localhost:8000/static/파일명.jpg */
         const imgUrl = process.env.MY_PROXY + req.files.photos_text[i].path;
         const sumText = await processOCR(imgUrl);          
-        console.log(sumText)
-        const [ result ] = await connection.query(q1, [ sumText, imgUrl ])
+        console.log(sumText);
+        const [ result ] = await connection.query(q1, [ sumText, imgUrl ]);
 
         // if (result.insertId) res.send('photos uploaded!');
         // else throw new Error('upload failed');
