@@ -41,8 +41,6 @@
         "id": "0",
         "name": "1",
         "symbolSize": 30,
-        "x": -266.82776,
-        "y": 299.6904,
         "value": 28.685715,
         "category": 0
       },
@@ -50,8 +48,6 @@
         "id": "1",
         "name": "2",
         "symbolSize": 20,
-        "x": -418.08344,
-        "y": 446.8853,
         "value": 4,
         "category": 0
       },
@@ -59,8 +55,6 @@
         "id": "2",
         "name": "3",
         "symbolSize": 20,
-        "x": -408.08344,
-        "y": 426.8853,
         "value": 4,
         "category": 0
       }
@@ -76,7 +70,11 @@
       },
       {
         "source": "2",
-        "target": "0, 1"
+        "target": "0"
+      },
+      {
+        "source": "2",
+        "target": "1"
       }
     ],
     "categories": [
