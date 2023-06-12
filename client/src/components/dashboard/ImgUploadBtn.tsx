@@ -1,7 +1,6 @@
 import React, { useRef } from "react";
 // Assets
 import { BsCamera } from "react-icons/bs";
-import { POSTImg } from "../../axios/ImgUploadBtn";
 
 export default function ImgUploadBtn() {
   const fileInputRef = useRef<HTMLInputElement>(null);
