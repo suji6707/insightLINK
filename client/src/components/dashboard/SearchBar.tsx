@@ -25,13 +25,13 @@ export default function SearchBar() {
           searchBar ? null : "hidden"
         } md:flex transition-all hover:bg-slate-100 flex items-center px-3 py-1 rounded-full w-full md:w-[20rem] ring ring-inset ring-gray-100 hover:ring-0 dark:hover:bg-DMThrColor dark:ring-white/20 md:mx-4 h-1/2`}
       >
-        <FiSearch />
+        <FiSearch size={20} className="mx-2" />
         <input
           ref={inputRef}
           type="text"
           className="w-full h-10 font-medium bg-transparent border-gray-300 outline-none ring-none"
           value={keywords}
-          placeholder="Search"
+          placeholder="검색"
           onChange={(e) => {
             setKeywords(e.target.value);
           }}
