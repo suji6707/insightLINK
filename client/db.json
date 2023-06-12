@@ -1,0 +1,112 @@
+{
+  "members": [
+    {
+      "id": 1,
+      "username": "DummyName1",
+      "tags": 123,
+      "cards": 123,
+      "friends": 123
+    },
+    {
+      "id": 2,
+      "username": "DummyName2",
+      "tags": 123,
+      "cards": 123,
+      "friends": 123
+    },
+    {
+      "id": 3,
+      "username": "DummyName3",
+      "tags": 123,
+      "cards": 123,
+      "friends": 123
+    }
+  ],
+
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+
+  "profile": {
+    "name": "typicode"
+  },
+
+  "graph": {
+    "nodes": [
+      {
+        "id": "0",
+        "name": "1",
+        "symbolSize": 30,
+        "x": -266.82776,
+        "y": 299.6904,
+        "value": 28.685715,
+        "category": 0
+      },
+      {
+        "id": "1",
+        "name": "2",
+        "symbolSize": 20,
+        "x": -418.08344,
+        "y": 446.8853,
+        "value": 4,
+        "category": 0
+      },
+      {
+        "id": "2",
+        "name": "3",
+        "symbolSize": 20,
+        "x": -408.08344,
+        "y": 426.8853,
+        "value": 4,
+        "category": 0
+      }
+    ],
+    "links": [
+      {
+        "source": "0",
+        "target": "1"
+      },
+      {
+        "source": "1",
+        "target": "0"
+      },
+      {
+        "source": "2",
+        "target": "0, 1"
+      }
+    ],
+    "categories": [
+      {
+        "name": "A"
+      },
+      {
+        "name": "B"
+      },
+      {
+        "name": "C"
+      },
+      {
+        "name": "D"
+      },
+      {
+        "name": "E"
+      },
+      {
+        "name": "F"
+      },
+      {
+        "name": "G"
+      },
+      {
+        "name": "H"
+      },
+      {
+        "name": "I"
+      }
+    ]
+  }
+}
