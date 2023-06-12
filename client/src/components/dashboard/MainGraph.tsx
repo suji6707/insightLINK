@@ -29,9 +29,9 @@ export default function Main_graph() {
 
       const option: any = {
         title: {
-          text: "Les Miserables",
-          subtext: "Default layout",
-          top: "bottom",
+          text: "ㅇㅇ의 인사이트",
+          subtext: "2023.06.12(현재 날짜)",
+          top: "top",
           left: "right",
         },
         tooltip: {},
@@ -44,26 +44,32 @@ export default function Main_graph() {
         animationEasingUpdate: "quinticInOut",
         series: [
           {
-            name: "Les Miserables",
             type: "graph",
-            layout: "none",
+            layout: "force",
             data: graph.nodes,
             links: graph.links,
             categories: graph.categories,
             roam: false,
             label: {
-              position: "right",
+              position: "insight", // label의 위치
+              fontSize: 12, // label의 폰트 크기
               formatter: "{b}",
             },
             lineStyle: {
+              width: 2, // edge의 두께
               color: "source",
-              curveness: 0.3,
+              curveness: 0.1, // edge의 곡률, 0은 직선
             },
             emphasis: {
               focus: "adjacency",
               lineStyle: {
                 width: 10,
               },
+            },
+            force: {
+              repulsion: 100, // 노드 간 반발력
+              gravity: 0.1, // 중력
+              edgeLength: [50, 200], // 노드 간 거리
             },
           },
         ],
