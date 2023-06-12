@@ -9,11 +9,10 @@ import { db } from '../connect.js';
 import { processOCR } from '../services/naverOCR.js';
 import path from 'path';
 /* OCR ENDED */
-/* Langchain LINE ADDED */
-import { OpenAI } from 'langchain/llms/openai';
-/* Langchain ENDED */
-
-
+/* Tag LINE ADDED */
+import { generate } from '../services/generate.js';
+import { extractJson } from '../services/jsonUtils.js';
+/* Tag ENDED */
 
 const s3 = new S3Client({
   region: 'ap-northeast-2',
@@ -23,17 +22,6 @@ const s3 = new S3Client({
   },
   correctClockSkew: true,
 });
-
-// (async () => {
-//   const response = await client.send(new GetObjectCommand({
-//     Bucket: 'sw-jungle-s3',
-//     Key: function (req, file, cb) {
-//       const ext = path.extname(file.originalname);
-//       cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
-//     }
-//   }));
-//   console.log(response);
-// })();
 
 /* Multer */
 const storage = multerS3({
@@ -48,24 +36,16 @@ const storage = multerS3({
   },
 });
 
-/* Multer- 이전 버전*/
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     if (file.fieldname == 'photos_text') { 
-//       cb(null, "static/texts/");
-//     } else {
-//       cb(null, "static/images/");
-//     } 
-//   },
-//   filename: function (req, file, cb) {  
-//     const ext = path.extname(file.originalname);
-//     cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
-//   },
-// });
-
 const upload = multer({ storage: storage });
 const router = express.Router();
 
+const isImage = (ocrResult) => {
+  const tag =  ocrResult || '';
+  if (tag.trim().length === 0) {
+    return true;
+  }
+  return false;
+};
 
 
 /* Multer */
@@ -73,66 +53,48 @@ router.get('/', (req, res) => {
   res.sendFile(path.join(path.resolve(), './multipart.html'));
 });
 
-router.post('/', upload.fields(
-  [
-    { name: 'photos_text', maxCount: 10 },
-    { name: 'photos_img_only', maxCount: 10 },
-  ],
-),
-async (req, res) => {
-  if (req.files) {
-    console.log('files uploaded');
-    console.log(req.files); 
+router.post('/', upload.array('photos'),
+  async (req, res) => {
+    if (req.files) {
+      console.log('files uploaded');
+      console.log(req.files); 
 
-    let connection = null;
-    try {
-      connection = await db.getConnection();
-      // const table = req.files.fieldname === 'photos_text' ? 'posts_text' : 'posts_img';
-      const q1 = 'INSERT INTO posts_text (text, img, tag) VALUES (?, ?, ?)';
-      // const q2 = 'INSERT INTO posts_img_only (img) VALUES (?)';
+      let connection = null;
+      try {
+        connection = await db.getConnection();
+        const q1 = 'INSERT INTO posts_text (text, img, tag) VALUES (?, ?, ?)';
 
-      /** TO DO
+        /** TO DO
        * (변경전)photos_text 필드로 업로드된 파일은 posts_text 테이블로 processOCR 결과물, img 저장
        * -> (변경후) 모든 이미지를 S3로 저장, sumText.length != 0 인 것만 OCR 및 태그 추출 후 저장하기
-      */ 
-      for (let i = 0; i < req.files.photos_text.length; i++) {  // 개별 파일마다 처리해 저장해야 함. text/img 전용 파일 개수가 다름
-        /* http://localhost:8000/static/파일명.jpg */
-        const imgUrl = req.files.photos_text[i].location;
-        // console.log(imgUrl);
-        const sumText = await processOCR(imgUrl);          
-        console.log(sumText);
-        const model = new OpenAI({ temperature: 0 });
-        const chatAnswer = await model.call(
-          `Given a short piece of information, please recommend up to 4 key tags \
-          in Korean for the content. The information you need starts from here ${sumText}`,
-        );
-        console.log(chatAnswer);
-        const [ result ] = await connection.query(q1, [ sumText, imgUrl, chatAnswer ]);
+      */
+        let tagList = [];
+        for (const file of req.files) { 
+          const imgUrl = file.location; // S3 링크
+          const sumText = await processOCR(imgUrl);  
+          if (isImage(sumText)) {
+            tagList.push('<Image>');
+          } else {
+            const tag = await generate(req, res, sumText); 
+            const tagJSON = extractJson(tag);
+            tagList.push(tagJSON);
+            const [ result ] = await connection.query(q1, [ sumText, imgUrl, tagJSON.tags[0]]);
+          };
+        }
+        console.log(tagList);
+        connection.release();
 
-        // if (result.insertId) res.send('photos uploaded!');
-        // else throw new Error('upload failed');
+        return res.status(200).send('SUCCESS');
+
+      } catch (err) {
+        connection?.release();
+        console.log(err);
+        res.status(400).send('ERROR');
       }
-
-      // IMAGE-Only: null, img 저장
-      // for (let i = 0; i < req.files.photos_img_only.length; i++) {
-      //   const imgUrl = process.env.MY_PROXY + req.files.photos_img_only[i].path;
-      //   const [ result ] = await connection.query(q2, [ imgUrl ])
-        
-      //   // if (result.insertId) res.send('photos uploaded!');
-      //   // else throw new Error('upload failed');
-      // }
-
-      connection.release();
-
-      return res.status(200).send('SUCCESS');
-
-    } catch (err) {
-      connection?.release();
-      console.log(err);
-      res.status(400).send('ERROR');
     }
-  }
-});
+  },
+);
+
 
 
 export default router;

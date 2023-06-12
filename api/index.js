@@ -2,6 +2,7 @@ import express from 'express';
 import './dotenv.js';
 import http from 'http';
 import cors from 'cors';
+import morgan from 'morgan';
 
 
 // import postRoutes from "./routes/posts.js"   // 내 포스트 보여주는 화면
@@ -16,7 +17,7 @@ const port = process.env.PORT || 8000;
 app.use(express.json());
 app.use(cors());
 app.use('/static', express.static('static'));   //  가상경로 지정. http://localhost:8000/static/파일명.jpg
-
+app.use(morgan('dev'));
 
 /* Routing */
 app.use('/upload', uploadRouter);
