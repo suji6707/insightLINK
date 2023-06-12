@@ -1,10 +1,12 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
+
+import { POST } from "@/axios/POST";
 // Assets
 import { BsCamera } from "react-icons/bs";
-import { POSTImg } from "../axios/ImgUploadBtn";
 
 export default function ImgUploadBtn() {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [img, setImg] = useState([]);
 
   const handleInput = () => {
     fileInputRef.current?.click();
@@ -22,7 +24,18 @@ export default function ImgUploadBtn() {
       formData.append("photos", selectedImg[i]);
     }
 
-    POSTImg(formData); // 💡 결과 리턴
+    // 로컬 이미지 업로드 API
+    const uploadImg = async () => {
+      const data = await POST("/upload/1", formData, {
+        "Content-Type": "multipart/form-data",
+        token: 1,
+      });
+      if (data != null) {
+        setImg(data);
+      }
+    };
+
+    uploadImg();
   };
 
   return (

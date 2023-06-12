@@ -9,9 +9,9 @@ export default function NavBar() {
   const { systemTheme, theme, setTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
   return (
-    <div className="flex flex-row text-3xl p-7 justify-between ">
+    <div className="flex flex-row p-7 justify-between ">
       <Link href="/dashboard">
-        <h1>insightLINK</h1>{" "}
+        <p className="text-3xl font-extrabold">insightLINK</p>
       </Link>
       <div className="flex flex-row w-1/6 justify-between">
         <BsShare size={30} />
