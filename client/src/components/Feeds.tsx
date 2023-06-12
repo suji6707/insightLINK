@@ -1,16 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FiThumbsUp, FiThumbsDown } from "react-icons/fi";
-import { AiOutlineClose } from "react-icons/ai";
+import { GET } from "@/axios/GET";
+import CardDetail from "./CardDetail";
 
 export default function Feeds() {
   const [cards, setCards] = useState([]);
+  // 모달
+  const modalRef = useRef<HTMLDivElement>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [cardId, setCardId] = useState(1);
 
+  const getFeeds = async () => {
+    const data = await GET("feeds");
+    if (data != null) {
+      setCards(data);
+    }
+  };
+
+  useEffect(() => {
+    getFeeds();
+  }, []);
+
+  const modalOutsideClicked = (e: any) => {
+    if (modalRef.current === e.target) {
+      setShowModal(false);
+    }
+  };
   return (
     <div>
-      <p className="text-3xl font-semibold">Friends</p>
+      <p className="text-3xl font-semibold">피드</p>
       <ul>
         {cards &&
           cards.map((c) => {
+            () => setCardId(c.id);
             return (
               <li key={c.id} className="flex flex-col border-2 my-4">
                 <div className="flex justify-between border-b-2 p-2">
@@ -20,14 +42,25 @@ export default function Feeds() {
                   <div className="flex">
                     <FiThumbsUp className="mr-2" />
                     <FiThumbsDown className="mr-2" />
-                    <AiOutlineClose className="mr-2" />
                   </div>
                 </div>
-                <p className="p-2">{c.content}</p>
+                <p
+                  className="p-2 inline-block white space-normal w-full break-words cursor-pointer"
+                  onClick={() => setShowModal(true)}
+                >
+                  {c.content}
+                </p>
               </li>
             );
           })}
       </ul>
+      {showModal && (
+        <CardDetail
+          modalRef={modalRef}
+          modalOutsideClicked={modalOutsideClicked}
+          cardId={cardId}
+        />
+      )}
     </div>
   );
 }
