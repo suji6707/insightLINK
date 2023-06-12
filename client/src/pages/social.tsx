@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 // Component
 import NavBar from "../components/NavBar";
 import Friends from "@/components/Friends";
