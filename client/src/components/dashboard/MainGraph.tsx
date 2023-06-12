@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as echarts from "echarts";
-import axios from "axios";
 import { Main_graph_Api } from "@/axios/dashBoardApi";
 
 export default function Main_graph() {
@@ -8,12 +7,11 @@ export default function Main_graph() {
   const [graph, setGraph] = useState<any>();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const getGraphData = async () => {
       const graphData: any = await Main_graph_Api();
       setGraph(graphData);
     };
-
-    fetchData();
+    getGraphData();
   }, []);
 
   useEffect(() => {
