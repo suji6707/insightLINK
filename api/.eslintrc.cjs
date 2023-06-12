@@ -5,7 +5,7 @@ module.exports = {
     'sourceType': 'module',
   },
   'extends': ['eslint:recommended', 'prettier'],
-  'env': { 
+  'env': {
     'es2021': true,
     'node': true,
   },
@@ -15,6 +15,6 @@ module.exports = {
     semi: ['error', 'always'],
     'no-unused-vars': 'warn',
     'comma-dangle': ['error', 'always-multiline'],
-    //  "no-console": "error"
+  //  "no-console": "error"
   },
 };
