@@ -25,15 +25,15 @@ export default function UserInfo() {
         <h1 className="text-3xl">{userInfo?.username}</h1>
         <div className="flex">
           <div className="p-2">
-            <div>tags</div>
+            <div>태그 수</div>
             <div>+{userInfo?.tags}</div>
           </div>
           <div className="p-2">
-            <div>cadss</div>
+            <div>카드 수</div>
             <div>+{userInfo?.cards}</div>
           </div>
           <div className="p-2">
-            <div>friends</div>
+            <div>친구 수</div>
             <div>+{userInfo?.friends}</div>
           </div>
         </div>
