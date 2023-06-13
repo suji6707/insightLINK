@@ -1,14 +1,28 @@
 import axios from "axios";
 const api = "http://localhost:4000";
 
-export const Main_graph_Api = async () => {
-  try {
-    const response = await axios.get(`${api}/graph`);
-    const graph = response.data;
-    return graph;
-  } catch (error) {
-    console.log(error);
-  }
+interface GraphNode {
+  id: string
+  name: string
+  symbolSize: number
+  category: number
+}
+
+interface GraphLink {
+  source: string
+  target: string
+}
+
+export interface Main_graph_Api_DTO {
+  nodes: GraphNode[]
+  links: GraphLink[]
+}
+
+export const Main_graph_Api = async ():Promise<Main_graph_Api_DTO> => {
+  const response = await axios.get(`${api}/graph`);
+  const graph = response.data as Main_graph_Api_DTO;
+  
+  return graph;
 };
 
 export const User_Info_Api = async (params: number | undefined) => {
