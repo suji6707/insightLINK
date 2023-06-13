@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 // Component
 import NavBar from "../components/NavBar";
 import UserPanel from "@/components/dashboard/UserPanel";
-import MainGraph from "../components/dashboard/MainGraph";
+import MainGraph from "@/features/MainGraph/components/MainGraph"
 import CardPanel from "@/components/dashboard/CardPanel";
 import ImageUpload from "@/components/image/ImageUpload";
 
