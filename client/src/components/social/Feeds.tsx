@@ -33,15 +33,17 @@ export default function Feeds() {
     content: string;
   };
   return (
-    <div>
+    <div className="w-full">
       <p className="text-3xl font-semibold">피드</p>
       <ul>
         {cards &&
           cards.map((c: CardType) => {
-            setCardId(c.id);
-
             return (
-              <li key={c.id} className="flex flex-col border-2 my-4">
+              <li
+                key={c.id}
+                className="flex flex-col border-2 my-4"
+                onClick={() => setCardId(c.id)}
+              >
                 <div className="flex justify-between border-b-2 p-2">
                   <div>
                     <p>#{c.tags}</p>

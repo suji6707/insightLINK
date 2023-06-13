@@ -7,13 +7,12 @@ import NavBar from "@/components/NavBar";
 import { Wrapper } from "@/styles/wrapper";
 // Assets
 import { FiUploadCloud } from "react-icons/fi";
-import { TiDocumentDelete } from "react-icons/ti";
 import ImageList from "@/components/image/ImgList";
 
-export default function Image() {
+export default function ImageUpload({ setShowImgModal }: any) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLElement>(null);
-
+  const modalRef = useRef<HTMLDivElement>(null);
   const [imgList, setImgList] = useState<string[]>([]);
 
   const handleInput = () => {
@@ -52,14 +51,23 @@ export default function Image() {
     uploadImg();
   };
 
+  const modalOutsideClicked = (e: any) => {
+    if (modalRef.current === e.target) {
+      setShowImgModal(false);
+    }
+  };
+
   const ClasBtn = tw.p`
   h-16 w-5/12 py-8 flex justify-center items-center text-2xl border border-black rounded-lg hover:bg-yellow-300 hover:text-white transition-colors dark:border-white cursor-pointer
   `;
 
   return (
-    <div>
-      <NavBar />
-      <Wrapper className="flex-row justify-between">
+    <div
+      className="fixed inset-0 bg-white bg-opacity-30"
+      ref={modalRef}
+      onClick={(e) => modalOutsideClicked(e)}
+    >
+      <Wrapper className="flex-row justify-between absolute top-2/3 left-1/2 transform -translate-y-2/3 -translate-x-1/2 bg-white w-3/5 h-4/6 border drop-shadow-xl p-4">
         <div className="border-8 w-2/4 h-4/6 border-dashed flex flex-col justify-center items-center">
           <input
             type="file"
