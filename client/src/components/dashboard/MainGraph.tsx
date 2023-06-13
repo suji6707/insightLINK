@@ -2,9 +2,20 @@ import React, { useEffect, useRef, useState } from "react";
 import * as echarts from "echarts";
 import { Main_graph_Api } from "@/axios/dashBoardApi";
 
-export default function Main_graph() {
+type MainGraphProps = {
+  openCard: boolean;
+  setOpenCard: (value: boolean) => void;
+};
+
+export default function Main_graph({ openCard, setOpenCard }: MainGraphProps) {
   const chartRef = useRef();
   const [graph, setGraph] = useState<any>();
+
+  const handleNodeClick = () => {
+    console.log(openCard);
+    setOpenCard(!openCard);
+    console.log(openCard);
+  };
 
   useEffect(() => {
     const getGraphData = async () => {
@@ -17,6 +28,7 @@ export default function Main_graph() {
   useEffect(() => {
     if (chartRef.current && graph) {
       let myChart = echarts.init(chartRef.current);
+
       myChart.showLoading();
 
       myChart.hideLoading();
@@ -28,18 +40,7 @@ export default function Main_graph() {
       });
 
       const option: any = {
-        title: {
-          text: "ㅇㅇ의 인사이트",
-          subtext: "2023.06.12(현재 날짜)",
-          top: "top",
-          left: "right",
-        },
         tooltip: {},
-        legend: [
-          {
-            data: graph.categories.map((a) => a.name),
-          },
-        ],
         animationDuration: 1500,
         animationEasingUpdate: "quinticInOut",
         series: [
@@ -48,7 +49,6 @@ export default function Main_graph() {
             layout: "force",
             data: graph.nodes,
             links: graph.links,
-            categories: graph.categories,
             roam: false,
             label: {
               position: "insight", // label의 위치
@@ -76,8 +76,28 @@ export default function Main_graph() {
       };
 
       myChart.setOption(option);
+
+      myChart.on("click", function (params) {
+        if (params.dataType === "node") {
+          handleNodeClick();
+        }
+        if (openCard) {
+          myChart.resize();
+        } else {
+          myChart.resize();
+        }
+      });
+
+      // window.addEventListener("resize", function () {
+      //   myChart.resize();
+      // });
     }
   }, [graph]);
 
-  return <div className="w-full h-screen" ref={chartRef}></div>;
+  return (
+    <div
+      className={openCard ? "w-1/2 h-screen flex" : "w-full h-screen flex"}
+      ref={chartRef}
+    ></div>
+  );
 }
