@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { User_Info_Api } from "@/axios/dashBoardApi";
 import { UserInfo } from "@/types/dashborad.types";
-import { UserInfo } from "os";
 
-export default function UserInfo({handleNodeClick}) {
+export default function UserInfo() {
   // 상태관리 로그인 id
   let userId = 1;
 
   const [userInfo, setUserInfo] = useState<UserInfo>();
 
   const getUserInfoData = async () => {
-    const { data } = await User_Info_Api(userId);
-    console.log(data);
-    setUserInfo(data);
+    const response = await User_Info_Api(userId);
+    setUserInfo(response?.data);
   };
 
   useEffect(() => {
