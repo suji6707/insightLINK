@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import GoogleLogin from 'react-google-login';
 import axios from 'axios';
 import 'typeface-roboto';
@@ -6,9 +7,10 @@ import 'typeface-roboto';
 
 // const clientId = process.env.GOOGLE_CLIENT_ID ?? '';
 const clientId = '862985060268-bns768k2p01btrjkdk94f8hkrvqlt5d8.apps.googleusercontent.com';
-const serverPath = "http://localhost:8000"
+const serverPath = "http://localhost:8800"
 
 function LoginButton() {
+  const router = useRouter();
 
   const [userInfo, setUserInfo] = useState({ givenName: '', imageUrl: '' });
 
@@ -38,10 +40,14 @@ function LoginButton() {
           console.log(sessionResponse.data.user.name + "님 세션 서버 local에 저장완료!");
 
           // Set the user info
-          setUserInfo({
-            givenName: res.profileObj.givenName,
-            imageUrl: res.profileObj.imageUrl,
-          });
+          // setUserInfo({
+          //   givenName: res.profileObj.givenName,
+          //   imageUrl: res.profileObj.imageUrl,
+          // });
+
+          // Redirect to the dashboard page
+          router.push('/dashboard');
+
         } else {
           alert('로그인에 실패했습니다.ㅠㅠ'); // Display failure alert
           console.log(response.data);
@@ -67,12 +73,12 @@ function LoginButton() {
         // className={styles.googleLoginButton}
       />
 
-      {userInfo.imageUrl && (
+      {/* {userInfo.imageUrl && (
               <div>
                 <img src={userInfo.imageUrl} alt="Profile" />
                 <p>{userInfo.givenName}</p>
               </div>
-      )}
+      )} */}
     </div>
   );
 }
