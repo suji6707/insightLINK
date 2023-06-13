@@ -4,7 +4,7 @@ import { FiThumbsDown, FiThumbsUp } from "react-icons/fi";
 interface propsType {
   modalRef: React.ForwardedRef<HTMLDivElement>;
   modalOutsideClicked: (e: any) => void;
-  cardId?: string;
+  cardId?: number;
   userId?: string;
 }
 

@@ -1,7 +1,7 @@
 import React from "react";
 
 type ImageListProps = {
-  imgList: { fileName: string; url: string }[];
+  imgList: string[];
   deleteImg: (index: number) => void;
 };
 
