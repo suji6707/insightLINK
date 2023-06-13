@@ -57,6 +57,11 @@ export default function Friends() {
     }
   };
 
+  type FriendType = {
+    id: number;
+    image: string;
+  };
+
   return (
     <div>
       <p className="text-3xl font-semibold">친구</p>
@@ -69,7 +74,7 @@ export default function Friends() {
         onMouseMove={handleMouseMove}
       >
         {friends &&
-          friends.map((f) => {
+          friends.map((f: FriendType) => {
             return (
               <li
                 key={f.id}
