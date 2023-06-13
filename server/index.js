@@ -32,6 +32,8 @@ app.use('/api/graph', graphRouter);
 /* session management */
 app.get('/api/users/me', authMiddleware, async (req, res) => {
   const { user } = res.locals;
+  const useId = user.id;
+  console.log('userId :', useId);
   console.log('현재 로그인한 유저의 local 정보 : ');
   console.log(user);
   res.send({

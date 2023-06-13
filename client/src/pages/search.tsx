@@ -3,8 +3,11 @@ import React from "react";
 import NavBar from "../components/NavBar";
 import { Wrapper } from "@/styles/wrapper";
 import SearchResult from "@/components/searchResult/ContentSearch";
+import { useRouter } from 'next/router';
 
 export default function Search() {
+  const router = useRouter();
+
   const data = {
     hasNext: false,
     results: [
@@ -20,6 +23,15 @@ export default function Search() {
       },
     ],
   };
+
+  const moreKeyword = () => {
+    router.push('/searchKeyword');
+  };
+
+  const moreContent = () => {
+    router.push('/searchContent');
+  };
+
   return (
     <div>
       <NavBar />
@@ -28,16 +40,16 @@ export default function Search() {
           ㅇㅇ의 검색 결과입니다
         </p>
         <div className="w-full flex flex-col">
-          <div className="flex flex-row justify-between">
-            <p className="text-2xl">키워드</p>
-            <p className="text-xl">더보기</p>
+          <div className="flex flex-row justify-between items-center mb-4">
+            <p className="text-2xl font-bold">키워드</p>
+            <p onClick={moreKeyword} className="text-xl text-gray-500">더보기</p>
           </div>
           <SearchResult data={data} />
         </div>
-        <div className="w-full flex flex-col">
-          <div className="flex flex-row justify-between">
-            <p className="text-2xl">내용</p>
-            <p className="text-xl">더보기</p>
+        <div className="w-full flex flex-col mt-8">
+          <div className="flex flex-row justify-between items-center mb-4">
+            <p className="text-2xl font-bold">내용</p>
+            <p onClick={moreContent} className="text-xl text-gray-500">더보기</p>
           </div>
           <SearchResult data={data} />
         </div>
