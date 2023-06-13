@@ -20,11 +20,11 @@ export const User_Info_Api = async (params: number | undefined) => {
   }
 };
 
-export const Search_api = async (params: string | undefined) => {
-  try {
-    const response = await axios.post();
-    return response;
-  } catch (error) {
-    console.log(error);
-  }
-};
+// export const Search_api = async (params: string | undefined) => {
+//   try {
+//     const response = await axios.post();
+//     return response;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
