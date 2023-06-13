@@ -8,7 +8,7 @@ type MainGraphProps = {
 };
 
 export default function Main_graph({ openCard, setOpenCard }: MainGraphProps) {
-  const chartRef = useRef();
+  const chartRef = useRef<HTMLDivElement | null>(null);
   const [graph, setGraph] = useState<any>();
 
   const handleNodeClick = () => {
@@ -33,7 +33,7 @@ export default function Main_graph({ openCard, setOpenCard }: MainGraphProps) {
 
       myChart.hideLoading();
 
-      graph.nodes.forEach((node) => {
+      graph.nodes.forEach((node: any) => {
         node.label = {
           show: node.symbolSize > 30,
         };
