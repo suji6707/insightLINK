@@ -3,7 +3,7 @@ import { User_Info_Api } from "@/axios/dashBoardApi";
 import { UserInfo } from "@/types/dashborad.types";
 import { UserInfo } from "os";
 
-export default function UserInfo() {
+export default function UserInfo({handleNodeClick}) {
   // 상태관리 로그인 id
   let userId = 1;
 

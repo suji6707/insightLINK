@@ -23,7 +23,7 @@ export default function SearchBar() {
       <form
         className={` ${
           searchBar ? null : "hidden"
-        } md:flex transition-all hover:bg-slate-100 flex items-center px-3 py-1 rounded-full w-full md:w-[20rem] ring ring-inset ring-gray-100 hover:ring-0 dark:hover:bg-DMThrColor dark:ring-white/20 md:mx-4 h-1/2`}
+        } md:flex transition-all hover:bg-slate-100 flex items-center px-3 py-1 rounded-full w-full md:w-[20rem] ring ring-inset ring-gray-100 hover:ring-0 dark:ring-white/20 md:mx-4 h-1/2`}
       >
         <FiSearch size={20} className="mx-2" />
         <input
