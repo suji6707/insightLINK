@@ -16,7 +16,7 @@ MYSQL_PORT = 3306
 
 ```
 cd server
-nodeman index
+npx nodemon
 ```
 
 <br />
@@ -25,6 +25,14 @@ nodeman index
 ```
 cd client
 npm run dev
+```
+
+<br />
+클라이언트 db.json 실행
+
+```
+cd client
+npx json-server ./db.json --port 4000
 ```
 
 <br />
