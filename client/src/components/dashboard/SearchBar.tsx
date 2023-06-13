@@ -5,7 +5,7 @@ import { FiSearch } from "react-icons/fi";
 export default function SearchBar() {
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
-  const [searchBar, setSearchBar] = useState();
+  const [searchBar, setSearchBar] = useState<boolean>(false);
   const [keywords, setKeywords] = useState("");
   const onKeyPress = (e: KeyboardEvent) => {
     if (e.key == "Enter") {
