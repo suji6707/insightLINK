@@ -63,7 +63,7 @@ export default function Friends() {
   };
 
   return (
-    <div>
+    <div className="w-full">
       <p className="text-3xl font-semibold">친구</p>
       <ul
         ref={listRef}
