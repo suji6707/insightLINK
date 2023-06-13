@@ -16,13 +16,13 @@ export default function CardDetail({
 }: propsType) {
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-60"
+      className="fixed inset-0 bg-white bg-opacity-30"
       ref={modalRef}
       onClick={(e) => modalOutsideClicked(e)}
     >
       <div
         className="
-  absolute top-1/2 left-1/2 transform -translate-y-2/3 -translate-x-1/2 bg-white flex-col justify-start w-1/2 h-3/6 border-2 border-current"
+  absolute top-1/2 left-1/2 transform -translate-y-2/3 -translate-x-1/2 bg-white flex-col justify-start w-1/2 h-3/6 border drop-shadow-xl"
       >
         <div className="p-2 border-b border-current flex flex-row justify-between">
           <div className="flex flex-row">
