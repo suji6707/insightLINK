@@ -62,12 +62,10 @@ router.post('/', upload.array('photos'),
       let connection = null;
       try {
         connection = await db.getConnection();
-        const q1 = 'INSERT INTO posts_text (text, img, tag) VALUES (?, ?, ?)';
-
-        /** TO DO
-       * (변경전)photos_text 필드로 업로드된 파일은 posts_text 테이블로 processOCR 결과물, img 저장
-       * -> (변경후) 모든 이미지를 S3로 저장, sumText.length != 0 인 것만 OCR 및 태그 추출 후 저장하기
-      */
+        const q1 = 'INSERT INTO File (content, img_url) VALUES (?, ?)';
+        const q2 = 'INSERT INTO Tag (tag_one, tag_two) VALUES (?, ?)';
+        
+        /* 모든 이미지를 S3로 저장, sumText.length != 0 인 것만 OCR 및 태그 추출 후 저장 */
         let tagList = [];
         for (const file of req.files) { 
           const imgUrl = file.location; // S3 링크
@@ -78,7 +76,8 @@ router.post('/', upload.array('photos'),
             const tag = await generate(req, res, sumText); 
             const tagJSON = extractJson(tag);
             tagList.push(tagJSON);
-            const [ result ] = await connection.query(q1, [ sumText, imgUrl, tagJSON.tags[0]]);
+            const [ result1 ] = await connection.query(q1, [ sumText, imgUrl ]);
+            const [ result2 ] = await connection.query(q2, [ tagJSON.tags[0], tagJSON.tags[1]]);
           };
         }
         console.log(tagList);
