@@ -1,37 +1,29 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as echarts from "echarts";
-import { Main_graph_Api } from "@/axios/dashBoardApi";
+import { Main_graph_Api, Main_graph_Api_DTO } from "@/axios/dashBoardApi";
+
 
 type MainGraphProps = {
+  data: Main_graph_Api_DTO; 
   openCard: boolean;
   setOpenCard: (value: boolean) => void;
 };
 
-export default function Main_graph({ openCard, setOpenCard }: MainGraphProps) {
-  const chartRef = useRef<HTMLDivElement | null>(null);
-  const chartInstance = useRef<echarts.ECharts | null>(null);
-  const [graph, setGraph] = useState<any>();
-  const [lastClickedNode, setLastClickedNode] = useState<any>();
-
+export default function Main_graph({ data: graph, openCard, setOpenCard }: MainGraphProps) {
+  const chartRef = useRef<HTMLDivElement>(null);
+  const chartInstance = useRef<echarts.ECharts>(null);
+  const [lastClickedNode, setLastClickedNode] = useState<string>('');
 
   const handleNodeClick = (nodeId: string) => {
     console.log("debug nodeId", nodeId);
     console.log("debug lastClickedNode", lastClickedNode);
-    if (lastClickedNode === nodeId) {
-      setOpenCard(!openCard);
-    } else {
-      setOpenCard(true);
-    }
+
+    const isLastClickedNode = lastClickedNode === nodeId
+
+    setOpenCard(isLastClickedNode ? !openCard : true) // 삼항으로 짰는데, 논리 연산자 쓰면 축약 가능
     setLastClickedNode(nodeId);
   };
 
-  useEffect(() => {
-    const getGraphData = async () => {
-      const graphData: any = await Main_graph_Api();
-      setGraph(graphData);
-    };
-    getGraphData();
-  }, []);
 
   useEffect(() => {
     if (chartRef.current && graph) {
@@ -52,8 +44,8 @@ export default function Main_graph({ openCard, setOpenCard }: MainGraphProps) {
         };
       });
 
-      const option: any = {
-        tooltip: false,
+      const option = {
+        tooltip: {},
         animationDuration: 1500,
         animationEasingUpdate: "quinticInOut",
         series: [
@@ -93,9 +85,6 @@ export default function Main_graph({ openCard, setOpenCard }: MainGraphProps) {
       myChart.on("click", function (params) {
         if (params.dataType === "node") {
           handleNodeClick(params.data.id);
-          // console.log(params);
-          // console.log(params.dataType);
-          // console.log(params.data);
         }
       });
     }
