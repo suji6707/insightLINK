@@ -2,7 +2,8 @@ import React, { useRef, useState } from "react";
 // Component
 import NavBar from "../components/NavBar";
 import UserPanel from "@/components/dashboard/UserPanel";
-import MainGraph from "@/features/MainGraph/components/MainGraph"
+import Main_graph from "@/components/dashboard/MainGraph";
+// import MainGraph from "@/features/MainGraph/components/MainGraph"
 import CardPanel from "@/components/dashboard/CardPanel";
 
 export default function Dashboard() {
@@ -14,7 +15,7 @@ export default function Dashboard() {
       <div className="flex flex-col justify-between w-full">
         <UserPanel />
         <div className="flex flex-row justify-between w-full">
-          <MainGraph openCard={openCard} setOpenCard={setOpenCard} />
+          <Main_graph openCard={openCard} setOpenCard={setOpenCard} />
           {openCard ? <CardPanel /> : <></>}
         </div>
       </div>
