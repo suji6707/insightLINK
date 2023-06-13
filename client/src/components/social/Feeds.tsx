@@ -26,13 +26,20 @@ export default function Feeds() {
       setShowModal(false);
     }
   };
+
+  type CardType = {
+    id: number;
+    tags: string;
+    content: string;
+  };
   return (
     <div>
       <p className="text-3xl font-semibold">피드</p>
       <ul>
         {cards &&
-          cards.map((c) => {
-            () => setCardId(c.id);
+          cards.map((c: CardType) => {
+            setCardId(c.id);
+
             return (
               <li key={c.id} className="flex flex-col border-2 my-4">
                 <div className="flex justify-between border-b-2 p-2">

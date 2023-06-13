@@ -2,7 +2,7 @@ import React from "react";
 // Component
 import NavBar from "../components/NavBar";
 import { Wrapper } from "@/styles/wrapper";
-import SearchResult from "@/components/searchResult/contentSearch";
+import SearchResult from "@/components/searchResult/ContentSearch";
 
 export default function Search() {
   const data = {

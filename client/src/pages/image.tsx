@@ -12,7 +12,7 @@ import ImageList from "@/components/image/ImgList";
 
 export default function Image() {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const listRef = useRef<HTMLLiElement>(null);
+  const listRef = useRef<HTMLElement>(null);
 
   const [imgList, setImgList] = useState<string[]>([]);
 
