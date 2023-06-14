@@ -3,7 +3,7 @@ import '../dotenv.js';
 import { db } from '../connect.js';
 
 export const authMiddleware = async (req, res, next) => {
-  // console.log(req.headers);
+  console.log(req.headers.headers);
   const { authorization } = req.headers;
   const [authType, authToken] = (authorization || '').split(' ');
 

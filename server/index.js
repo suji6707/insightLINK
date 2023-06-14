@@ -29,7 +29,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 
 /* Routing */
-app.use('/api/upload', uploadRouter);
+app.use('/api/upload', authMiddleware, uploadRouter);
 app.use('/api/login', loginRouter);
 app.use('/api/graph', graphRouter);
 
@@ -46,7 +46,7 @@ app.use('/api/graph', graphRouter);
 //   });
 // });
 
-app.use('/api/users/me',authMiddleware, testRouter);
+app.use('/api/users/me', authMiddleware, testRouter);
 
 // app.get('/api/users/me', authMiddleware, async (req, res) => {
 //   const { user } = res.locals;

@@ -45,8 +45,10 @@ export default function ImageUpload({ setShowImgModal }: any) {
     const uploadImg = async () => {
       const token = localStorage.getItem('token');
       await POST("upload", formData, {
-        "Content-Type": "multipart/form-data",
-        "token": token,
+        headers : {
+          "Content-Type": "multipart/form-data",
+          "authorization": `Bearer ${token}`,
+        }
       });
     };
 
