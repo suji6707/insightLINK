@@ -6,14 +6,16 @@ const router = express.Router();
 
 // 일반 유저 회원가입
 router.post('/', async (req, res) => {
-    const { email, name, imageUrl, password} = req.body;
+    const { email, name, password} = req.body;
     console.log(req.body);
 
     let connection = null;
 
+    const imageUrl = 'https://cdn.pixabay.com/photo/2023/04/15/17/19/cat-7928232_1280.png'
+
     try {
       connection = await db.getConnection();
-      const insertSql = `INSERT INTO Users(email, name, imageUrl, password) 
+      const insertSql = `INSERT INTO User(email, user_name, profile_img, password) 
           VALUES (?, ?, ?, ?)`;
       await connection.query(insertSql, [email, name, imageUrl, password]);
       connection.release();
