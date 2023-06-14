@@ -14,7 +14,7 @@ import { generate } from '../services/generate.js';
 import { extractJson } from '../services/jsonUtils.js';
 import { combinedList }  from '../services/taglist.js';  
 /* Tag ENDED */
-import jwt from'jsonwebtoken';
+// import jwt from'jsonwebtoken';
 
 // import { authMiddleware } from '../middlewares/auth-middleware.js';
 
@@ -57,43 +57,9 @@ router.get('/', (req, res) => {
   res.sendFile(path.join(path.resolve(), './multipart.html'));
 });
 
+
 router.post('/', upload.array('photos'),
   async (req, res) => {
-    /* Auth */
-    const authToken = req.headers.token;
-
-    const { userId } = jwt.verify(authToken, 'customized-secret-key');
-    console.log(userId);
-
-    try {
-      const connection = await db.getConnection();
-      const sql = `SELECT * FROM User
-                     WHERE user_id = '${userId}'`;
-      const [result] = await connection.query(sql);
-      connection.release();
-  
-      if (result.length === 0) {
-        res.status(401).send({
-          errorMessage: 'User not found.',
-        });
-        return;
-      }
-  
-      const user = result[0];
-      res.locals.user = user; // 서버측 구성
-
-
-    } catch (err) {
-      res.status(401).send({
-        errorMessage: '로그인 후 이용 가능한 기능입니다.',
-      });
-    }
-    /* Auth */
-
-
-
-
-
 
     if (req.files) {
       console.log('files uploaded');

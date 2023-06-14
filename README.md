@@ -2,7 +2,7 @@
 
 server/.env
 ```
-PORT = 8000
+PORT = 8800
 
 MYSQL_HOST = 127.0.0.1
 MYSQL_USERNAME = root
