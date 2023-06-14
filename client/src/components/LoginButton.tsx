@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import GoogleLogin from 'react-google-login';
 import axios from 'axios';
 import 'typeface-roboto';
+import { POST } from '@/axios/POST';
 // import styles from '../styles/LoginButton.css';
 
 // const clientId = process.env.GOOGLE_CLIENT_ID ?? '';
@@ -17,12 +18,17 @@ function LoginButton() {
   const onSuccess = async(res: any) => {
       console.log(res.profileObj); // 로그인한 사용자 정보 조회
       try {
-        const response = await axios.post(`${serverPath}/api/login`, {
+        const response = await axios.post(`http://localhost:8800/api/login`, {
           email:res.profileObj.email,
           givenName:res.profileObj.givenName,
           imageUrl:res.profileObj.imageUrl,
         });
 
+        // POST("login", {
+        //     email:res.profileObj.email,
+        //      givenName:res.profileObj.givenName,
+        //      imageUrl:res.profileObj.imageUrl,
+        //    }, null)
         console.log(response);
 
         if (response.data.success) {
