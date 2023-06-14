@@ -15,10 +15,10 @@ export default function Dashboard() {
     <>
       <NavBar />
       <div className="flex flex-col justify-between w-full">
-        {/* <UserPanel
+        <UserPanel
           showImgModal={showImgModal}
           setShowImgModal={setShowImgModal}
-        /> */}
+        />
         <div className="flex flex-row justify-between w-full">
           <Main_graph openCard={openCard} setOpenCard={setOpenCard} />
           {openCard ? <CardPanel /> : <></>}

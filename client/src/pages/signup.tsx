@@ -1,157 +1,138 @@
 import React, { useState } from "react";
 // Component
-import NavBar from "../features/Dashboard/components/NavBar";
-import { Button, Divider, Input } from "antd";
+import NavBar from "../components/NavBar";
 import axios from "axios";
-import bcrypt from "bcryptjs";
+import { useRouter } from 'next/router';
 
-const serverPath = "http://localhost:8800";
+const serverPath = "http://localhost:8800"
 
 export default function Home() {
-  const [userEmail, setUserEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [userName, setUserName] = useState("");
-  const [userImg, setUserImg] = useState("");
-  const [passwordMatchError, setPasswordMatchError] = useState(false);
-  const [emailFormatError, setEmailFormatError] = useState(false);
+    const router = useRouter();
 
-  const doUserRegistration = async (res: any) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(userEmail)) {
-      setEmailFormatError(true);
-      setPasswordMatchError(false);
-      return;
-    } else {
-      setEmailFormatError(false);
+    const [userEmail, setUserEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [userName, setUserName] = useState('');
+    const [passwordMatchError, setPasswordMatchError] = useState(false);
+    const [emailFormatError, setEmailFormatError] = useState(false);
+
+    const doUserRegistration = async(res: any) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(userEmail)) {
+            setEmailFormatError(true);
+            setPasswordMatchError(false);
+            return;
+        } else {
+            setEmailFormatError(false);
+        }
+
+        if (password !== confirmPassword) {
+            setPasswordMatchError(true);
+            setEmailFormatError(false);
+            return;
+        } else {
+            setPasswordMatchError(false);
+        }
+
+        const response = await axios.post(`${serverPath}/api/signup`, {
+          email: userEmail,
+          name: userName,
+          password: password,
+        });
+
+        setUserEmail('');
+        setPassword('');
+        setConfirmPassword('');
+        setUserName('');
+
+        if (response.data.success) {
+            alert(`Success! User ${userName} was successfully created!`);
+            router.push('/login');
+        } else {
+            alert('fail!!');
+        }
     }
 
-    if (password !== confirmPassword) {
-      setPasswordMatchError(true);
-      setEmailFormatError(false);
-      return;
-    } else {
-      setPasswordMatchError(false);
-    }
-
-    // Hash the password
-    const hashedPassword = bcrypt.hashSync(
-      password,
-      "$2a$10$CwTycUXWue0Thq9StjUM0u"
-    );
-
-    const response = await axios.post(`${serverPath}/api/signup`, {
-      email: userEmail,
-      name: userName,
-      imageUrl: userName,
-      password: hashedPassword,
-    });
-
-    setUserEmail("");
-    setPassword("");
-    setConfirmPassword("");
-    setUserName("");
-    setUserImg("");
-
-    if (response.data.success) {
-      alert(`Success! User ${userName} was successfully created!`);
-    } else {
-      alert("fail!!");
-    }
-  };
-
-  return (
-    <div>
-      <NavBar />
-      <div className="flex flex-col items-center justify-center h-screen">
-        <div className="container mx-auto" style={{ width: "400px" }}>
-          <Divider />
-          <div className="flex flex-col space-y-4">
-            <div className="flex space-x-4">
-              <label className="w-32" style={{ width: "200px" }}>
-                이메일:
-              </label>
-              <Input
+    return (
+      <div>
+        <NavBar />
+        <div className="flex flex-col items-center justify-center h-screen">
+        <div className="container mx-auto max-w-md flex flex-col items-end"> {/* Updated class */}
+          <div className="mb-4 flex items-center justify-end"> {/* Updated class */}
+            <label className="block text-gray-700 text-sm font-bold mr-2" htmlFor="email">
+              이메일:
+            </label>
+            <div className="input-box ml-auto">
+              <input
+                id="email"
                 value={userEmail}
                 onChange={(event) => setUserEmail(event.target.value)}
                 placeholder="이메일"
-                size="large"
-                className="form_input"
+                className="form_input inline-block border border-gray-300 rounded px-2 py-1"
               />
             </div>
-            {emailFormatError && (
-              <div className="text-red-500 text-right">
-                이메일 형식이 아닙니다.
-              </div>
-            )}
-            <div className="flex space-x-4">
-              <label className="w-32" style={{ width: "200px" }}>
-                비밀번호:
-              </label>
-              <Input
+          </div>
+          {emailFormatError && (
+            <div className="text-red-500 text-right">이메일 형식이 아닙니다.</div>
+          )}
+          <div className="mb-4 flex items-center justify-end"> {/* Updated class */}
+            <label className="block text-gray-700 text-sm font-bold mr-2" htmlFor="password">
+              비밀번호:
+            </label>
+            <div className="input-box ml-auto">
+              <input
+                id="password"
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 placeholder="비밀번호"
-                size="large"
                 type="password"
-                className="form_input"
+                className="form_input inline-block border border-gray-300 rounded px-2 py-1"
               />
             </div>
-            <div className="flex space-x-4">
-              <label className="w-32" style={{ width: "200px" }}>
-                비밀번호 확인:
-              </label>
-              <Input
+          </div>
+          <div className="mb-4 flex items-center justify-end"> {/* Updated class */}
+            <label className="block text-gray-700 text-sm font-bold mr-2" htmlFor="confirmPassword">
+              비밀번호 확인:
+            </label>
+            <div className="input-box ml-auto">
+              <input
+                id="confirmPassword"
                 value={confirmPassword}
                 onChange={(event) => setConfirmPassword(event.target.value)}
                 placeholder="비밀번호 확인"
-                size="large"
                 type="password"
-                className="form_input"
+                className="form_input inline-block border border-gray-300 rounded px-2 py-1"
               />
             </div>
-            {passwordMatchError && (
-              <div className="text-red-500 text-right">
-                비밀번호가 일치하지 않습니다.
-              </div>
-            )}
-            <div className="flex space-x-4">
-              <label className="w-32" style={{ width: "200px" }}>
-                이름:
-              </label>
-              <Input
+          </div>
+          {passwordMatchError && (
+            <div className="text-red-500 text-right">비밀번호가 일치하지 않습니다.</div>
+          )}
+          <div className="mb-4 flex items-center justify-end"> {/* Updated class */}
+            <label className="block text-gray-700 text-sm font-bold mr-2" htmlFor="userName">
+              이름:
+            </label>
+            <div className="input-box ml-auto">
+              <input
+                id="userName"
                 value={userName}
                 onChange={(event) => setUserName(event.target.value)}
                 placeholder="이름"
-                size="large"
-                className="form_input"
-              />
-            </div>
-            <div className="flex space-x-4">
-              <label className="w-32" style={{ width: "200px" }}>
-                프로필 사진 url:
-              </label>
-              <Input
-                value={userImg}
-                onChange={(event) => setUserImg(event.target.value)}
-                placeholder="프로필 사진 url"
-                size="large"
-                className="form_input"
+                className="form_input inline-block border border-gray-300 rounded px-2 py-1"
               />
             </div>
           </div>
-          <div className="flex justify-center mt-4">
-            <Button
+        </div>
+        <div className="flex justify-end mt-4"> {/* Updated class */}
+            <button
               onClick={doUserRegistration}
-              size="large"
               className="bg-black text-white font-bold py-2 px-4 rounded"
             >
               회원가입
-            </Button>
+            </button>
           </div>
-        </div>
       </div>
-    </div>
-  );
 
+      </div>
+    );   
 }
