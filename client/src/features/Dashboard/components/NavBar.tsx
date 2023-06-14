@@ -5,7 +5,7 @@ import Link from "next/link";
 import { AiTwotoneBell } from "react-icons/ai";
 import { BiUser } from "react-icons/bi";
 import { BsShare, BsSunFill, BsFillMoonFill } from "react-icons/bs";
-import UserModal from "./UserModal";
+import UserModal from "../../User/UserModal";
 
 export default function NavBar() {
   const { systemTheme, theme, setTheme } = useTheme();
