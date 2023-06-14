@@ -3,11 +3,11 @@ import tw from "tailwind-styled-components";
 
 import { POST } from "@/axios/POST";
 // Components
-import NavBar from "@/components/NavBar";
+import NavBar from "@/features/Dashboard/components/NavBar";
 import { Wrapper } from "@/styles/wrapper";
 // Assets
 import { FiUploadCloud } from "react-icons/fi";
-import ImageList from "@/components/image/ImgList";
+import ImageList from "@/features/ImageUpload/ImgList";
 
 export default function ImageUpload({ setShowImgModal }: any) {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -43,12 +43,12 @@ export default function ImageUpload({ setShowImgModal }: any) {
 
     // 로컬 이미지 업로드 API
     const uploadImg = async () => {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       await POST("upload", formData, {
-        headers : {
+        headers: {
           "Content-Type": "multipart/form-data",
-          "authorization": `Bearer ${token}`,
-        }
+          authorization: `Bearer ${token}`,
+        },
       });
     };
 

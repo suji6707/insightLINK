@@ -3,7 +3,7 @@ import { FiThumbsUp, FiThumbsDown } from "react-icons/fi";
 import { GET } from "@/axios/GET";
 import CardDetail from "./CardDetail";
 
-export default function Feeds() {
+const Feeds = () => {
   const [cards, setCards] = useState([]);
   // 모달
   const modalRef = useRef<HTMLDivElement>(null);
@@ -27,17 +27,12 @@ export default function Feeds() {
     }
   };
 
-  type CardType = {
-    id: number;
-    tags: string;
-    content: string;
-  };
   return (
     <div className="w-full">
       <p className="text-3xl font-semibold">피드</p>
       <ul>
         {cards &&
-          cards.map((c: CardType) => {
+          cards.map((c: Feeds) => {
             return (
               <li
                 key={c.id}
@@ -72,4 +67,6 @@ export default function Feeds() {
       )}
     </div>
   );
-}
+};
+
+export default Feeds;

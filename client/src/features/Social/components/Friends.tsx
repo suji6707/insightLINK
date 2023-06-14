@@ -2,7 +2,7 @@ import { GET } from "@/axios/GET";
 import React, { useEffect, useRef, useState } from "react";
 import CardDetail from "./CardDetail";
 
-export default function Friends() {
+const Friends = () => {
   const [friends, setFriends] = useState([]);
   const listRef = useRef<HTMLUListElement>(null);
   // 마우스로 드래그 앤 드롭
@@ -57,11 +57,6 @@ export default function Friends() {
     }
   };
 
-  type FriendType = {
-    id: number;
-    image: string;
-  };
-
   return (
     <div className="w-full">
       <p className="text-3xl font-semibold">친구</p>
@@ -74,7 +69,7 @@ export default function Friends() {
         onMouseMove={handleMouseMove}
       >
         {friends &&
-          friends.map((f: FriendType) => {
+          friends.map((f: Friends) => {
             return (
               <li
                 key={f.id}
@@ -98,4 +93,6 @@ export default function Friends() {
       )}
     </div>
   );
-}
+};
+
+export default Friends;

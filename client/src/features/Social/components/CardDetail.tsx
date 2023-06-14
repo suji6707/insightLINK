@@ -1,19 +1,12 @@
 import React from "react";
 import { FiThumbsDown, FiThumbsUp } from "react-icons/fi";
 
-interface propsType {
-  modalRef: React.ForwardedRef<HTMLDivElement>;
-  modalOutsideClicked: (e: any) => void;
-  cardId?: number;
-  userId?: string;
-}
-
-export default function CardDetail({
+const CardDetail = ({
   modalRef,
   modalOutsideClicked,
   cardId,
   userId,
-}: propsType) {
+}: CardDetail) => {
   return (
     <div
       className="fixed inset-0 bg-white bg-opacity-30"
@@ -37,4 +30,6 @@ export default function CardDetail({
       </div>
     </div>
   );
-}
+};
+
+export default CardDetail;

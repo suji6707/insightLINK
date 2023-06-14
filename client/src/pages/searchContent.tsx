@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 // Component
-import NavBar from "../components/NavBar";
+import NavBar from "../features/Dashboard/components/NavBar";
 import { Wrapper } from "@/styles/wrapper";
-import SearchResult from "@/components/searchResult/ContentSearch";
-import { useRouter } from 'next/router';
+import SearchResult from "@/features/Search/ContentSearch";
+import { useRouter } from "next/router";
 
 export default function Search() {
   const router = useRouter();
 
   const [currentPage, setCurrentPage] = useState(1);
   const resultsPerPage = 3; // Number of results to show per page
-  
+
   const data = {
     hasNext: true,
     results: [
@@ -82,24 +82,23 @@ export default function Search() {
     ],
   };
 
-//   console.log(data.results.length);
+  //   console.log(data.results.length);
   const totalResults = data.results.length;
   const totalPages = Math.ceil(totalResults / resultsPerPage);
-
 
   const testData = {
     hashNext: currentPage < totalPages,
     results: data.results.slice(
-        (currentPage - 1) * resultsPerPage,
-        currentPage * resultsPerPage
+      (currentPage - 1) * resultsPerPage,
+      currentPage * resultsPerPage
     ),
   };
 
   // Function to handle pagination
   const handlePageChange = (page: any) => {
     if (page >= 1 && page <= totalPages) {
-        setCurrentPage(page);
-      }
+      setCurrentPage(page);
+    }
   };
 
   const goBack = () => {
@@ -116,7 +115,9 @@ export default function Search() {
         <div className="w-full flex flex-col">
           <div className="flex flex-row justify-between items-center mb-4">
             <p className="text-2xl font-bold">내용</p>
-            <p onClick={goBack} className="text-xl text-gray-500">이전</p>
+            <p onClick={goBack} className="text-xl text-gray-500">
+              이전
+            </p>
           </div>
           <SearchResult data={testData} />
           {data.hasNext && (
@@ -127,7 +128,7 @@ export default function Search() {
                 className="bg-black hover:bg-gray-300 text-white font-bold py-2 px-4 rounded mr-2"
               >
                 이전
-              </button>  
+              </button>
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}

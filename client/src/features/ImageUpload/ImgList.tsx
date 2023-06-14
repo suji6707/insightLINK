@@ -1,10 +1,5 @@
 import React from "react";
 
-type ImageListProps = {
-  imgList: string[];
-  deleteImg: (index: number) => void;
-};
-
 const ImageList: React.FC<ImageListProps> = ({ imgList, deleteImg }) => {
   return (
     <ul className="border h-full border-black p-4 mb-6 overflow-y-auto">

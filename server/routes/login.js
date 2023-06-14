@@ -8,7 +8,6 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
   const { email, givenName, imageUrl } = req.body;
-  console.log(req.body);
 
   /* 유저정보 확인 */
   let connection = null;
@@ -19,7 +18,6 @@ router.post('/', async (req, res) => {
     connection.release();
 
     if (result[0]) {
-      console.log(result[0]);
       console.log(`userId : ${result[0].user_id} has been logged in!`);
       const token = jwt.sign({ userId: result[0].user_id }, 'customized-secret-key');
       res.send({ success: true, token });  
@@ -44,6 +42,30 @@ router.post('/', async (req, res) => {
     res.status(500).send('Internal Server Error'); // Send error response
   }
 });
+
+router.post('/generic', async(req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    let connection = null;
+    connection = await db.getConnection();
+    const sql = `SELECT * FROM User WHERE email = '${email}' AND password='${password}'`;
+    const [result] = await connection.query(sql);
+    connection.release();
+  
+    if (result[0]) {
+      const token = jwt.sign({ userId: result[0].user_id }, 'customized-secret-key');
+      res.send({ success: true, token });  
+    } else {
+      res.send({ success: fail });
+    }
+  } catch (err) {
+    connection?.release();
+    console.log(err);
+    res.status(500).send('Internal Server Error'); // Send error response
+  }
+
+})
 
 
 

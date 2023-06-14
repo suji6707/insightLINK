@@ -11,6 +11,7 @@ router.get('/', async (req, res) => {
   /* 유저정보 확인 */
   const { user } = res.locals;    // authMiddleware 리턴값
   const useId = user.user_id;
+  console.log(useId);
 
   let connection = null;
   console.log(req.params.id);
@@ -28,8 +29,8 @@ router.get('/', async (req, res) => {
     // let responseList = [];
     // responseList.push({ success: true, token });
     // responseList.push({"graph" : })
-    const [ graphCountResult ] = await connection.query(graphCountQuery(1));
-    const [ graphDirectionResult ] = await connection.query(graphDirectionQuery(1));
+    const [ graphCountResult ] = await connection.query(graphCountQuery(useId));
+    const [ graphDirectionResult ] = await connection.query(graphDirectionQuery(useId));
     let graph = {
       nodes: graphCountResult,
       links: sortDirection(graphDirectionResult),

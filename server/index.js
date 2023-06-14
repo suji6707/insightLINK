@@ -17,8 +17,7 @@ import { authMiddleware } from './middlewares/auth-middleware.js';
 
 const app = express();
 const server = http.createServer(app);
-const port = process.env.PORT || 8800;
-
+const port = process.env.PORT || 8000;
 
 /* Middleware */
 app.use(express.json());
@@ -27,15 +26,12 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-
-
-
 /* Routing */
 app.use('/api/upload', authMiddleware, uploadRouter);
 app.use('/api/login', loginRouter);
 app.use('/api/signup', signupRouter);
-app.use('/api/graph', graphRouter);
 app.use('/api/user',authMiddleware,userRouter);
+app.use('/api/graph', authMiddleware, graphRouter);
 
 app.get('/api/users/me', authMiddleware, async (req, res) => {
   const { user } = res.locals;
@@ -47,9 +43,8 @@ app.get('/api/users/me', authMiddleware, async (req, res) => {
 });
 
 
-
-
 /* Server */
 server.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
