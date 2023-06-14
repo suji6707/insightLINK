@@ -8,7 +8,7 @@ const SearchResult: React.FC<SearchResultProps> = ({ data }) => {
   const results = data.results;
 
   return (
-    <div className="w-full p-2">
+    <div className="w-full">
       {results &&
         results.map((r: any, index: number) => {
           return (
@@ -29,7 +29,9 @@ const SearchResult: React.FC<SearchResultProps> = ({ data }) => {
                   ))}
                 </div>
               </div>
-              <p className="text-lg text-gray-800 dark:text-gray-200">{r.cardContent}</p>
+              <p className="text-lg text-gray-800 dark:text-gray-200">
+                {r.cardContent}
+              </p>
             </div>
           );
         })}
