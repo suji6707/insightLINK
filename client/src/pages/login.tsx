@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-// Component
-import NavBar from "../features/User/NavBar";
-import LoginButton from "../features/User/LoginButton";
 import axios from "axios";
 import { useRouter } from "next/router";
+// Component
+import LoginButton from "../features/User/LoginButton";
+import NavBar from "@/features/Dashboard/components/NavBar";
+import { Wrapper } from "@/styles/wrapper";
 
 const serverPath = "http://localhost:8800";
 
@@ -58,62 +59,64 @@ export default function Home() {
   return (
     <div>
       <NavBar />
-      <div className="flex flex-col items-center justify-center h-screen">
-        <div className="container mx-auto max-w-md flex flex-col items-end">
-          {" "}
-          {/* Updated class */}
-          <div className="mb-4 flex items-center justify-end">
+      <Wrapper>
+        <div className="flex flex-col items-center justify-center h-screen">
+          <div className="container mx-auto max-w-md flex flex-col items-end">
             {" "}
             {/* Updated class */}
-            <label
-              className="block text-gray-700 text-sm font-bold mr-2"
-              htmlFor="email"
-            >
-              이메일:
-            </label>
-            <div className="input-box ml-auto">
-              <input
-                id="email"
-                value={userEmail}
-                onChange={(event) => setUserEmail(event.target.value)}
-                placeholder="이메일"
-                className="form_input inline-block border border-gray-300 rounded px-2 py-1"
-              />
+            <div className="mb-4 flex items-center justify-end">
+              {" "}
+              {/* Updated class */}
+              <label
+                className="block text-gray-700 text-sm font-bold mr-2"
+                htmlFor="email"
+              >
+                이메일:
+              </label>
+              <div className="input-box ml-auto">
+                <input
+                  id="email"
+                  value={userEmail}
+                  onChange={(event) => setUserEmail(event.target.value)}
+                  placeholder="이메일"
+                  className="form_input inline-block border border-gray-300 rounded px-2 py-1"
+                />
+              </div>
+            </div>
+            <div className="mb-4 flex items-center justify-end">
+              {" "}
+              {/* Updated class */}
+              <label
+                className="block text-gray-700 text-sm font-bold mr-2"
+                htmlFor="password"
+              >
+                비밀번호:
+              </label>
+              <div className="input-box ml-auto">
+                <input
+                  id="password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  placeholder="비밀번호"
+                  type="password"
+                  className="form_input inline-block border border-gray-300 rounded px-2 py-1"
+                />
+              </div>
             </div>
           </div>
-          <div className="mb-4 flex items-center justify-end">
+          <div className="flex justify-end mt-4">
             {" "}
             {/* Updated class */}
-            <label
-              className="block text-gray-700 text-sm font-bold mr-2"
-              htmlFor="password"
+            <button
+              onClick={handleLogin}
+              className="bg-black text-white font-bold py-2 px-4 rounded mr-4"
             >
-              비밀번호:
-            </label>
-            <div className="input-box ml-auto">
-              <input
-                id="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                placeholder="비밀번호"
-                type="password"
-                className="form_input inline-block border border-gray-300 rounded px-2 py-1"
-              />
-            </div>
+              로그인
+            </button>
+            <LoginButton />
           </div>
         </div>
-        <div className="flex justify-end mt-4">
-          {" "}
-          {/* Updated class */}
-          <button
-            onClick={handleLogin}
-            className="bg-black text-white font-bold py-2 px-4 rounded mr-4"
-          >
-            로그인
-          </button>
-          <LoginButton />
-        </div>
-      </div>
+      </Wrapper>
     </div>
   );
 }

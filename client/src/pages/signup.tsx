@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-// Component
-import NavBar from "../features/User/NavBar";
 import axios from "axios";
 import { useRouter } from "next/router";
+import NavBar from "@/features/Dashboard/components/NavBar";
+// Component
 
 const serverPath = "http://localhost:8800";
 

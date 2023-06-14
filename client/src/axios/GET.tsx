@@ -1,9 +1,13 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
-export const GET = async (uri: string, headers?: any) => {
-  const config = headers ? { headers: headers } : {};
+export const GET = async (uri: string, headers?: any): Promise<any | null> => {
   try {
-    const res = await axios.get("http://localhost:4000/" + uri, config);
+    let res: AxiosResponse;
+    if (headers) {
+      res = await axios.get(`http://localhost:8800/api/${uri}`, headers);
+    } else {
+      res = await axios.get(`http://localhost:8800/api/${uri}`);
+    }
     console.log("GET 성공");
     return res.data;
   } catch (err) {
