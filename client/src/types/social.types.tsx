@@ -5,6 +5,8 @@ type Friends = {
 
 type Feeds = {
   id: number;
+  nickName: string;
+  profile: string;
   tags: string;
   content: string;
 };

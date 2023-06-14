@@ -10,7 +10,7 @@ export default function Social() {
   return (
     <div>
       <NavBar />
-      <Wrapper>
+      <Wrapper className="border-l border-r px-4">
         <Friends />
         <Feeds />
       </Wrapper>
