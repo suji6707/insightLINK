@@ -82,6 +82,17 @@ export const screenshotSubjects_kr = [
   '아이디어 브레인스토밍',
 ];
 
+
+export const combinedList = screenshotSubjects_en.map((subject, index) => {
+  return {
+    index: index + 1, // Adding 1 to match 1-based indexing
+    englishKeyword: subject,
+    koreanKeyword: screenshotSubjects_kr[index],
+  };
+});
+// console.log(combinedList);
+
+
 export const mappedObject = screenshotSubjects_en.reduce((obj, subject, index) => {
   if (screenshotSubjects_en.length == screenshotSubjects_kr.length) {
     obj[subject] = screenshotSubjects_kr[index];

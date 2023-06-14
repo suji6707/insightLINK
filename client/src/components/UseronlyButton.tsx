@@ -21,7 +21,7 @@ function UseronlyButton() {
       // Make the request to the protected endpoint
       const response = await axios.get(`${serverPath}/api/users/me`);
       console.log(response.data);
-      alert(`${response.data.user.name} 님이 버튼에 접근했습니다.`);
+      alert(`${response.data.user.user_name} 님이 버튼에 접근했습니다.`);
     } catch (error) {
       console.log(error);
     }

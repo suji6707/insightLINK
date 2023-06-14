@@ -3,6 +3,7 @@ import '../dotenv.js';
 import { db } from '../connect.js';
 
 export const authMiddleware = async (req, res, next) => {
+  // console.log(req.headers);
   const { authorization } = req.headers;
   const [authType, authToken] = (authorization || '').split(' ');
 
@@ -15,10 +16,11 @@ export const authMiddleware = async (req, res, next) => {
 
   try {
     const { userId } = jwt.verify(authToken, 'customized-secret-key');
+    console.log(userId);
 
     const connection = await db.getConnection();
-    const sql = `SELECT * FROM Users 
-                   WHERE id = '${userId}'`;
+    const sql = `SELECT * FROM User
+                   WHERE user_id = '${userId}'`;
     const [result] = await connection.query(sql);
     connection.release();
 

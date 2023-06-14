@@ -43,8 +43,10 @@ export default function ImageUpload({ setShowImgModal }: any) {
 
     // 로컬 이미지 업로드 API
     const uploadImg = async () => {
+      const token = localStorage.getItem('token');
       await POST("upload", formData, {
         "Content-Type": "multipart/form-data",
+        "token": token,
       });
     };
 
