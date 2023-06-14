@@ -40,10 +40,9 @@ function LoginButton() {
           localStorage.setItem('token', token);
 
           // Session management
-          const sessionResponse = await axios.get(`${serverPath}/api/users/me`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          console.log(sessionResponse.data.user.name + "님 세션 서버 local에 저장완료!");
+          // const sessionResponse = await axios.get(`${serverPath}/api/users/me`, {
+          //   headers: { Authorization: `Bearer ${token}` },
+          // });
 
           // Set the user info
           // setUserInfo({
