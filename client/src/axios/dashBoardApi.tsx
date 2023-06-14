@@ -1,5 +1,5 @@
 import axios from "axios";
-const api = "http://localhost:4000";
+const api = "http://localhost:8800/api";
 
 interface GraphNode {
   id: string
@@ -19,7 +19,10 @@ export interface Main_graph_Api_DTO {
 }
 
 export const Main_graph_Api = async ():Promise<Main_graph_Api_DTO> => {
-  const response = await axios.get(`${api}/graph`);
+  console.log("그래프 api 호출 토큰"+localStorage.getItem('token'))
+  const response = await axios.get(`${api}/graph`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+  });
   const graph = response.data as Main_graph_Api_DTO;
   
   return graph;
