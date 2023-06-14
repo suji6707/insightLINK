@@ -7,7 +7,7 @@ import { BiUser } from "react-icons/bi";
 import { BsShare, BsSunFill, BsFillMoonFill } from "react-icons/bs";
 import UserModal from "../../User/UserModal";
 
-export default function NavBar() {
+const NavBar = () => {
   const { systemTheme, theme, setTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
   const [isUserModalOpen, setUserModalOpen] = useState(false);
@@ -42,4 +42,6 @@ export default function NavBar() {
       {isUserModalOpen && <UserModal closeModal={closeModal} />}
     </div>
   );
-}
+};
+
+export default NavBar;
