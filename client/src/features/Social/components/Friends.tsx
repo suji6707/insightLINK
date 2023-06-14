@@ -73,11 +73,11 @@ const Friends = () => {
             return (
               <li
                 key={f.id}
-                className="m-3 p-1 flex-shrink-0 bg-gradient-to-tr from-violet-600 to-yellow-300 rounded-full"
+                className="m-4 p-2 flex-shrink-0 bg-gradient-to-tr from-violet-600 to-yellow-300 rounded-full"
               >
                 <img
                   src={f.image}
-                  className="w-20 h-20 rounded-full transform transition hover:-rotate-6 cursor-pointer"
+                  className="w-28 h-28 rounded-full transform transition hover:-rotate-6 cursor-pointer"
                   alt="profile"
                   onClick={() => setShowModal(true)}
                 />
