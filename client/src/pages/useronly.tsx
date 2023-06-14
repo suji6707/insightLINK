@@ -1,14 +1,12 @@
 import React from "react";
-import NavBar from "../components/NavBar";
-import UseronlyButton from "../components/UseronlyButton";
+import NavBar from "../features/Dashboard/components/NavBar";
+import UseronlyButton from "../features/User/UseronlyButton";
 
 export default function Home() {
-
-    return (
-      <div>
-        <NavBar />
-        <UseronlyButton />
-      </div>
-    );
-  }
-  
+  return (
+    <div>
+      <NavBar />
+      <UseronlyButton />
+    </div>
+  );
+}
