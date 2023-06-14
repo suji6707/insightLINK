@@ -81,7 +81,6 @@ export default function Search() {
       },
     ],
   };
-
   //   console.log(data.results.length);
   const totalResults = data.results.length;
   const totalPages = Math.ceil(totalResults / resultsPerPage);
