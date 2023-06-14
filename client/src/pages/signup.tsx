@@ -1,65 +1,72 @@
 import React, { useState } from "react";
 // Component
-import NavBar from "../components/NavBar";
+import NavBar from "../features/User/NavBar";
 import axios from "axios";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 
-const serverPath = "http://localhost:8800"
+const serverPath = "http://localhost:8800";
 
 export default function Home() {
-    const router = useRouter();
+  const router = useRouter();
 
-    const [userEmail, setUserEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [userName, setUserName] = useState('');
-    const [passwordMatchError, setPasswordMatchError] = useState(false);
-    const [emailFormatError, setEmailFormatError] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [userName, setUserName] = useState("");
+  const [passwordMatchError, setPasswordMatchError] = useState(false);
+  const [emailFormatError, setEmailFormatError] = useState(false);
 
-    const doUserRegistration = async(res: any) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(userEmail)) {
-            setEmailFormatError(true);
-            setPasswordMatchError(false);
-            return;
-        } else {
-            setEmailFormatError(false);
-        }
-
-        if (password !== confirmPassword) {
-            setPasswordMatchError(true);
-            setEmailFormatError(false);
-            return;
-        } else {
-            setPasswordMatchError(false);
-        }
-
-        const response = await axios.post(`${serverPath}/api/signup`, {
-          email: userEmail,
-          name: userName,
-          password: password,
-        });
-
-        setUserEmail('');
-        setPassword('');
-        setConfirmPassword('');
-        setUserName('');
-
-        if (response.data.success) {
-            alert(`Success! User ${userName} was successfully created!`);
-            router.push('/login');
-        } else {
-            alert('fail!!');
-        }
+  const doUserRegistration = async (res: any) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(userEmail)) {
+      setEmailFormatError(true);
+      setPasswordMatchError(false);
+      return;
+    } else {
+      setEmailFormatError(false);
     }
 
-    return (
-      <div>
-        <NavBar />
-        <div className="flex flex-col items-center justify-center h-screen">
-        <div className="container mx-auto max-w-md flex flex-col items-end"> {/* Updated class */}
-          <div className="mb-4 flex items-center justify-end"> {/* Updated class */}
-            <label className="block text-gray-700 text-sm font-bold mr-2" htmlFor="email">
+    if (password !== confirmPassword) {
+      setPasswordMatchError(true);
+      setEmailFormatError(false);
+      return;
+    } else {
+      setPasswordMatchError(false);
+    }
+
+    const response = await axios.post(`${serverPath}/api/signup`, {
+      email: userEmail,
+      name: userName,
+      password: password,
+    });
+
+    setUserEmail("");
+    setPassword("");
+    setConfirmPassword("");
+    setUserName("");
+
+    if (response.data.success) {
+      alert(`Success! User ${userName} was successfully created!`);
+      router.push("/login");
+    } else {
+      alert("fail!!");
+    }
+  };
+
+  return (
+    <div>
+      <NavBar />
+      <div className="flex flex-col items-center justify-center h-screen">
+        <div className="container mx-auto max-w-md flex flex-col items-end">
+          {" "}
+          {/* Updated class */}
+          <div className="mb-4 flex items-center justify-end">
+            {" "}
+            {/* Updated class */}
+            <label
+              className="block text-gray-700 text-sm font-bold mr-2"
+              htmlFor="email"
+            >
               이메일:
             </label>
             <div className="input-box ml-auto">
@@ -73,10 +80,17 @@ export default function Home() {
             </div>
           </div>
           {emailFormatError && (
-            <div className="text-red-500 text-right">이메일 형식이 아닙니다.</div>
+            <div className="text-red-500 text-right">
+              이메일 형식이 아닙니다.
+            </div>
           )}
-          <div className="mb-4 flex items-center justify-end"> {/* Updated class */}
-            <label className="block text-gray-700 text-sm font-bold mr-2" htmlFor="password">
+          <div className="mb-4 flex items-center justify-end">
+            {" "}
+            {/* Updated class */}
+            <label
+              className="block text-gray-700 text-sm font-bold mr-2"
+              htmlFor="password"
+            >
               비밀번호:
             </label>
             <div className="input-box ml-auto">
@@ -90,8 +104,13 @@ export default function Home() {
               />
             </div>
           </div>
-          <div className="mb-4 flex items-center justify-end"> {/* Updated class */}
-            <label className="block text-gray-700 text-sm font-bold mr-2" htmlFor="confirmPassword">
+          <div className="mb-4 flex items-center justify-end">
+            {" "}
+            {/* Updated class */}
+            <label
+              className="block text-gray-700 text-sm font-bold mr-2"
+              htmlFor="confirmPassword"
+            >
               비밀번호 확인:
             </label>
             <div className="input-box ml-auto">
@@ -106,10 +125,17 @@ export default function Home() {
             </div>
           </div>
           {passwordMatchError && (
-            <div className="text-red-500 text-right">비밀번호가 일치하지 않습니다.</div>
+            <div className="text-red-500 text-right">
+              비밀번호가 일치하지 않습니다.
+            </div>
           )}
-          <div className="mb-4 flex items-center justify-end"> {/* Updated class */}
-            <label className="block text-gray-700 text-sm font-bold mr-2" htmlFor="userName">
+          <div className="mb-4 flex items-center justify-end">
+            {" "}
+            {/* Updated class */}
+            <label
+              className="block text-gray-700 text-sm font-bold mr-2"
+              htmlFor="userName"
+            >
               이름:
             </label>
             <div className="input-box ml-auto">
@@ -123,16 +149,17 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="flex justify-end mt-4"> {/* Updated class */}
-            <button
-              onClick={doUserRegistration}
-              className="bg-black text-white font-bold py-2 px-4 rounded"
-            >
-              회원가입
-            </button>
-          </div>
+        <div className="flex justify-end mt-4">
+          {" "}
+          {/* Updated class */}
+          <button
+            onClick={doUserRegistration}
+            className="bg-black text-white font-bold py-2 px-4 rounded"
+          >
+            회원가입
+          </button>
+        </div>
       </div>
-
-      </div>
-    );   
+    </div>
+  );
 }
