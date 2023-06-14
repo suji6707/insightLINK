@@ -2,33 +2,42 @@ import express from 'express';
 import '../dotenv.js';
 import { db } from '../connect.js';
 import { graphCountQuery, graphDirectionQuery } from '../db/graphQueries.js';
-// import { authMiddleware } from '../middlewares/auth-middleware.js';
+
 
 const router = express.Router();
 
+
 router.get('/', async (req, res) => {
   /* 유저정보 확인 */
-  const { user } = res.locals;
-  console.log(user.user_id);
+  const { user } = res.locals;    // authMiddleware 리턴값
+  const useId = user.user_id;
+
   let connection = null;
   console.log(req.params.id);
   try {
     connection = await db.getConnection();
+    // const selectUserByEmail = `SELECT user_id FROM Users 
+    //     WHERE email = '${email}' AND imageUrl='${imageUrl}'`;
+    // const [ userResult ] = await connection.query(selectUserByEmail);
+    // const { user } = res.locals;
+    // const userId = user.userId;    
 
     // if (result[0]) {
-    console.log('userId : 1 has been logged in!');
-    // const token = jwt.sign({ userId: user.user_id }, 'customized-secret-key');
+    console.log(`userId : ${useId} has been logged in!`);
+    // const token = jwt.sign({ userId: 1 }, 'customized-secret-key');
     // let responseList = [];
     // responseList.push({ success: true, token });
     // responseList.push({"graph" : })
     const [ graphCountResult ] = await connection.query(graphCountQuery(1));
     const [ graphDirectionResult ] = await connection.query(graphDirectionQuery(1));
-    const graph = graphCountResult;
-
+    let graph = {
+      nodes: graphCountResult,
+      links: sortDirection(graphDirectionResult),
+    };
     // graph.nodes = graphCountResult;
-    // graph.links = graphDirectionResult;
-    const links = sortDirection(graphDirectionResult);
-    res.send({graph, links});  
+    // graph.links = sortDirection(graphDirectionResult);
+    console.log(graph);
+    res.send(graph);  
     // } else {
     // console.log('there is no such user. please register');
     // }
@@ -55,7 +64,7 @@ const sortDirection = (graphDirectionResult) => {
   for (const file in groupedNodes) {
     const nodes = groupedNodes[file];
     if (nodes.length > 1) {
-      output.push({ source: nodes[0], target: nodes[1] });
+      output.push({ source: nodes[0].toString(), target: nodes[1].toString() });
     }
   }
 
