@@ -3,7 +3,7 @@ import '../dotenv.js';
 import { db } from '../connect.js';
 
 export const authMiddleware = async (req, res, next) => {
-  console.log(req.headers.headers);
+  console.log('req.headers.authorization: ', req.headers.authorization);  //@
   const { authorization } = req.headers;
   const [authType, authToken] = (authorization || '').split(' ');
 
@@ -30,3 +30,14 @@ export const authMiddleware = async (req, res, next) => {
       });
       return;
     }
+
+    const user = result[0];
+    res.locals.user = user; // 서버측 구성
+    // console.log(user);
+    next();
+  } catch (err) {
+    res.status(401).send({
+      errorMessage: '로그인 후 이용 가능한 기능입니다.',
+    });
+  }
+};

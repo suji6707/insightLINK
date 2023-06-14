@@ -14,9 +14,7 @@ import { generate } from '../services/generate.js';
 import { extractJson } from '../services/jsonUtils.js';
 import { combinedList }  from '../services/taglist.js';  
 /* Tag ENDED */
-// import jwt from'jsonwebtoken';
 
-// import { authMiddleware } from '../middlewares/auth-middleware.js';
 
 const s3 = new S3Client({
   region: 'ap-northeast-2',
@@ -61,6 +59,9 @@ router.get('/', (req, res) => {
 router.post('/', upload.array('photos'),
   async (req, res) => {
 
+    const { user } = res.locals;    // authMiddleware 리턴값
+    const useId = user.user_id;
+
     if (req.files) {
       console.log('files uploaded');
       console.log(req.files); 
@@ -101,7 +102,7 @@ router.post('/', upload.array('photos'),
             }
 
             /* SQL - File */
-            const [ result1 ] = await connection.query(q1, [ userId, imgUrl, sumText ]);
+            const [ result1 ] = await connection.query(q1, [ useId, imgUrl, sumText ]);
             /* SQL - Tag */
             const [ result2 ] = await connection.query(q2, [ result1.insertId, tagRow1.koreanKeyword, tagRow1.index ]);   // file's insertId, tag name(KR), tag[0] enum
             const [ result3 ] = await connection.query(q2, [ result1.insertId, tagRow2.koreanKeyword, tagRow2.index ]);   // file's insertId, tag name(KR), tag[1] enum
