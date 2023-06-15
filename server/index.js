@@ -11,8 +11,8 @@ import uploadRouter from './routes/uploads.js';
 import loginRouter from './routes/login.js';
 import signupRouter from './routes/signup.js';
 import graphRouter from './routes/graphs.js';
+import cardRouter from './routes/cards.js';
 import userRouter from './routes/user.js'; 
-// import testRouter from './routes/test.js';
 import { authMiddleware } from './middlewares/auth-middleware.js';
 
 const app = express();
@@ -32,7 +32,22 @@ app.use('/api/login', loginRouter);
 app.use('/api/signup', signupRouter);
 app.use('/api/user',authMiddleware,userRouter);
 app.use('/api/graph', authMiddleware, graphRouter);
+app.use('/api/tag', authMiddleware, cardRouter);
 
+
+// app.get('/api/users/me', authMiddleware, async (req, res) => {
+//   const { user } = res.locals;
+//   const useId = user.id;
+//   console.log('userId :', useId);
+//   console.log('현재 로그인한 유저의 local 정보 : ');
+//   console.log(user);
+//   res.send({
+//     user,
+//   });
+// });
+
+
+/* session management */
 app.get('/api/users/me', authMiddleware, async (req, res) => {
   const { user } = res.locals;
   console.log('현재 로그인한 유저의 local 정보 : ');
