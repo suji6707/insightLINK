@@ -33,7 +33,7 @@ router.get('/', async (req, res) => {
 router.get('/profile', async (req, res) => {
     const { user } = res.locals;
     const userId = user.user_id;
-    let connection = null;
+    let connection = null
     try {
         connection = await db.getConnection();
         const [ result ] = await connection.query(userProfileQuery(userId));
@@ -49,7 +49,7 @@ router.get('/profile', async (req, res) => {
         
         connection.release();
         return res.status(200).send(data);
-     } catch(err) {
+    } catch(err) {
         connection?.release();
         console.log(err);
         res.status(500).send('Internal Server Error');
