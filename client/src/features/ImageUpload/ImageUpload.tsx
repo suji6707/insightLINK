@@ -3,11 +3,10 @@ import tw from "tailwind-styled-components";
 
 import { POST } from "@/axios/POST";
 // Components
-import NavBar from "@/components/NavBar";
 import { Wrapper } from "@/styles/wrapper";
 // Assets
 import { FiUploadCloud } from "react-icons/fi";
-import ImageList from "@/components/image/ImgList";
+import ImageList from "@/features/ImageUpload/ImgList";
 
 export default function ImageUpload({ setShowImgModal }: any) {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -43,12 +42,12 @@ export default function ImageUpload({ setShowImgModal }: any) {
 
     // 로컬 이미지 업로드 API
     const uploadImg = async () => {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       await POST("upload", formData, {
-        headers : {
+        headers: {
           "Content-Type": "multipart/form-data",
-          "authorization": `Bearer ${token}`,
-        }
+          authorization: `Bearer ${token}`,
+        },
       });
     };
 
@@ -62,7 +61,7 @@ export default function ImageUpload({ setShowImgModal }: any) {
   };
 
   const ClasBtn = tw.p`
-  h-16 w-5/12 py-8 flex justify-center items-center text-2xl border border-black rounded-lg hover:bg-yellow-300 hover:text-white transition-colors dark:border-white cursor-pointer
+  h-10 w-5/12 py-8 flex justify-center items-center text-xl rounded-lg hover:bg-yellow-300 hover:text-white transition-colors dark:border-white cursor-pointer border drop-shadow-xl
   `;
 
   return (
@@ -71,7 +70,7 @@ export default function ImageUpload({ setShowImgModal }: any) {
       ref={modalRef}
       onClick={(e) => modalOutsideClicked(e)}
     >
-      <Wrapper className="flex-row justify-between absolute top-2/3 left-1/2 transform -translate-y-2/3 -translate-x-1/2 bg-white w-3/5 h-4/6 border drop-shadow-xl p-4">
+      <Wrapper className="flex-row justify-between absolute top-2/3 left-1/2 transform -translate-y-2/3 -translate-x-1/2 bg-white w-3/5 h-4/6 border drop-shadow-xl px-12 rounded-xl">
         <div className="border-8 w-2/4 h-4/6 border-dashed flex flex-col justify-center items-center">
           <input
             type="file"

@@ -1,11 +1,12 @@
 import React, { useRef, useState } from "react";
 // Component
-import NavBar from "../components/NavBar";
-import UserPanel from "@/components/dashboard/UserPanel";
-import Main_graph from "@/components/dashboard/MainGraph";
+import NavBar from "../features/Dashboard/components/NavBar";
+import UserPanel from "@/features/Dashboard/components/UserPanel";
+import Main_graph from "@/features/Dashboard/components/MainGraph";
 // import MainGraph from "@/features/MainGraph/components/MainGraph"
-import CardPanel from "@/components/dashboard/CardPanel";
-import ImageUpload from "@/components/image/ImageUpload";
+import CardPanel from "@/features/Dashboard/components/CardPanel";
+import ImageUpload from "@/features/ImageUpload/ImageUpload";
+import { Wrapper } from "@/styles/wrapper";
 
 export default function Dashboard() {
   const [openCard, setOpenCard] = useState(false);
@@ -14,22 +15,24 @@ export default function Dashboard() {
   return (
     <>
       <NavBar />
-      <div className="flex flex-col justify-between w-full">
-        {/* <UserPanel
-          showImgModal={showImgModal}
-          setShowImgModal={setShowImgModal}
-        /> */}
-        <div className="flex flex-row justify-between w-full">
-          <Main_graph openCard={openCard} setOpenCard={setOpenCard} />
-          {openCard ? <CardPanel /> : <></>}
+      <Wrapper>
+        <div className="flex flex-col justify-between w-full">
+          <UserPanel
+            showImgModal={showImgModal}
+            setShowImgModal={setShowImgModal}
+          />
+          <div className="flex flex-row justify-between w-full">
+            <Main_graph openCard={openCard} setOpenCard={setOpenCard} />
+            {openCard ? <CardPanel /> : <></>}
+          </div>
         </div>
-      </div>
-      {showImgModal && (
-        <ImageUpload
-          showImgModal={showImgModal}
-          setShowImgModal={setShowImgModal}
-        />
-      )}
+        {showImgModal && (
+          <ImageUpload
+            showImgModal={showImgModal}
+            setShowImgModal={setShowImgModal}
+          />
+        )}
+      </Wrapper>
     </>
   );
 }

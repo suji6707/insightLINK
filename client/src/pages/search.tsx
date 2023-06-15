@@ -1,9 +1,11 @@
 import React from "react";
+import { useRouter } from "next/router";
 // Component
-import NavBar from "../components/NavBar";
+import NavBar from "../features/Dashboard/components/NavBar";
 import { Wrapper } from "@/styles/wrapper";
-import SearchResult from "@/components/searchResult/ContentSearch";
-import { useRouter } from 'next/router';
+import SearchResult from "@/features/Search/ContentSearch";
+// Assets
+import { GrFormNext } from "react-icons/gr";
 
 export default function Search() {
   const router = useRouter();
@@ -25,11 +27,11 @@ export default function Search() {
   };
 
   const moreKeyword = () => {
-    router.push('/searchKeyword');
+    router.push("/searchKeyword");
   };
 
   const moreContent = () => {
-    router.push('/searchContent');
+    router.push("/searchContent");
   };
 
   return (
@@ -39,17 +41,21 @@ export default function Search() {
         <p className="w-full p-4 border-b border-black dark:border-white text-3xl my-4">
           ㅇㅇ의 검색 결과입니다
         </p>
-        <div className="w-full flex flex-col">
+        <div className="w-full flex flex-col px-2">
           <div className="flex flex-row justify-between items-center mb-4">
-            <p className="text-2xl font-bold">키워드</p>
-            <p onClick={moreKeyword} className="text-xl text-gray-500">더보기</p>
+            <p className="text-2xl font-bold px-2">키워드</p>
+            <GrFormNext onClick={moreKeyword} className="text-xl text-gray-500">
+              더보기
+            </GrFormNext>
           </div>
           <SearchResult data={data} />
         </div>
-        <div className="w-full flex flex-col mt-8">
+        <div className="w-full flex flex-col mt-4 px-2">
           <div className="flex flex-row justify-between items-center mb-4">
-            <p className="text-2xl font-bold">내용</p>
-            <p onClick={moreContent} className="text-xl text-gray-500">더보기</p>
+            <p className="text-2xl font-bold px-2">내용</p>
+            <GrFormNext onClick={moreContent} className="text-xl text-gray-500">
+              더보기
+            </GrFormNext>
           </div>
           <SearchResult data={data} />
         </div>
