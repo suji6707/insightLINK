@@ -5,11 +5,12 @@ interface SearchResultProps {
 }
 
 const SearchResult: React.FC<SearchResultProps> = ({ data }) => {
+  const results = data.results;
 
   return (
     <div className="w-full">
-      {data &&
-        data.map((r: any, index: number) => {
+      {results &&
+        results.map((r: any, index: number) => {
           return (
             <div
               key={index}

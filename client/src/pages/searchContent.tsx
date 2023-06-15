@@ -1,83 +1,126 @@
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import axios from 'axios';
+import React, { useState } from "react";
 // Component
 import NavBar from "../features/Dashboard/components/NavBar";
 import { Wrapper } from "@/styles/wrapper";
 import SearchResult from "@/features/Search/ContentSearch";
-
-interface ResponseData {
-  hasNext: boolean;
-  results: {
-    cardTags: string[];
-    cardKeyword: string;
-    cardContent: string;
-  }[];
-}
+import { useRouter } from "next/router";
 
 export default function Search() {
   const router = useRouter();
-  const keywords = router.query.search;
 
-  // pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const resultsPerPage = 2; // Number of results to show per page
+  const resultsPerPage = 3; // Number of results to show per page
 
-  const [findData, setFindData] = useState<ResponseData | null>(null);
+  const data = {
+    hasNext: true,
+    results: [
+      {
+        cardTags: ["태그 명", "태그 명"],
+        cardKeyword: "키워드 명 1",
+        cardContent: "내용",
+      },
+      {
+        cardTags: ["태그 명", "태그 명"],
+        cardKeyword: "키워드 명 2",
+        cardContent: "내용",
+      },
+      {
+        cardTags: ["태그 명", "태그 명"],
+        cardKeyword: "키워드 명 3",
+        cardContent: "내용",
+      },
+      {
+        cardTags: ["태그 명", "태그 명"],
+        cardKeyword: "키워드 명 4",
+        cardContent: "내용",
+      },
+      {
+        cardTags: ["태그 명", "태그 명"],
+        cardKeyword: "키워드 명 5",
+        cardContent: "내용",
+      },
+      {
+        cardTags: ["태그 명", "태그 명"],
+        cardKeyword: "키워드 명 6",
+        cardContent: "내용",
+      },
+      {
+        cardTags: ["태그 명", "태그 명"],
+        cardKeyword: "키워드 명 7",
+        cardContent: "내용",
+      },
+      {
+        cardTags: ["태그 명", "태그 명"],
+        cardKeyword: "키워드 명 8",
+        cardContent: "내용",
+      },
+      {
+        cardTags: ["태그 명", "태그 명"],
+        cardKeyword: "키워드 명 9",
+        cardContent: "내용",
+      },
+      {
+        cardTags: ["태그 명", "태그 명"],
+        cardKeyword: "키워드 명 10",
+        cardContent: "내용",
+      },
+      {
+        cardTags: ["태그 명", "태그 명"],
+        cardKeyword: "키워드 명 11",
+        cardContent: "내용",
+      },
+      {
+        cardTags: ["태그 명", "태그 명"],
+        cardKeyword: "키워드 명 12",
+        cardContent: "내용",
+      },
+      {
+        cardTags: ["태그 명", "태그 명"],
+        cardKeyword: "키워드 명 13",
+        cardContent: "내용",
+      },
+    ],
+  };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://localhost:8800/dashboard/contents/all', {
-          params: {
-            search: keywords
-          }
-        });
-        setFindData(response.data);
-      } catch (error) {
-        console.error(error); // Handle any errors that occurred during the request
-      }
-    };
-
-    if (keywords) {
-      fetchData();
-    }
-  }, [keywords]);
-
-  const totalResults = findData?.results?.length ?? 0;
+  //   console.log(data.results.length);
+  const totalResults = data.results.length;
   const totalPages = Math.ceil(totalResults / resultsPerPage);
 
   const testData = {
-    hasNext: currentPage < totalPages + 1,
-    results: findData?.results.slice(
+    hashNext: currentPage < totalPages,
+    results: data.results.slice(
       (currentPage - 1) * resultsPerPage,
       currentPage * resultsPerPage
     ),
   };
 
   // Function to handle pagination
-  const handlePageChange = (page: number) => {
+  const handlePageChange = (page: any) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
   };
-  
 
+  const goBack = () => {
+    router.back();
+  };
 
   return (
     <div>
       <NavBar />
-      {/* Display the search results */}
       <Wrapper className="items-start">
         <p className="w-full p-4 border-b border-black dark:border-white text-3xl my-4">
-          '{keywords}'의 검색 결과입니다
+          ㅇㅇ의 검색 결과입니다
         </p>
-        <div className="w-full flex flex-col mt-4 px-2">
+        <div className="w-full flex flex-col">
           <div className="flex flex-row justify-between items-center mb-4">
-            <p className="text-2xl font-bold px-2">내용</p>
+            <p className="text-2xl font-bold">내용</p>
+            <p onClick={goBack} className="text-xl text-gray-500">
+              이전
+            </p>
           </div>
-          <SearchResult data={testData.results} />
-          {testData.hasNext && (
+          <SearchResult data={testData} />
+          {data.hasNext && (
             <div className="flex justify-center mt-4">
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
