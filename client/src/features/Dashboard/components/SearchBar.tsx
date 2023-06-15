@@ -1,18 +1,21 @@
 import React, { useState, KeyboardEvent, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 import { FiSearch } from "react-icons/fi";
+import axios from 'axios';
+
 
 export default function SearchBar() {
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const [searchBar, setSearchBar] = useState<boolean>(false);
   const [keywords, setKeywords] = useState("");
-  const onKeyPress = (e: KeyboardEvent) => {
-    if (e.key == "Enter") {
+  const onKeyPress = async (e :KeyboardEvent) => {
+    if (e.key === "Enter") {
       e.preventDefault();
-      router.push(
-        `?search=${keywords.replace(/[^ㄱ-ㅎ가-힣a-zA-Z0-9]/g, " ")}`
-      );
+      router.push({
+        pathname: '/search',
+        query: {search : keywords.replace(/[^ㄱ-ㅎ가-힣a-zA-Z0-9]/g, " ")}
+      });
       setKeywords("");
       setSearchBar(false);
     }

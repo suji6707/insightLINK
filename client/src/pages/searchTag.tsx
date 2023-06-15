@@ -28,7 +28,7 @@ export default function Search() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8800/dashboard/contents/all', {
+        const response = await axios.get('http://localhost:8800/dashboard/tags/all', {
           params: {
             search: keywords
           }
