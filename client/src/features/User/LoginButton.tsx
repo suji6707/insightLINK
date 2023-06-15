@@ -1,74 +1,74 @@
-import React, { useState } from 'react';
-import { useRouter } from 'next/router';
-import GoogleLogin from 'react-google-login';
-import axios from 'axios';
-import 'typeface-roboto';
-import { POST } from '@/axios/POST';
+import React, { useState } from "react";
+import { useRouter } from "next/router";
+import GoogleLogin from "react-google-login";
+import axios from "axios";
+import "typeface-roboto";
+import { POST } from "@/axios/POST";
 // import styles from '../styles/LoginButton.css';
 
 // const clientId = process.env.GOOGLE_CLIENT_ID ?? '';
-const clientId = '862985060268-bns768k2p01btrjkdk94f8hkrvqlt5d8.apps.googleusercontent.com';
-const serverPath = "http://localhost:8800"
+const clientId =
+  "862985060268-bns768k2p01btrjkdk94f8hkrvqlt5d8.apps.googleusercontent.com";
+const serverPath = "http://localhost:8800";
 
 function LoginButton() {
   const router = useRouter();
 
-  const [userInfo, setUserInfo] = useState({ givenName: '', imageUrl: '' });
+  const [userInfo, setUserInfo] = useState({ givenName: "", imageUrl: "" });
 
-  const onSuccess = async(res: any) => {
-      console.log(res.profileObj); // 로그인한 사용자 정보 조회
-      try {
-        const response = await axios.post(`http://localhost:8800/api/login`, {
-          email:res.profileObj.email,
-          givenName:res.profileObj.givenName,
-          imageUrl:res.profileObj.imageUrl,
-        });
+  const onSuccess = async (res: any) => {
+    console.log(res.profileObj); // 로그인한 사용자 정보 조회
+    try {
+      const response = await axios.post(`http://localhost:8800/api/login`, {
+        email: res.profileObj.email,
+        givenName: res.profileObj.givenName,
+        imageUrl: res.profileObj.imageUrl,
+      });
 
-        // POST("login", {
-        //     email:res.profileObj.email,
-        //      givenName:res.profileObj.givenName,
-        //      imageUrl:res.profileObj.imageUrl,
-        //    }, null)
-        console.log(response);
+      // POST("login", {
+      //     email:res.profileObj.email,
+      //      givenName:res.profileObj.givenName,
+      //      imageUrl:res.profileObj.imageUrl,
+      //    }, null)
+      console.log(response);
 
-        if (response.data.success) {
-          alert('로그인 성공!'); // Display success alert
-          const token = response.data.token;
-          // console.log(token);
-  
-          // Store the token in local storage
-          localStorage.setItem('token', token);
+      if (response.data.success) {
+        alert("로그인 성공!"); // Display success alert
+        const token = response.data.token;
+        // console.log(token);
 
-          // Session management
-          // const sessionResponse = await axios.get(`${serverPath}/api/users/me`, {
-          //   headers: { Authorization: `Bearer ${token}` },
-          // });
+        // Store the token in local storage
+        localStorage.setItem("token", token);
 
-          // Set the user info
-          // setUserInfo({
-          //   givenName: res.profileObj.givenName,
-          //   imageUrl: res.profileObj.imageUrl,
-          // });
+        // Session management
+        // const sessionResponse = await axios.get(`${serverPath}/api/users/me`, {
+        //   headers: { Authorization: `Bearer ${token}` },
+        // });
 
-          // Redirect to the dashboard page
-          router.push('/dashboard');
+        // Set the user info
+        // setUserInfo({
+        //   givenName: res.profileObj.givenName,
+        //   imageUrl: res.profileObj.imageUrl,
+        // });
 
-        } else {
-          alert('로그인에 실패했습니다.ㅠㅠ'); // Display failure alert
-          console.log(response.data);
-        }
-      } catch(error) {
-        console.log(error);
+        // Redirect to the dashboard page
+        router.push("/dashboard");
+      } else {
+        alert("로그인에 실패했습니다.ㅠㅠ"); // Display failure alert
+        console.log(response.data);
+      }
+    } catch (error) {
+      console.log(error);
     }
-  }
+  };
 
   const onFailure = (error: any) => {
-    console.log('Login failed!');
+    console.log("Login failed!");
     console.log(error);
   };
 
   return (
-    <div id="loginButton">
+    <div id="loginButton" className="w-full">
       <GoogleLogin
         clientId={clientId}
         buttonText="구글 로그인"

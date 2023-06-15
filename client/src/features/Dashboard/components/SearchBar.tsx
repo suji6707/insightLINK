@@ -29,7 +29,7 @@ export default function SearchBar() {
         <input
           ref={inputRef}
           type="text"
-          className="w-full h-10 font-medium bg-transparent border-gray-300 outline-none ring-none"
+          className="w-full h-10 font-medium bg-transparent outline-none ring-none"
           value={keywords}
           placeholder="검색"
           onChange={(e) => {

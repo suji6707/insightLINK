@@ -15,9 +15,9 @@ const CardDetail = ({
     >
       <div
         className="
-  absolute top-1/2 left-1/2 transform -translate-y-2/3 -translate-x-1/2 bg-white flex-col justify-start w-1/2 h-3/6 border drop-shadow-xl"
+  absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 bg-white flex-col justify-start w-1/2 h-4/6 border drop-shadow-xl rounded-xl"
       >
-        <div className="p-2 border-b border-current flex flex-row justify-between">
+        <div className="p-2 border-b border-current flex flex-row justify-between p-4">
           <div className="flex flex-row">
             <p className="mr-2">#tag</p>
             <p>#tag</p>
