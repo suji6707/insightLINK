@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 // Assets
@@ -6,11 +6,30 @@ import { AiTwotoneBell } from "react-icons/ai";
 import { BiUser } from "react-icons/bi";
 import { BsShare, BsSunFill, BsFillMoonFill } from "react-icons/bs";
 import UserModal from "../../User/UserModal";
+import { GET } from "@/axios/GET";
 
 const NavBar = () => {
   const { systemTheme, theme, setTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
   const [isUserModalOpen, setUserModalOpen] = useState(false);
+  const [userProfile, setUserProfile] = useState();
+
+  const getProfileImg = async () => {
+    const token = localStorage.getItem("token");
+    const response = await GET("user/profile", {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (response) {
+      console.log(response);
+      setUserProfile(response.userProfile);
+    }
+  };
+
+  useEffect(() => {
+    getProfileImg();
+  }, []);
 
   const handleUserIconClick = () => {
     setUserModalOpen(true);
