@@ -12,7 +12,6 @@ import loginRouter from './routes/login.js';
 import signupRouter from './routes/signup.js';
 import graphRouter from './routes/graphs.js';
 
-import userRouter from './routes/user.js';
 import tagRouter from './routes/tag.js'; 
 // import testRouter from './routes/test.js';
 
