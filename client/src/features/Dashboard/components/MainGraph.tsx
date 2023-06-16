@@ -93,14 +93,14 @@ export default function Main_graph({ openCard, setOpenCard }: MainGraphProps) {
 
       myChart.setOption(option);
 
-      // myChart.on("click", function (params) {
-      //   if (params.dataType === "node") {
-      //     handleNodeClick(params.data.id);
-      //     // console.log(params);
-      //     // console.log(params.dataType);
-      //     // console.log(params.data);
-      //   }
-      // });
+      myChart.on("click", function (params) {
+        if (params.dataType === "node") {
+          handleNodeClick(params.data.id);
+          // console.log(params);
+          // console.log(params.dataType);
+          // console.log(params.data);
+        }
+      });
 
       // 마우스 오래 클릭시 combineNodes
       myChart.getZr().on("mousedown", (params: any) => {
