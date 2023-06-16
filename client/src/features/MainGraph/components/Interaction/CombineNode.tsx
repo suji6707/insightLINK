@@ -27,6 +27,7 @@ const combineNodes = ({
   nodes.push(newNode);
   // 새 데이터로 차트를 리렌더링
   myChart.setOption({ series: [{ data: nodes, links: links }] });
+  return 1;
 };
 
 export default combineNodes;
