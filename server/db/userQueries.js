@@ -11,3 +11,7 @@ export const userInfoQuery = (userId) => {
 export const userProfileQuery = (userId) => {
     return `SELECT profile_img FROM User where User.user_id = ${userId};`
 };
+
+export const myInfoQuery = (userId) => {
+    return `SELECT user_name,email,profile_img FROM User where user_id = ${userId};`
+}
