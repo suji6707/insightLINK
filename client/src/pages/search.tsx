@@ -24,6 +24,8 @@ export default function Search() {
 
   const [contentsData, setContentsData] = useState<ResponseData | null>(null);
   const [tagsData, setTagsData] = useState<ResponseData | null>(null);
+  const [contentsAllData, setContensAllData] = useState<ResponseData | null>(null);
+  const [tagsAllData, setTagsAllData] = useState<ResponseData | null>(null);
 
   useEffect(() => {
     const contentsData = async () => {
@@ -34,6 +36,19 @@ export default function Search() {
           }
         });
         setContentsData(response.data);
+      } catch (error) {
+        console.error(error); // Handle any errors that occurred during the request
+      }
+    };
+
+    const contentsAllData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8800/dashboard/contents/all', {
+          params: {
+            search: keywords
+          }
+        });
+        setContensAllData(response.data);
       } catch (error) {
         console.error(error); // Handle any errors that occurred during the request
       }
@@ -51,15 +66,31 @@ export default function Search() {
         console.error(error); // Handle any errors that occurred during the request
       }
     };
+  
+    const tagsAllData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8800/dashboard/tags/all', {
+          params: {
+            search: keywords
+          }
+        });
+        setTagsAllData(response.data);
+      } catch (error) {
+        console.error(error); // Handle any errors that occurred during the request
+      }
+    };
 
     if (keywords) {
       contentsData();
       tagsData();
+      contentsAllData();
+      tagsAllData();
     }
   }, [keywords]);
 
   console.log(contentsData?.results);
   console.log(tagsData?.results)
+  console.log(contentsAllData?.results)
 
 
   const moreTag = () => {
@@ -85,7 +116,7 @@ export default function Search() {
         </p>
         <div className="w-full flex flex-col px-2">
           <div className="flex flex-row justify-between items-center mb-4">
-            <p className="text-2xl font-bold px-2">내용</p>
+            <p className="text-2xl font-bold px-2">내용 {(contentsData?.results[0])? contentsAllData?.results.length + '개' : '0개'}</p>
             <GrFormNext onClick={moreContent} className="text-xl text-gray-500">
               더보기
             </GrFormNext>
@@ -95,7 +126,7 @@ export default function Search() {
         </div>
         <div className="w-full flex flex-col mt-4 px-2">
           <div className="flex flex-row justify-between items-center mb-4">
-            <p className="text-2xl font-bold px-2">태그</p>
+            <p className="text-2xl font-bold px-2">태그 {(tagsData?.results[0])? tagsAllData?.results.length + '개' : '0개'}</p>
             <GrFormNext onClick={moreTag} className="text-xl text-gray-500">
               더보기
             </GrFormNext>
