@@ -13,6 +13,7 @@ import signupRouter from './routes/signup.js';
 import graphRouter from './routes/graphs.js';
 import cardRouter from './routes/cards.js';
 import userRouter from './routes/user.js'; 
+import searchRouter from './routes/search.js';
 import { authMiddleware } from './middlewares/auth-middleware.js';
 
 const app = express();
@@ -33,6 +34,7 @@ app.use('/api/signup', signupRouter);
 app.use('/api/user',authMiddleware,userRouter);
 app.use('/api/graph', authMiddleware, graphRouter);
 app.use('/api/tag', authMiddleware, cardRouter);
+app.use('/dashboard', searchRouter);
 
 
 // app.get('/api/users/me', authMiddleware, async (req, res) => {

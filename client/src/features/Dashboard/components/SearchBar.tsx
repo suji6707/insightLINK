@@ -10,9 +10,10 @@ export default function SearchBar() {
   const onKeyPress = (e: KeyboardEvent) => {
     if (e.key == "Enter") {
       e.preventDefault();
-      router.push(
-        `?search=${keywords.replace(/[^ㄱ-ㅎ가-힣a-zA-Z0-9]/g, " ")}`
-      );
+      router.push({
+        pathname: '/search',
+        query: {search : keywords.replace(/[^ㄱ-ㅎ가-힣a-zA-Z0-9]/g, " ")}
+      });
       setKeywords("");
       setSearchBar(false);
     }
