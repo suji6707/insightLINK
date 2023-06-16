@@ -2,7 +2,7 @@ import express from 'express';
 import '../dotenv.js';
 import multer from 'multer';
 /* MULTER-S3 ADDED */
-import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client } from '@aws-sdk/client-s3';
 import multerS3 from 'multer-s3';
 /* OCR LINE ADDED */
 import { db } from '../connect.js';
@@ -103,6 +103,7 @@ router.post('/', upload.array('photos'),
 
             /* SQL - File */
             const [ result1 ] = await connection.query(q1, [ useId, imgUrl, sumText ]);
+            // console.log(result1);
             /* SQL - Tag */
             const [ result2 ] = await connection.query(q2, [ result1.insertId, tagRow1.koreanKeyword, tagRow1.index ]);   // file's insertId, tag name(KR), tag[0] enum
             const [ result3 ] = await connection.query(q2, [ result1.insertId, tagRow2.koreanKeyword, tagRow2.index ]);   // file's insertId, tag name(KR), tag[1] enum
@@ -111,6 +112,7 @@ router.post('/', upload.array('photos'),
             await connection.query(q3, [ result1.insertId, result3.insertId ]);       // same file's insertId, tag[1]'s insertId
           };
         }
+
         console.log(tagList);
         connection.release();
 

@@ -1,66 +1,14 @@
 import express from 'express';
-import '../dotenv.js';
-import { db } from '../connect.js';
+import { getCardInfos } from '../middlewares/cardInfo.js';
+import { getTagInfos } from '../middlewares/cardTag.js';
+import { getCards } from '../middlewares/cardCopy.js';
+import { authMiddleware } from '../middlewares/auth-middleware.js';
+
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
-  console.log(req.query.tagname); 
-
-  /* 유저정보 확인 */
-  const { user } = res.locals;    // authMiddleware 리턴값
-  const useId = user.user_id;
-  console.log(useId);
-
-  let connection = null;
-  try {
-    connection = await db.getConnection();
-
-    /* 태그명에 해당하는 file_id, content -> cardId, cardContent. result1은 여러개임.*/
-    const q1 = 
-    `SELECT File.file_id, File.content
-      FROM File
-      JOIN Tag ON File.file_id = Tag.file_id
-      WHERE Tag.tag = ?`;
-
-    /* 파일id에 해당하는 태그 */
-    const q2 = 
-    `SELECT Tag.tag
-      FROM Tag
-      JOIN File ON Tag.file_id = File.file_id
-      WHERE File.file_id = ?`;
-
-    const [result1] = await connection.query(q1, [req.query.tagname]);
-
-    let data = [];    // 최종 리턴할 배열
-
-    for (let i = 0; i < result1.length; i++) {
-      /* result1의 한 파일에 대해- 태그 두 개 */
-      const [result2] = await connection.query(q2, result1[i].file_id);
-      let cardTag = [];
-      for (let i = 0; i < result2.length; i++) {
-        cardTag.push(result2[i].tag);
-      }
-
-      let obj = 
-        {
-          'cardId' : result1[i].file_id,
-          'cardTag' : cardTag,
-          'cardContent' : result1[i].content,
-        };
-
-      data.push(obj);
-    }    
-    connection.release();
-    console.log(data);
-    return res.status(200).send(data);
-
-  } catch (err) {
-    connection?.release();
-    console.log(err);
-    res.status(500).send('Internal Server Error'); // Send error response
-  }
-});
+router.get('/info', authMiddleware, getCardInfos);    // 카드 상세정보
+router.get('/tag', authMiddleware, getTagInfos);      // 태그 클릭시 관련 카드들 조회
+router.post('/copy', authMiddleware, getCards);       // 카드 드래그앤드롭
 
 export default router;
-

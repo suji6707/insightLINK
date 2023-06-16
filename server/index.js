@@ -5,8 +5,7 @@ import cors from 'cors';
 import morgan from 'morgan';  // log
 import bodyParser from 'body-parser'; // 요청정보 처리
 
-
-// import postRoutes from "./routes/posts.js"   // 내 포스트 보여주는 화면
+/* Router */
 import uploadRouter from './routes/uploads.js';
 import loginRouter from './routes/login.js';
 import signupRouter from './routes/signup.js';
@@ -17,6 +16,10 @@ import tagRouter from './routes/tag.js';
 // import testRouter from './routes/test.js';
 
 import cardRouter from './routes/cards.js';
+/* DD */
+// import cardTagRouter from './routes/cardTag.js';
+// import cardInfoRouter from './routes/cardInfo.js';
+// import cardMergeRouter from './routes/cardMerge.js';
 import userRouter from './routes/user.js'; 
 import searchRouter from './routes/search.js';
 
@@ -39,15 +42,10 @@ app.use('/api/login', loginRouter);
 app.use('/api/signup', signupRouter);
 app.use('/api/user',authMiddleware,userRouter);
 app.use('/api/graph', authMiddleware, graphRouter);
-
-app.use('/api/tag',authMiddleware,tagRouter); // uri 중복 추후 변경
-
-//app.use('/api/tag', authMiddleware, cardRouter);
-
+app.use('/api/cards', cardRouter);
 
 
 /* session management */
-
 app.get('/api/users/me', authMiddleware, async (req, res) => {
   const { user } = res.locals;
   console.log('현재 로그인한 유저의 local 정보 : ');
