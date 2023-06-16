@@ -8,7 +8,6 @@ import UserModal from "@/features/User/UserModal";
 import { AiTwotoneBell } from "react-icons/ai";
 import { BiUser } from "react-icons/bi";
 import { BsShare, BsSunFill, BsFillMoonFill } from "react-icons/bs";
-import UserModal from "../../User/UserModal";
 import { GET } from "@/axios/GET";
 
 export default function NavBar() {
@@ -16,7 +15,6 @@ export default function NavBar() {
   const currentTheme = theme === "system" ? systemTheme : theme;
   const [userProfile, setUserProfile] = useState("");
   const [isUserModalOpen, setUserModalOpen] = useState(false);
-  const [userProfile, setUserProfile] = useState();
 
   const getProfileImg = async () => {
     const token = localStorage.getItem("token");
@@ -34,23 +32,6 @@ export default function NavBar() {
   useEffect(() => {
     getProfileImg();
   }, []);
-
-  const getProfileImg = async () => {
-    const token = localStorage.getItem("token");
-    const response = await GET("user/profile", {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    });
-    if (response) {
-      console.log(response);
-      setUserProfile(response.userProfile);
-    }
-  };
-
-  useEffect(() => {
-    getProfileImg();
-  });
 
   const handleUserIconClick = () => {
     setUserModalOpen(true);
