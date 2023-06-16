@@ -61,45 +61,45 @@ export default function Home() {
       <NavBar />
       <Wrapper>
         <div className="flex flex-col items-center justify-center h-screen">
-          <div className="container mx-auto max-w-md flex flex-col items-end">
+          <div className="container flex flex-col items-end max-w-md mx-auto">
             {" "}
             {/* Updated class */}
-            <div className="mb-4 flex items-center justify-end">
+            <div className="flex items-center justify-end mb-4">
               {" "}
               {/* Updated class */}
               <label
-                className="block text-gray-700 text-sm font-bold mr-2"
+                className="block mr-2 text-sm font-bold text-gray-700"
                 htmlFor="email"
               >
                 이메일:
               </label>
-              <div className="input-box ml-auto">
+              <div className="ml-auto input-box">
                 <input
                   id="email"
                   value={userEmail}
                   onChange={(event) => setUserEmail(event.target.value)}
                   placeholder="이메일"
-                  className="form_input inline-block border border-gray-300 rounded px-2 py-1"
+                  className="inline-block px-2 py-1 border border-gray-300 rounded form_input"
                 />
               </div>
             </div>
-            <div className="mb-4 flex items-center justify-end">
+            <div className="flex items-center justify-end mb-4">
               {" "}
               {/* Updated class */}
               <label
-                className="block text-gray-700 text-sm font-bold mr-2"
+                className="block mr-2 text-sm font-bold text-gray-700"
                 htmlFor="password"
               >
                 비밀번호:
               </label>
-              <div className="input-box ml-auto">
+              <div className="ml-auto input-box">
                 <input
                   id="password"
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
                   placeholder="비밀번호"
                   type="password"
-                  className="form_input inline-block border border-gray-300 rounded px-2 py-1"
+                  className="inline-block px-2 py-1 border border-gray-300 rounded form_input"
                 />
               </div>
             </div>
@@ -109,7 +109,7 @@ export default function Home() {
             {/* Updated class */}
             <button
               onClick={handleLogin}
-              className="bg-black text-white font-bold py-2 px-4 rounded mr-4"
+              className="px-4 py-2 mr-4 font-bold text-white bg-black rounded"
             >
               로그인
             </button>

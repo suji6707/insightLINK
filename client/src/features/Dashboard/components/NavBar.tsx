@@ -46,11 +46,11 @@ export default function NavBar() {
   `;
 
   return (
-    <div className="flex flex-row p-7 justify-between items-center">
+    <div className="flex flex-row items-center justify-between p-7">
       <Link href="/dashboard">
         <p className="text-3xl font-extrabold">insightLINK</p>
       </Link>
-      <div className="flex flex-row w-2/3 justify-start ml-4">
+      <div className="flex flex-row justify-start w-2/3 ml-4">
         <Link href="/social">
           <CategoryLink>소셜</CategoryLink>
         </Link>
@@ -59,7 +59,7 @@ export default function NavBar() {
           <CategoryLink>탐색</CategoryLink>
         </Link>
       </div>
-      <div className="flex flex-row w-1/6 justify-between items-center">
+      <div className="flex flex-row items-center justify-between w-1/6">
         <BsShare size={30} />
         <AiTwotoneBell size={30} />
         {userProfile ? (

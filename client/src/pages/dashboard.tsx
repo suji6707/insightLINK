@@ -1,38 +1,36 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useRecoilState } from "recoil";
+import { DashBoardCardAtom } from "@/recoil/atoms/MainGraphAtom";
 // Component
 import NavBar from "../features/Dashboard/components/NavBar";
 import UserPanel from "@/features/Dashboard/components/UserPanel";
-import Main_graph from "@/features/Dashboard/components/MainGraph";
-// import MainGraph from "@/features/MainGraph/components/MainGraph"
-import CardPanel from "@/features/Dashboard/components/CardPanel";
+import MainGraph from "@/features/MainGraph/components/MainGraph/MainGraph";
+import CardPanel from "@/features/MainCard/components/CardPanel";
 import ImageUpload from "@/features/ImageUpload/ImageUpload";
-import { Wrapper } from "@/styles/wrapper";
 
 export default function Dashboard() {
-  const [openCard, setOpenCard] = useState(false);
+  const [openCard, setOpenCard] = useRecoilState(DashBoardCardAtom);
   const [showImgModal, setShowImgModal] = useState(false);
 
   return (
     <>
       <NavBar />
-      <Wrapper>
-        <div className="flex flex-col justify-between w-full">
-          <UserPanel
-            showImgModal={showImgModal}
-            setShowImgModal={setShowImgModal}
-          />
-          <div className="flex flex-row justify-between w-full">
-            <Main_graph openCard={openCard} setOpenCard={setOpenCard} />
-            {openCard ? <CardPanel /> : <></>}
-          </div>
+      <div className="flex flex-col justify-between w-full">
+        <UserPanel
+          showImgModal={showImgModal}
+          setShowImgModal={setShowImgModal}
+        />
+        <div className="flex flex-row justify-between w-full">
+          <MainGraph />
+          {openCard ? <CardPanel /> : <></>}
         </div>
-        {showImgModal && (
-          <ImageUpload
-            showImgModal={showImgModal}
-            setShowImgModal={setShowImgModal}
-          />
-        )}
-      </Wrapper>
+      </div>
+      {showImgModal && (
+        <ImageUpload
+          showImgModal={showImgModal}
+          setShowImgModal={setShowImgModal}
+        />
+      )}
     </>
   );
 }
