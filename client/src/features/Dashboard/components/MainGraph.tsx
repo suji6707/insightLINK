@@ -146,10 +146,17 @@ export default function Main_graph({ openCard, setOpenCard }: MainGraphProps) {
               });
 
               const POSTMerge = async () => {
+                const token = localStorage.getItem("token")
+console.log(                  { tagId1: prevNode.id, tagId2: currentNode.id },
+  )
                 const result = await POST(
-                  "/tag",
+                  "tag/merge",
                   { tagId1: prevNode.id, tagId2: currentNode.id },
-                  null
+                  {
+                    headers: {
+                      authorization: `Bearer ${token}`,
+                    },
+                  }
                 );
                 console.log(result);
               };

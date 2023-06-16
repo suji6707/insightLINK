@@ -12,6 +12,7 @@ import loginRouter from './routes/login.js';
 import signupRouter from './routes/signup.js';
 import graphRouter from './routes/graphs.js';
 
+import myinfoRouter from './routes/myInfo.js';
 import tagRouter from './routes/tag.js'; 
 // import testRouter from './routes/test.js';
 
@@ -39,12 +40,9 @@ app.use('/api/signup', signupRouter);
 app.use('/api/user',authMiddleware,userRouter);
 app.use('/api/graph', authMiddleware, graphRouter);
 
-// app.use('/api/tag',tagRouter); // uri 중복 추후 변경
+app.use('/api/tag',authMiddleware,tagRouter); // uri 중복 추후 변경
 
-app.use('/api/tag', authMiddleware, cardRouter);
-app.use('/dashboard', searchRouter);
-
-
+//app.use('/api/tag', authMiddleware, cardRouter);
 
 
 
