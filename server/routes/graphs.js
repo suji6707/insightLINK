@@ -1,7 +1,7 @@
 import express from 'express';
 import '../dotenv.js';
 import { db } from '../connect.js';
-import { graphCountQuery, graphDirectionQuery } from '../sql/graphQueries.js';
+import { graphCountQuery, graphDirectionQuery } from '../db/graphQueries.js';
 
 
 const router = express.Router();

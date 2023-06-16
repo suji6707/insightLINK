@@ -17,7 +17,8 @@ import tagRouter from './routes/tag.js';
 // import testRouter from './routes/test.js';
 
 import cardRouter from './routes/cards.js';
-
+import userRouter from './routes/user.js'; 
+import searchRouter from './routes/search.js';
 
 import { authMiddleware } from './middlewares/auth-middleware.js';
 
@@ -42,6 +43,7 @@ app.use('/api/graph', authMiddleware, graphRouter);
 // app.use('/api/tag',tagRouter); // uri 중복 추후 변경
 
 app.use('/api/tag', authMiddleware, cardRouter);
+app.use('/dashboard', searchRouter);
 
 
 
