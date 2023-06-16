@@ -1,9 +1,9 @@
-import express from 'express'
-import '../dotenv.js'
-import { db } from '../connect.js'
-import { graphCountQuery, graphDirectionQuery } from '../db/graphQueries.js'
+import express from 'express';
+import '../dotenv.js';
+import { db } from '../connect.js';
+import { graphCountQuery, graphDirectionQuery } from '../db/graphQueries.js';
 
-const router = express.Router()
+const router = express.Router();
 
 router.get('/', async (req, res) => {
   /* 유저정보 확인 */

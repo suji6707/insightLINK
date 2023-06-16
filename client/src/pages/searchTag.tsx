@@ -27,7 +27,7 @@ export default function Search() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8800/dashboard/contents/all', {
+        const response = await axios.get('http://localhost:8800/dashboard/tags/all', {
           params: {
             search: keywords
           }
@@ -75,7 +75,7 @@ export default function Search() {
         </p>
         <div className="w-full flex flex-col mt-4 px-2">
           <div className="flex flex-row justify-between items-center mb-4">
-            <p className="text-2xl font-bold px-2">내용</p>
+            <p className="text-2xl font-bold px-2">태그</p>
             <p onClick={goBack} className="text-xl text-gray-500">
               이전
             </p>
