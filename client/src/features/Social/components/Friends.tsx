@@ -1,6 +1,7 @@
 import { GET } from "@/axios/GET";
 import React, { useEffect, useRef, useState } from "react";
 import CardDetail from "./CardDetail";
+import axios from "axios";
 
 const Friends = () => {
   const [friends, setFriends] = useState([]);
@@ -15,11 +16,13 @@ const Friends = () => {
 
   // 최근 업데이트 친구 조회
   const getFriends = async () => {
-    const data = await GET("friends");
-    console.log("data", data);
+    // const data = await GET("friends");
+    // console.log("data", data);
 
+    // 임시
+    const data = await axios.get(`http://localhost:4000/friends`);
     if (data != null) {
-      setFriends(data);
+      setFriends(data.data);
     }
   };
 
@@ -59,7 +62,7 @@ const Friends = () => {
 
   return (
     <div className="w-full">
-      <p className="text-3xl font-semibold">친구</p>
+      <p className="text-3xl font-bold">친구</p>
       <ul
         ref={listRef}
         className="flex justify-start py-5 overflow-x-hidden overflow-y-hidden scrolling-touch w-full cursor-grab"
@@ -73,11 +76,11 @@ const Friends = () => {
             return (
               <li
                 key={f.id}
-                className="m-3 p-1 flex-shrink-0 bg-gradient-to-tr from-violet-600 to-yellow-300 rounded-full"
+                className="m-4 p-2 flex-shrink-0 bg-gradient-to-tr from-violet-600 to-yellow-300 rounded-full"
               >
                 <img
                   src={f.image}
-                  className="w-20 h-20 rounded-full transform transition hover:-rotate-6 cursor-pointer"
+                  className="w-24 h-24 rounded-full transform transition hover:-rotate-6 cursor-pointer"
                   alt="profile"
                   onClick={() => setShowModal(true)}
                 />
