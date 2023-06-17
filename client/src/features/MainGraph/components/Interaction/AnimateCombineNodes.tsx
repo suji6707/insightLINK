@@ -1,5 +1,5 @@
 const animateCombineNodes = (
-  myChart: any,
+  chart: any,
   nodes: ChartNode[],
   links: ChartLink[],
   node1: ChartNode,
@@ -28,7 +28,7 @@ const animateCombineNodes = (
         return node;
       });
 
-      myChart.setOption({ series: [{ data: nodes, links }] });
+      chart.setOption({ series: [{ data: nodes, links }] });
 
       requestAnimationFrame(animateStep);
     } else {
@@ -38,7 +38,7 @@ const animateCombineNodes = (
       );
       nodes.push(newNode);
 
-      myChart.setOption({ series: [{ data: nodes, links }] });
+      chart.setOption({ series: [{ data: nodes, links }] });
     }
   };
 
