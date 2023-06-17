@@ -1,15 +1,13 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 // recoil
 import { useRecoilState } from "recoil";
-import {
-  DashBoardCardAtom,
-  ChartInstanceAtom,
-  NodeIdAtom,
-} from "@/recoil/atoms/MainGraphAtom";
+import { DashBoardCardAtom, NodeIdAtom } from "@/recoil/atoms/MainGraphAtom";
 // library
 import * as echarts from "echarts";
 // type
 import { Main_graph_Api_DTO } from "@/axios/dashBoardApi";
+import combineNodes from "../Interaction/CombineNode";
+import { POST } from "@/axios/POST";
 
 type MainGraphProps = {
   data: Main_graph_Api_DTO;
@@ -20,6 +18,8 @@ function Graph({ data: graph }: MainGraphProps) {
   const [lastClickedNode, setLastClickedNode] = useState<string>("");
   const [openCard, setOpenCard] = useRecoilState(DashBoardCardAtom);
   const [nodeId, setNodeId] = useRecoilState(NodeIdAtom);
+  const pressTimer = useRef<any>(null);
+  let longPressNode: string | null = null;
 
   const [options, setOptions] = useState({
     tooltip: {},
@@ -79,6 +79,93 @@ function Graph({ data: graph }: MainGraphProps) {
         }
       };
       chart.on("click", clickHandler);
+
+      let longPressNode = null;
+      let pressTimer = null;
+
+      // 마우스 오래 클릭시 combineNodes
+      chart.getZr().on("mousedown", (params) => {
+        console.log("mouse!!");
+        console.log(params.target);
+
+        const ecInnerKey = Object.keys(params.target).find((key) =>
+          key.startsWith("__ec_inner_")
+        );
+
+        if (ecInnerKey && params.target[ecInnerKey].dataType === "node") {
+          const dataIndex = params.target[ecInnerKey].dataIndex;
+
+          pressTimer = setTimeout(() => {
+            console.log("selected");
+
+            // 노드의 옵션 가져오기
+            const nodesOption = chart.getOption().series[0].data as any[];
+            const nodeId = nodesOption[dataIndex].id;
+            const currentNode = nodesOption.find((node) => node.id === nodeId);
+
+            if (longPressNode) {
+              // 이전에 길게 누른 노드 객체 가져오기
+              const prevNode = nodesOption.find(
+                (node) => node.id === longPressNode
+              );
+              console.log({
+                chart,
+                nodes: nodesOption,
+                links: chart.getOption().series[0].links as any[],
+                node1: prevNode!,
+                node2: currentNode!,
+              });
+              let success = 0;
+
+              // 두 노드를 결합하는 함수 호출
+              success = combineNodes({
+                chart,
+                nodes: nodesOption,
+                links: chart.getOption().series[0].links as any[],
+                node1: prevNode!,
+                node2: currentNode!,
+              });
+
+              const POSTMerge = async () => {
+                const token = localStorage.getItem("token");
+                const result = await POST(
+                  "tag/merge",
+                  { tagId1: prevNode.id, tagId2: currentNode.id },
+                  {
+                    headers: {
+                      authorization: `Bearer ${token}`,
+                    },
+                  }
+                );
+                console.log(result);
+              };
+
+              if (success) {
+                POSTMerge();
+              }
+
+              longPressNode = null; // longPressNode 초기화
+            } else {
+              longPressNode = nodeId; // 길게 클릭한 노드 저장
+
+              // 노드의 stroke 색상 변경 (노드를 노란색으로 바꾸기)
+              currentNode!.itemStyle = {
+                borderColor: "yellow",
+                borderWidth: 3,
+              };
+              chart.setOption({ series: [{ data: nodesOption }] });
+            }
+          }, 2000); // 2초 이상 길게 누르면 long press로 간주
+        }
+      });
+
+      chart.getZr().on("mouseup", () => {
+        if (pressTimer !== null) {
+          clearTimeout(pressTimer);
+          pressTimer = null;
+        }
+      });
+
       // Cleanup function
       return () => {
         chart.off("click", clickHandler);

@@ -1,7 +1,7 @@
 import animateCombineNodes from "./AnimateCombineNodes";
 
 const combineNodes = ({
-  myChart,
+  chart,
   nodes,
   links,
   node1,
@@ -18,7 +18,7 @@ const combineNodes = ({
   };
 
   // 애니메이션 시작
-  animateCombineNodes(myChart, nodes, links, node1, node2, newNode, 1000); // 1000ms duration
+  animateCombineNodes(chart, nodes, links, node1, node2, newNode, 1000); // 1000ms duration
 
   return 1;
 };
