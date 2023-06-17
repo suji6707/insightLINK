@@ -38,7 +38,6 @@ function LoginButton() {
         // console.log(token);
 
         // Store the token in local storage
-      ç
 
         // Session management
         // const sessionResponse = await axios.get(`${serverPath}/api/users/me`, {
