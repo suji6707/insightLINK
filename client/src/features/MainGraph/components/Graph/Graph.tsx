@@ -21,7 +21,7 @@ function Graph({ data: graph }: MainGraphProps) {
   const pressTimer = useRef<any>(null);
   let longPressNode: string | null = null;
 
-  const [options, setOptions] = useState({
+  const [options, setOptions] = useState<echarts.EChartsOption>({
     tooltip: {},
     animationDuration: 1500,
     animationEasingUpdate: "quinticInOut",
@@ -33,10 +33,11 @@ function Graph({ data: graph }: MainGraphProps) {
         links: graph?.links,
         roam: false,
         label: {
-          position: "insight", // label의 위치
-          fontSize: 12, // label의 폰트 크기
+          position: "inside", // 레이블을 위로 정렬
+          fontSize: 12,
           formatter: "{b}",
         },
+
         lineStyle: {
           width: 2, // edge의 두께
           color: "source",
@@ -59,12 +60,12 @@ function Graph({ data: graph }: MainGraphProps) {
 
   const handleNodeClick = useCallback(
     (nodeId: string) => {
-      setNodeId(nodeId);
+      setNodeId((currNodeId) => (currNodeId === null ? nodeId : null));
       const isLastClickedNode = lastClickedNode === nodeId;
       setOpenCard(isLastClickedNode ? !openCard : true);
       setLastClickedNode(nodeId);
     },
-    [lastClickedNode, openCard]
+    [lastClickedNode, openCard, setNodeId]
   );
 
   useEffect(() => {
@@ -72,19 +73,17 @@ function Graph({ data: graph }: MainGraphProps) {
       const chart = echarts.init(chartRef.current);
       chart.setOption(options);
 
-      const clickHandler = function (params) {
+      const clickHandler = function (params: any) {
         if (params.dataType === "node") {
           console.log("node clicked");
-          handleNodeClick(params.data.id);
+          handleNodeClick(params.data.id as string);
         }
       };
+
       chart.on("click", clickHandler);
 
-      let longPressNode = null;
-      let pressTimer = null;
-
       // 마우스 오래 클릭시 combineNodes
-      chart.getZr().on("mousedown", (params) => {
+      chart.getZr().on("mousedown", (params: any) => {
         console.log("mouse!!");
         console.log(params.target);
 
@@ -95,11 +94,12 @@ function Graph({ data: graph }: MainGraphProps) {
         if (ecInnerKey && params.target[ecInnerKey].dataType === "node") {
           const dataIndex = params.target[ecInnerKey].dataIndex;
 
-          pressTimer = setTimeout(() => {
+          pressTimer.current = setTimeout(() => {
             console.log("selected");
 
             // 노드의 옵션 가져오기
-            const nodesOption = chart.getOption().series[0].data as any[];
+            const nodesOption = (chart.getOption() as any).series[0]
+              .data as any[];
             const nodeId = nodesOption[dataIndex].id;
             const currentNode = nodesOption.find((node) => node.id === nodeId);
 
@@ -111,7 +111,7 @@ function Graph({ data: graph }: MainGraphProps) {
               console.log({
                 chart,
                 nodes: nodesOption,
-                links: chart.getOption().series[0].links as any[],
+                links: (chart.getOption() as any).series[0].links as any[],
                 node1: prevNode!,
                 node2: currentNode!,
               });
@@ -121,7 +121,7 @@ function Graph({ data: graph }: MainGraphProps) {
               success = combineNodes({
                 chart,
                 nodes: nodesOption,
-                links: chart.getOption().series[0].links as any[],
+                links: (chart.getOption() as any).series[0].links as any[],
                 node1: prevNode!,
                 node2: currentNode!,
               });
@@ -160,9 +160,9 @@ function Graph({ data: graph }: MainGraphProps) {
       });
 
       chart.getZr().on("mouseup", () => {
-        if (pressTimer !== null) {
-          clearTimeout(pressTimer);
-          pressTimer = null;
+        if (pressTimer.current !== null) {
+          clearTimeout(pressTimer.current);
+          pressTimer.current = null;
         }
       });
 

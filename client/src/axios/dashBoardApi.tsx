@@ -20,14 +20,11 @@ export interface Main_graph_Api_DTO {
   links: GraphLink[];
 }
 
-interface Card {
-  cardId: number;
-  cardTag: string[];
-  cardKeyword: string;
-}
-
 export interface Card_Info_Api_DTO {
-  data: Card[];
+  data: {
+    cardTag: string[]; // Add cardTag property
+    cardContent: string; // Add cardContent property or modify as per your data structure
+  }[];
 }
 
 export const Main_graph_Api = async (): Promise<Main_graph_Api_DTO> => {
