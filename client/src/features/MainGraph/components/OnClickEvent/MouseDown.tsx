@@ -8,6 +8,10 @@ const handleNodeLongClick = (
   longPressNode: React.MutableRefObject<string | null>,
   pressTimer: React.MutableRefObject<any>
 ) => {
+  if (!params.target) {
+    return; // 빈 공간을 클릭한 경우 처리
+  }
+
   const ecInnerKey = Object.keys(params.target).find((key) =>
     key.startsWith("__ec_inner_")
   );
