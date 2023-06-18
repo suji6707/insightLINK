@@ -1,5 +1,7 @@
+import { ECharts } from "echarts";
+
 const animateCombineNodes = (
-  chart: any,
+  chart: ECharts,
   nodes: ChartNode[],
   links: ChartLink[],
   node1: ChartNode,
@@ -9,21 +11,20 @@ const animateCombineNodes = (
 ) => {
   const startTime = performance.now();
 
+  // 🚨 서서히 node1으로 node2가 이동하게 수정 필요
   const animateStep = (timestamp: number) => {
     const progress = (timestamp - startTime) / duration;
 
     if (progress < 1) {
-      // node1을 node2 쪽으로 이동
-      const x = node1.x + progress * (node2.x - node1.x);
-      const y = node1.y + progress * (node2.y - node1.y);
-
-      // 새 노드 크기를 점점 키우기
       const symbolSize =
         node1.symbolSize + progress * (newNode.symbolSize - node1.symbolSize);
 
       nodes = nodes.map((node) => {
         if (node.id === node1.id) {
-          return { ...node, x, y, symbolSize };
+          return { ...node, symbolSize };
+        }
+        if (node.id === node2.id) {
+          return { ...node, x: newNode.x, y: newNode.y };
         }
         return node;
       });
