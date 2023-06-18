@@ -91,17 +91,16 @@ function Graph({ data: graph }: MainGraphProps) {
       chart.on("click", clickHandler);
 
       // 마우스 오래 클릭시 태그 병합
-      chart
-        .getZr()
-        .on("mousedown", (params) =>
-          handleNodeLongClick(params, chart, longPressNode, pressTimer)
-        );
+      const handleMouseDown = (params: any) =>
+        handleNodeLongClick(params, chart, longPressNode, pressTimer);
 
+      chart.getZr().on("mousedown", handleMouseDown);
       chart.getZr().on("mouseup", handleNodeUnclick(pressTimer));
 
       // Cleanup function
       return () => {
         chart.off("click", clickHandler);
+        chart.getZr().off("mousedown", handleMouseDown);
       };
     }
   }, [options, handleNodeClick]);
