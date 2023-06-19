@@ -4,15 +4,23 @@ import CardDetail from "./CardDetail";
 import axios from "axios";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
+interface Card {
+  id: number;
+  nickName: string;
+  profile: string;
+  tags: string;
+  content: string;
+}
+
 const Feeds = () => {
-  const [cards, setCards] = useState([]);
+  const [cards, setCards] = useState<Card[]>([]);
   // 모달
   const modalRef = useRef<HTMLDivElement>(null);
   const [showModal, setShowModal] = useState(false);
   const [cardId, setCardId] = useState(1);
 
   const getFeeds = async () => {
-    // const data = await GET("feeds");
+    // const data = await GET(`social/card?userId={}`);
     // 임시
     const data = await axios.get(`http://localhost:4000/feeds`);
     if (data != null) {
@@ -23,6 +31,11 @@ const Feeds = () => {
   useEffect(() => {
     getFeeds();
   }, []);
+
+  const handleClose = (id: number) => {
+    const newCards = cards.filter((c) => c.id !== id);
+    setCards(newCards);
+  };
 
   const modalOutsideClicked = (e: any) => {
     if (modalRef.current === e.target) {
@@ -48,7 +61,10 @@ const Feeds = () => {
                     <p className="w-full font-bold">{c.nickName}</p>
                     <div className="flex items-center justify-end w-full">
                       <p className="mr-2">#{c.tags}</p>
-                      <AiOutlineCloseCircle className="text-xl" />
+                      <AiOutlineCloseCircle
+                        className="text-xl"
+                        onClick={() => handleClose(c.id)}
+                      />
                     </div>
                   </div>
                 </div>

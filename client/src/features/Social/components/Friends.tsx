@@ -16,7 +16,7 @@ const Friends = () => {
 
   // 최근 업데이트 친구 조회
   const getFriends = async () => {
-    // const data = await GET("friends");
+    // const data = await GET("friend/updated");
     // console.log("data", data);
 
     // 임시

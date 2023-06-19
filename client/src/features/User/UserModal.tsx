@@ -10,7 +10,7 @@ type UserModalProps = {
 
 const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
   const router = useRouter();
-  
+
   const { data: sessionData } = useSession();
   const [token, setToken] = useState<string | null>(null);
 
@@ -24,10 +24,10 @@ const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
       <div className="bg-white p-8 rounded-lg shadow-lg text-center">
         <h2 className="font-bold mb-4">User Modal</h2>
         {typeof window !== "undefined" && sessionData?.user && token ? (
-              <GoogleLogoutBtn />
-            ) : token ? (
-                < LogoutBtn />
-            ):null}
+          <GoogleLogoutBtn router={router} />
+        ) : token ? (
+          <LogoutBtn />
+        ) : null}
         <button
           className="bg-black text-white font-bold py-2 px-4 rounded mt-2"
           onClick={closeModal}
