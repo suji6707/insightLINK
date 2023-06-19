@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FiThumbsUp, FiThumbsDown } from "react-icons/fi";
 import { GET } from "@/axios/GET";
 import CardDetail from "./CardDetail";
 import axios from "axios";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 
 const Feeds = () => {
   const [cards, setCards] = useState([]);
@@ -48,8 +48,7 @@ const Feeds = () => {
                     <p className="font-bold w-full">{c.nickName}</p>
                     <div className="flex justify-end items-center w-full">
                       <p className="mr-2">#{c.tags}</p>
-                      <FiThumbsUp className="mr-2" />
-                      <FiThumbsDown className="mr-2" />
+                      <AiOutlineCloseCircle className="text-xl" />
                     </div>
                   </div>
                 </div>

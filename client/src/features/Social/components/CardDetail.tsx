@@ -1,5 +1,4 @@
 import React from "react";
-import { FiThumbsDown, FiThumbsUp } from "react-icons/fi";
 
 const CardDetail = ({
   modalRef,
@@ -21,10 +20,6 @@ const CardDetail = ({
           <div className="flex flex-row">
             <p className="mr-2">#tag</p>
             <p>#tag</p>
-          </div>
-          <div className="flex flex-row">
-            <FiThumbsUp className="mr-2" />
-            <FiThumbsDown className="mr-2" />
           </div>
         </div>
       </div>
