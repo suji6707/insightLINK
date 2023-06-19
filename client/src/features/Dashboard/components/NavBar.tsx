@@ -46,7 +46,7 @@ export default function NavBar() {
   `;
 
   return (
-    <div className="flex flex-row items-center justify-between p-7">
+    <div className="flex flex-row items-center justify-between p-7 fixed top-0 w-full">
       <Link href="/dashboard">
         <p className="text-3xl font-extrabold">insightLINK</p>
       </Link>
@@ -63,7 +63,11 @@ export default function NavBar() {
         <BsShare size={30} />
         <AiTwotoneBell size={30} />
         {userProfile ? (
-          <img src={userProfile} className="w-10 h-10 rounded-full" onClick={handleUserIconClick} />
+          <img
+            src={userProfile}
+            className="w-10 h-10 rounded-full"
+            onClick={handleUserIconClick}
+          />
         ) : (
           <BiUser size={30} onClick={handleUserIconClick} />
         )}
