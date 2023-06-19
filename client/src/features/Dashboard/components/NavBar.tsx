@@ -63,7 +63,7 @@ export default function NavBar() {
         <BsShare size={30} />
         <AiTwotoneBell size={30} />
         {userProfile ? (
-          <img src={userProfile} className="w-10 h-10 rounded-full" />
+          <img src={userProfile} className="w-10 h-10 rounded-full" onClick={handleUserIconClick} />
         ) : (
           <BiUser size={30} onClick={handleUserIconClick} />
         )}

@@ -12,6 +12,14 @@ MYSQL_PORT = 3306
 ```
 
 <br />
+
+client/.env
+```
+GOOGLE_CLIENT_ID = 구글 클라이언트 아이디
+GOOGLE_CLIENT_SECRET = 구글 클라이언트 시크릿
+```
+
+<br />
 서버 실행
 
 ```

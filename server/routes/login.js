@@ -7,13 +7,14 @@ const router = express.Router();
 
 
 router.post('/', async (req, res) => {
+  console.log(req.body);
   const { email, givenName, imageUrl } = req.body;
 
   /* 유저정보 확인 */
   let connection = null;
   try {
     connection = await db.getConnection();
-    const sql = `SELECT * FROM User WHERE email = '${email}' AND profile_img='${imageUrl}'`;
+    const sql = `SELECT * FROM User WHERE email = '${email}'`;
     const [result] = await connection.query(sql);
     connection.release();
 
