@@ -5,8 +5,7 @@ import { DashBoardCardAtom, NodeIdAtom } from "@/recoil/atoms/MainGraphAtom";
 // library
 import * as echarts from "echarts";
 // type
-import { Main_graph_Api_DTO } from "@/axios/dashBoardApi";
-
+import { Main_graph_Api_DTO } from "@/types/dashborad.types";
 import handleNodeUnclick from "../OnClickEvent/MouseUp";
 import handleNodeLongClick from "../OnClickEvent/MouseDown";
 
@@ -67,24 +66,37 @@ function Graph({ data: graph }: MainGraphProps) {
   });
 
   const handleNodeClick = useCallback(
-    (nodeId: string) => {
-      setNodeId((currNodeId) => (currNodeId === null ? nodeId : null));
-      const isLastClickedNode = lastClickedNode === nodeId;
-      setOpenCard(isLastClickedNode ? !openCard : true);
-      setLastClickedNode(nodeId);
+    (nodeName: string) => {
+      // 이전에 클릭된 노드인지 확인
+      console.log(nodeName);
+      const isLastClickedNode = lastClickedNode === nodeName;
+      setLastClickedNode(nodeName);
+      // 클릭된 노드 상태 업데이트
+      if (isLastClickedNode) {
+        setOpenCard(!openCard);
+      } else {
+        setOpenCard(true);
+        setNodeId(nodeName);
+      }
     },
-    [lastClickedNode, openCard, setNodeId]
+    [lastClickedNode, openCard]
   );
 
   useEffect(() => {
     if (chartRef.current) {
       const chart = echarts.init(chartRef.current);
+
+      graph.nodes.forEach((node: any) => {
+        node.label = {
+          show: node.symbolSize >= 15,
+        };
+      });
+
       chart.setOption(options);
 
-      const clickHandler = function (params: any) {
+      const clickHandler = function (params) {
         if (params.dataType === "node") {
-          console.log("node clicked");
-          handleNodeClick(params.data.id as string);
+          handleNodeClick(params.name as string);
         }
       };
 
