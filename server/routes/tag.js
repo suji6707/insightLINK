@@ -12,7 +12,7 @@ router.post('/merge', async (req, res) => {
         const parentTag = parseInt(req.body.tagId1);
         const childTag = parseInt(req.body.tagId2);
 
-        const [result] = await connection.query(`SELECT tag_index FROM Tag WHERE file_id IN (SELECT file_id FROM File WHERE user_id = ${userId}) AND tag_index = ${parentTag}`);
+        const [result] = await connection.query(`SELECT tag_index,tag FROM Tag WHERE file_id IN (SELECT file_id FROM File WHERE user_id = ${userId}) AND tag_index = ${parentTag}`);
         const parentName = result[0].tag;
         const resultQuery = `UPDATE Tag SET tag = '${parentName}', tag_index = ${parentTag} WHERE tag_index = ${childTag}`;
 
