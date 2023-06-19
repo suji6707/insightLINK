@@ -40,7 +40,7 @@ app.use('/api/user',authMiddleware,userRouter);
 app.use('/api/graph', authMiddleware, graphRouter);
 app.use('/api/cards', cardRouter);
 app.use('/dashboard', searchRouter);
-
+app.use('/api/tag',authMiddleware,tagRouter);
 
 /* session management */
 app.get('/api/users/me', authMiddleware, async (req, res) => {

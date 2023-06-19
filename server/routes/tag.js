@@ -6,18 +6,20 @@ const router = express.Router();
 let connection = null;
 router.post('/merge', async (req, res) => {
     try {
+        const { user } = res.locals;
+        const userId = user.user_id;
         connection = await db.getConnection();
         const parentTag = parseInt(req.body.tagId1);
         const childTag = parseInt(req.body.tagId2);
 
-        const [result] = await connection.query(`SELECT tag FROM Tag WHERE tag_index = ${parentTag}`);
+        const [result] = await connection.query(`SELECT tag_index FROM Tag WHERE file_id IN (SELECT file_id FROM File WHERE user_id = ${userId}) AND tag_index = ${parentTag}`);
         const parentName = result[0].tag;
         const resultQuery = `UPDATE Tag SET tag = '${parentName}', tag_index = ${parentTag} WHERE tag_index = ${childTag}`;
 
         await connection.query(resultQuery);
 
         connection.release();
-        return res.status(200).send('요청, 조회 성공');
+        return res.status(200).send('success');
     } catch(err) {
         connection?.release();
         console.log(err);
