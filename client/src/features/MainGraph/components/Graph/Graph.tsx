@@ -23,12 +23,6 @@ function Graph({ data: graph }: MainGraphProps) {
   const longPressNode = useRef<string | null>(null);
 
   const [options, setOptions] = useState<echarts.EChartsOption>({
-    title: {
-      text: "ㅇㅇ의 인사이트",
-      subtext: "여기 정보가 나오는 건 어때?",
-      top: "top",
-      left: "left",
-    },
     tooltip: {},
     animationDuration: 1500,
     animationEasingUpdate: "quinticInOut",

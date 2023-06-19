@@ -7,6 +7,7 @@ import UserPanel from "@/features/Dashboard/components/UserPanel";
 import MainGraph from "@/features/MainGraph/components/MainGraph/MainGraph";
 import CardPanel from "@/features/MainCard/components/CardPanel";
 import ImageUpload from "@/features/ImageUpload/ImageUpload";
+import { Wrapper } from "@/styles/wrapper";
 
 export default function Dashboard() {
   const [openCard, setOpenCard] = useRecoilState(DashBoardCardAtom);
@@ -15,22 +16,24 @@ export default function Dashboard() {
   return (
     <>
       <NavBar />
-      <div className="flex flex-col justify-between w-full">
-        <UserPanel
-          showImgModal={showImgModal}
-          setShowImgModal={setShowImgModal}
-        />
-        <div className="flex flex-row justify-between w-full">
-          <MainGraph />
-          {openCard ? <CardPanel /> : <></>}
+      <Wrapper className="w-full px-10">
+        <div className="flex flex-col justify-between w-full">
+          <UserPanel
+            showImgModal={showImgModal}
+            setShowImgModal={setShowImgModal}
+          />
+          <div className="flex flex-row justify-between w-full">
+            <MainGraph />
+            {openCard ? <CardPanel /> : <></>}
+          </div>
         </div>
-      </div>
-      {showImgModal && (
-        <ImageUpload
-          showImgModal={showImgModal}
-          setShowImgModal={setShowImgModal}
-        />
-      )}
+        {showImgModal && (
+          <ImageUpload
+            showImgModal={showImgModal}
+            setShowImgModal={setShowImgModal}
+          />
+        )}
+      </Wrapper>
     </>
   );
 }
