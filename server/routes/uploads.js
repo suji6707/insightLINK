@@ -71,7 +71,6 @@ router.post('/', upload.array('photos'),
         connection = await db.getConnection();
         const q1 = 'INSERT INTO File (user_id, img_url, content) VALUES (?, ?, ?)';   // SQL - File 
         const q2 = 'INSERT INTO Tag (file_id, tag, tag_index) VALUES (?, ?, ?)';      // SQL - Tag  
-        const q3 = 'INSERT INTO FileTag (file_id, tag_id) VALUES (?, ?)';
         
         /* 모든 이미지를 S3로 저장, sumText.length != 0 인 것만 OCR 및 태그 추출 후 저장 */
         let tagList = [];
@@ -107,9 +106,6 @@ router.post('/', upload.array('photos'),
             /* SQL - Tag */
             const [ result2 ] = await connection.query(q2, [ result1.insertId, tagRow1.koreanKeyword, tagRow1.index ]);   // file's insertId, tag name(KR), tag[0] enum
             const [ result3 ] = await connection.query(q2, [ result1.insertId, tagRow2.koreanKeyword, tagRow2.index ]);   // file's insertId, tag name(KR), tag[1] enum
-            /* SQL - FileTag */
-            await connection.query(q3, [ result1.insertId, result2.insertId ]);       // same file's insertId, tag[0]'s insertId
-            await connection.query(q3, [ result1.insertId, result3.insertId ]);       // same file's insertId, tag[1]'s insertId
           };
         }
 

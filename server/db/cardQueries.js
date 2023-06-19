@@ -17,9 +17,3 @@ export const copyQuery2 =
     SELECT ?, tag, tag_index
     FROM Tag
     WHERE file_id = ?`; 
-
-export const copyQuery3 = 
-  `INSERT INTO FileTag (file_id, tag_id) 
-    SELECT ?, tag_id 
-    FROM FileTag
-    WHERE file_id = ?`; 

@@ -2,7 +2,6 @@ import '../dotenv.js';
 import { db } from '../connect.js';
 import { copyQuery1 } from '../db/cardQueries.js';
 import { copyQuery2 } from '../db/cardQueries.js';
-import { copyQuery3 } from '../db/cardQueries.js';
 
 
 export const getCards =  async (req, res) => {
@@ -33,7 +32,6 @@ const getCard = async (userId, cardId) => {
     connection.release();
     /* 기존 cardId가 아니라 새로 생성된 cardId를 넣어야 함 */
     await connection.query(copyQuery2, [newFileId, newFileId]);
-    await connection.query(copyQuery3, [newFileId, newFileId]);  
     console.log(`Copying card ${cardId} to user ${userId} successed!`);
   } catch (err) {
     connection?.release();
