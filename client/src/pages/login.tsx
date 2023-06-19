@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 // Component
-import LoginButton from "../features/User/LoginButton";
 import NavBar from "@/features/Dashboard/components/NavBar";
 import { Wrapper } from "@/styles/wrapper";
 
@@ -36,25 +35,6 @@ export default function Home() {
       alert("fail!!");
     }
   };
-
-  useEffect(() => {
-    async function loadGapi() {
-      const { gapi } = await import("gapi-script");
-
-      // const clientId = process.env.GOOGLE_CLIENT_ID;
-      const clientId =
-        "862985060268-bns768k2p01btrjkdk94f8hkrvqlt5d8.apps.googleusercontent.com";
-
-      if (gapi && gapi.client) {
-        await gapi.client.init({
-          clientId,
-          scope: "",
-        });
-      }
-    }
-
-    loadGapi();
-  }, []);
 
   return (
     <div>
@@ -113,7 +93,6 @@ export default function Home() {
             >
               로그인
             </button>
-            <LoginButton />
           </div>
         </div>
       </Wrapper>
