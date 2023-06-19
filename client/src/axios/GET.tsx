@@ -12,6 +12,6 @@ export const GET = async (uri: string, headers?: any): Promise<any | null> => {
     return res.data;
   } catch (err) {
     console.log("GET 실패", err);
-    return null;
+    return err;
   }
 };
