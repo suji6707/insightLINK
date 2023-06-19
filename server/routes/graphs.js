@@ -44,7 +44,9 @@ const getGraphData = async (userId) => {
       nodes: graphCountResult,
       links: sortDirection(graphDirectionResult),
     };
-    // console.log(graph);
+    // source와 target 중복 값 제거
+    graph.links = graph.links.filter(link => link.source !== link.target);
+    console.log(graph);
     connection.release();
     return graph;  
   } catch (err) {
