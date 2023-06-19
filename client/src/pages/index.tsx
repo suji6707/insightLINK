@@ -61,14 +61,10 @@ export default function Home() {
             </p>
             <p className="text-8xl font-bold mt-10 mb-32">insightLINK</p>
             <div className="flex justify-between h-11">
-            {(!sessionData?.user && !token) ? (
-                 <SignupButton />
-              ): null}
-              {(!sessionData?.user && !token) ? (
-                <LoginBtn />
-              ): null}
+              {!sessionData?.user && !token ? <SignupButton /> : null}
+              {!sessionData?.user && !token ? <LoginBtn /> : null}
               {sessionData?.user ? (
-                <GoogleLogoutBtn />
+                <GoogleLogoutBtn router={router} />
               ) : (
                 <GoogleLoginBtn />
               )}
@@ -77,5 +73,5 @@ export default function Home() {
         </div>
       </Wrapper>
     </div>
-  )
+  );
 }

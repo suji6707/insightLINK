@@ -1,8 +1,13 @@
 // components/LogoutButton.js
 import { signOut } from "next-auth/react";
+import { NextRouter } from "next/router";
 
-const GoogleLogoutBtn = () => {
-  const handleLogout = async (e : any) => {
+interface GoogleLogoutBtnProps {
+  router: NextRouter;
+}
+
+const GoogleLogoutBtn: React.FC<GoogleLogoutBtnProps> = ({ router }) => {
+  const handleLogout = async (e: any) => {
     e.preventDefault();
     await signOut({ callbackUrl: "/" });
     localStorage.removeItem("token");
