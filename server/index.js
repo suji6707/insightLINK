@@ -16,10 +16,6 @@ import tagRouter from './routes/tag.js';
 // import testRouter from './routes/test.js';
 
 import cardRouter from './routes/cards.js';
-/* DD */
-// import cardTagRouter from './routes/cardTag.js';
-// import cardInfoRouter from './routes/cardInfo.js';
-// import cardMergeRouter from './routes/cardMerge.js';
 import userRouter from './routes/user.js'; 
 import searchRouter from './routes/search.js';
 import mypageRouter from './routes/mypage.js';
@@ -46,7 +42,7 @@ app.use('/api/graph', authMiddleware, graphRouter);
 app.use('/api/cards', cardRouter);
 app.use('/dashboard', searchRouter);
 app.use('/api/myinfo', authMiddleware, mypageRouter);
-
+app.use('/api/tag',authMiddleware,tagRouter);
 
 /* session management */
 app.get('/api/users/me', authMiddleware, async (req, res) => {

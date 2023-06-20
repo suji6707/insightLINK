@@ -16,7 +16,7 @@ const Friends = () => {
 
   // 최근 업데이트 친구 조회
   const getFriends = async () => {
-    // const data = await GET("friends");
+    // const data = await GET("friend/updated");
     // console.log("data", data);
 
     // 임시
@@ -76,7 +76,7 @@ const Friends = () => {
             return (
               <li
                 key={f.id}
-                className="m-4 p-2 flex-shrink-0 bg-gradient-to-tr from-violet-600 to-yellow-300 rounded-full"
+                className="m-2 p-2 flex-shrink-0 bg-gradient-to-tr from-violet-600 to-yellow-300 rounded-full"
               >
                 <img
                   src={f.image}

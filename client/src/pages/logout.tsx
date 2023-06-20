@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 // Component
 import NavBar from "@/features/Dashboard/components/NavBar";
 import { Wrapper } from "@/styles/wrapper";
-import GoogleLogoutBtn from "../features/User/GoogleLogoutBtn";
+import GoogleLogoutBtn from "@/features/User/GoogleLogoutBtn";
 import { useSession } from "next-auth/react";
 
 export default function Home() {
@@ -31,17 +31,16 @@ export default function Home() {
             {/* Updated class */}
           </div>
           <div className="flex justify-end mt-4">
-           {typeof window !== "undefined" && sessionData?.user && token ? (
+            {typeof window !== "undefined" && sessionData?.user && token ? (
               <GoogleLogoutBtn router={router} />
             ) : token ? (
-                <button
+              <button
                 onClick={handleLogout}
                 className="px-4 py-2 mr-4 font-bold text-white bg-black rounded"
               >
                 로그아웃
               </button>
-            ):null}
-            
+            ) : null}
           </div>
         </div>
       </Wrapper>

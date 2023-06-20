@@ -10,13 +10,13 @@ type UserModalProps = {
 };
 
 const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
+  const router = useRouter();
+  
   const { data: sessionData } = useSession();
   const [token, setToken] = useState<string | null>(null);
   const [userInfo, setUserInfo] = useState<any>(null);
   const [editedNickname, setEditedNickname] = useState<string>("");
   const [isEditingNickname, setIsEditingNickname] = useState(false);
-
-  const router = useRouter();
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
