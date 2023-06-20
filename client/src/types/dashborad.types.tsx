@@ -32,3 +32,9 @@ export interface CardData {
 export interface CardData_DTO {
   data: CardData[];
 }
+
+export interface CardDetail_DTO {
+  cardId: number;
+  cardTag: string[];
+  cardImage: string;
+}
