@@ -1,6 +1,7 @@
 import { ECharts } from "echarts";
 import combineNodes from "../Interaction/CombineNode";
 import { POST } from "@/axios/POST";
+import getToken from "@/axios/getToken";
 
 const handleNodeLongClick = (
   params: any,
@@ -47,15 +48,10 @@ const handleNodeLongClick = (
         });
 
         const POSTMerge = async () => {
-          const token = localStorage.getItem("token");
           const result = await POST(
             "tag/merge",
             { tagId1: prevNode.id, tagId2: currentNode.id },
-            {
-              headers: {
-                authorization: `Bearer ${token}`,
-              },
-            }
+            getToken()
           );
           console.log(result);
         };

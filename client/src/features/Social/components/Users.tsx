@@ -1,6 +1,6 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 
+import getToken from "@/axios/getToken";
 import { GET } from "@/axios/GET";
 import { DELETE } from "@/axios/DELETE";
 // Assets
@@ -8,12 +8,10 @@ import { AiFillCheckCircle, AiOutlinePlusCircle } from "react-icons/ai";
 
 const Users = () => {
   const [users, setUsers] = useState<any[]>([]);
-  const [isFriend, setIsFriend] = useState(false);
 
+  // 추천 친구 조회
   const getUsers = async () => {
-    // const data = await GET("users");
-    // 임시
-    const data = await axios.get(`http://localhost:4000/users`);
+    const data = await GET("social/user", getToken());
     if (data.data) {
       setUsers(data.data);
     }
@@ -49,7 +47,7 @@ const Users = () => {
         {users &&
           users.map((u) => (
             <li
-              key={u.id}
+              key={u.userId}
               className="flex flex-row items-center justify-around w-60 py-2 border"
             >
               <img
