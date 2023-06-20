@@ -2,13 +2,15 @@ import React, { useEffect, useState } from "react";
 import tw from "tailwind-styled-components";
 import { useTheme } from "next-themes";
 import Link from "next/link";
+
+import { GET } from "@/axios/GET";
+import getToken from "@/axios/getToken";
 // Components
 import UserModal from "@/features/User/UserModal";
 // Assets
 import { AiTwotoneBell } from "react-icons/ai";
 import { BiUser } from "react-icons/bi";
 import { BsShare, BsSunFill, BsFillMoonFill } from "react-icons/bs";
-import { GET } from "@/axios/GET";
 
 export default function NavBar() {
   const { systemTheme, theme, setTheme } = useTheme();
@@ -17,12 +19,7 @@ export default function NavBar() {
   const [isUserModalOpen, setUserModalOpen] = useState(false);
 
   const getProfileImg = async () => {
-    const token = localStorage.getItem("token");
-    const response = await GET("user/profile", {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await GET("user/profile", getToken());
     if (response) {
       console.log(response);
       setUserProfile(response.userProfile);

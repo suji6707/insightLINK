@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
+import getToken from "@/axios/getToken";
+
 import { GET } from "@/axios/GET";
 import CardDetail from "./CardDetail";
-import axios from "axios";
+// Assets
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
 interface Card {
@@ -20,9 +22,7 @@ const Feeds = () => {
   const [cardId, setCardId] = useState(1);
 
   const getFeeds = async () => {
-    // const data = await GET(`social/card?userId={}`);
-    // 임시
-    const data = await axios.get(`http://localhost:4000/feeds`);
+    const data = await GET(`social/card?`, getToken());
     if (data != null) {
       setCards(data.data);
     }

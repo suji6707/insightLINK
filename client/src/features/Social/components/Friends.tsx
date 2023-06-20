@@ -1,7 +1,7 @@
+import getToken from "@/axios/getToken";
 import { GET } from "@/axios/GET";
 import React, { useEffect, useRef, useState } from "react";
 import CardDetail from "./CardDetail";
-import axios from "axios";
 
 const Friends = () => {
   const [friends, setFriends] = useState([]);
@@ -16,11 +16,7 @@ const Friends = () => {
 
   // 최근 업데이트 친구 조회
   const getFriends = async () => {
-    // const data = await GET("friend/updated");
-    // console.log("data", data);
-
-    // 임시
-    const data = await axios.get(`http://localhost:4000/friends`);
+    const data = await GET("friend/updated", getToken());
     if (data != null) {
       setFriends(data.data);
     }
