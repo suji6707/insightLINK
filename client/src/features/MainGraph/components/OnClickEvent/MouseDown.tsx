@@ -1,5 +1,5 @@
 import { ECharts } from "echarts";
-import combineNodes from "../Interaction/CombineNode";
+import combineNodes from "@/features/MainGraph/components/Interaction/CombineNode";
 import { POST } from "@/axios/POST";
 import getToken from "@/axios/getToken";
 
