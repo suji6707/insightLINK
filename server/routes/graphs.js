@@ -30,7 +30,6 @@ router.get('/', async (req, res) => {
 });
 
 
-
 const getGraphData = async (userId) => {
   let connection = null;
   try {
@@ -40,13 +39,53 @@ const getGraphData = async (userId) => {
 
     const [ graphCountResult ] = await connection.query(graphCountQuery(userId));
     const [ graphDirectionResult ] = await connection.query(graphDirectionQuery(userId));
+    //console.log('graphCountResult : \n\n',graphCountResult);
     let graph = {
       nodes: graphCountResult,
       links: sortDirection(graphDirectionResult),
     };
-    // source와 target 중복 값 제거
+    //source와 target 중복 값 제거
     graph.links = graph.links.filter(link => link.source !== link.target);
-    console.log(graph);
+    console.log('graph.links : ',graph.links);
+    // -- Fix SH -- 
+    const categoryList = []
+    for(let i = 0;i< graph.links.length; i++){
+      const link = graph.links[i];
+      let val;
+      let source;
+      let target;
+      if(i == 0){
+        val = [link.source,link.target];
+        categoryList.push(val);
+      }else{
+        source = link.source;
+        target = link.target;
+        const targetArray = [source,target];
+        const existsInCategoryList = categoryList.some(item =>
+          item.includes(source) || item.includes(target)
+        );
+        if (existsInCategoryList) {
+          const targetIndex = categoryList.findIndex(item =>
+            item.includes(source) || item.includes(target)
+          );
+          console.log('targetIndex : ',targetIndex, 'source : ',source);
+          if (categoryList[targetIndex].includes(target)) {
+            categoryList[targetIndex].push(source);
+          }
+        }else{
+          categoryList.push([source, target]);
+        }
+        // if (!existsInCategoryList) {
+        //   categoryList.push([source, target]);
+        // }    
+      }
+    }
+    // -- SH category 추가 --
+    for (const node of graph.nodes){
+      const findIndex = categoryList.findIndex((num) => num = node.id);
+      node.category = findIndex;
+    }
+    // -- End --
     connection.release();
     return graph;  
   } catch (err) {
