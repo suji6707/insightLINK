@@ -7,7 +7,7 @@ import * as echarts from "echarts";
 // type
 import { Main_graph_Api_DTO } from "@/types/dashborad.types";
 
-import handleNodeLongClick from "@/features/MainGraph/components/OnClickEvent/MouseUp";
+import handleNodeLongClick from "@/features/MainGraph/components/OnClickEvent/MouseDown";
 import handleNodeUnclick from "@/features/MainGraph/components/OnClickEvent/MouseUp";
 
 type MainGraphProps = {
@@ -99,7 +99,7 @@ function Graph({ data: graph }: MainGraphProps) {
 
       // 마우스 오래 클릭시 태그 병합
       const handleMouseDown = (params: any) => {
-        chart.getZr().off("mouseup", handleMouseDown);
+        chart.getZr().off("mouseup", handleNodeUnclick(pressTimer));
         handleNodeLongClick(params, chart, longPressNode, pressTimer);
         chart.getZr().on("mouseup", handleNodeUnclick(pressTimer));
       };
