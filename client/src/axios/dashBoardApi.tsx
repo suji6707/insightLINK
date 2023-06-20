@@ -16,18 +16,18 @@ export const Main_graph_Api = async (): Promise<Main_graph_Api_DTO> => {
   return graph;
 };
 
-export const User_Info_Api = async (params: number | undefined) => {
-  try {
-    const response = await axios.get(`${api}/userinfo`);
-    return response;
-  } catch (error) {
-    console.log(error);
-  }
+export const User_Info_Api = async () => {
+  const response = await axios.get(`${api}/user`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+  const userData = response.data;
+  console.log(userData)
+  return userData;
 };
 
 export const Card_Info_Api = async (
   params: string | undefined
-): Promise<CardD_DTO> => {
+): Promise<CardData_DTO> => {
   const response = await axios.get(`${api}/cards/tag?tagname=${params}`, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
