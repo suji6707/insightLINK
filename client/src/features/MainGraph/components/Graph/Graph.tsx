@@ -23,6 +23,12 @@ function Graph({ data: graph }: MainGraphProps) {
   const longPressNode = useRef<string | null>(null);
 
   const [options, setOptions] = useState<echarts.EChartsOption>({
+    title: {
+      text: "ㅇㅇ의 인사이트",
+      subtext: "여기 정보가 나오는 건 어때?",
+      top: "top",
+      left: "left",
+    },
     tooltip: {},
     animationDuration: 1500,
     animationEasingUpdate: "quinticInOut",
@@ -63,7 +69,6 @@ function Graph({ data: graph }: MainGraphProps) {
   const handleNodeClick = useCallback(
     (nodeName: string) => {
       // 이전에 클릭된 노드인지 확인
-      console.log(nodeName);
       const isLastClickedNode = lastClickedNode === nodeName;
       setLastClickedNode(nodeName);
       // 클릭된 노드 상태 업데이트
@@ -89,14 +94,6 @@ function Graph({ data: graph }: MainGraphProps) {
 
       chart.setOption(options);
 
-      const clickHandler = function (params) {
-        if (params.dataType === "node") {
-          handleNodeClick(params.name as string);
-        }
-      };
-
-      chart.on("click", clickHandler);
-
       // 마우스 오래 클릭시 태그 병합
       const handleMouseDown = (params: any) => {
         chart.getZr().off("mouseup", handleNodeUnclick(pressTimer));
@@ -107,6 +104,13 @@ function Graph({ data: graph }: MainGraphProps) {
       chart.getZr().on("mousedown", handleMouseDown);
       chart.getZr().on("mouseup", handleNodeUnclick(pressTimer));
 
+      const clickHandler = function (params) {
+        if (params.dataType === "node" && !pressTimer.current) {
+          handleNodeClick(params.name as string);
+        }
+      };
+
+      chart.on("click", clickHandler);
       // Cleanup function
       return () => {
         chart.off("click", clickHandler);

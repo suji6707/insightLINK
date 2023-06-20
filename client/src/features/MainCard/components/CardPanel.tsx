@@ -15,7 +15,6 @@ function CardPanel() {
   const detailOpen = useRecoilValue(CardDetailOpenAtom);
   const getData = useCard();
 
-  console.log(getData);
   useEffect(() => {
     setCardData(getData);
   }, [getData]);
