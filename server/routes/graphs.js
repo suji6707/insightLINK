@@ -3,6 +3,38 @@ import '../dotenv.js';
 import { db } from '../connect.js';
 import { graphCountQuery, graphDirectionQuery } from '../db/graphQueries.js';
 
+function cycleCount(connections, nodes) {
+  let count = 0;
+  const visited = new Set();
+  const groups = new Map();
+
+  for (const node of nodes) {
+    if (!visited.has(node)) {
+      const groupNum = count + 1;
+      DFS(connections, node, visited, groupNum, groups);
+      count++;
+    }
+  }
+
+  // 묶음 번호 리스트 생성
+  const groupList = nodes.map((node) => groups.get(node));
+  return groupList;
+}
+
+function DFS(connections, node, visited, groupNum, groups) {
+  visited.add(node);
+  groups.set(node, groupNum);
+
+  const neighbors = connections.find((item) => item.node === node).neighbors;
+  if (neighbors.length > 0) {
+    for (const neighbor of neighbors) {
+      if (!visited.has(neighbor)) {
+        DFS(connections, neighbor, visited, groupNum, groups);
+      }
+    }
+  }
+}
+
 const router = express.Router();
 
 
@@ -34,7 +66,6 @@ const getGraphData = async (userId) => {
   let connection = null;
   try {
     connection = await db.getConnection();
-
     console.log(`userId : ${userId} has been logged in!`);
 
     const [ graphCountResult ] = await connection.query(graphCountQuery(userId));
@@ -46,47 +77,26 @@ const getGraphData = async (userId) => {
     };
     //source와 target 중복 값 제거
     graph.links = graph.links.filter(link => link.source !== link.target);
-    console.log('graph.links : ',graph.links);
-    // -- Fix SH -- 
-    const categoryList = []
-    for(let i = 0;i< graph.links.length; i++){
-      const link = graph.links[i];
-      let val;
-      let source;
-      let target;
-      if(i == 0){
-        val = [link.source,link.target];
-        categoryList.push(val);
-      }else{
-        source = link.source;
-        target = link.target;
-        const targetArray = [source,target];
-        const existsInCategoryList = categoryList.some(item =>
-          item.includes(source) || item.includes(target)
-        );
-        if (existsInCategoryList) {
-          const targetIndex = categoryList.findIndex(item =>
-            item.includes(source) || item.includes(target)
-          );
-          console.log('targetIndex : ',targetIndex, 'source : ',source);
-          if (categoryList[targetIndex].includes(target)) {
-            categoryList[targetIndex].push(source);
-          }
-        }else{
-          categoryList.push([source, target]);
-        }
-        // if (!existsInCategoryList) {
-        //   categoryList.push([source, target]);
-        // }    
-      }
+    // id값들을 추출하여 리스트 생성
+    console.log('graph.nodes : ',graph.nodes);
+    const idList = graph.nodes.map(node => node.id);
+    console.log('idList : ',idList);
+    const graphLinks = graph.links.map(link => [link.source,link.target]);
+    console.log('graphLinks : ',graphLinks);
+
+    const connections = idList.map(node => ({ node, neighbors: [] }));
+    for (const edge of graphLinks) {
+      const [a, b] = edge;
+      const nodeA = connections.find(item => item.node === a);
+      const nodeB = connections.find(item => item.node === b);
+      nodeA.neighbors.push(b);
+      nodeB.neighbors.push(a);
     }
-    // -- SH category 추가 --
-    for (const node of graph.nodes){
-      const findIndex = categoryList.findIndex((num) => num = node.id);
-      node.category = findIndex;
-    }
-    // -- End --
-    connection.release();
+    const categoryList = cycleCount(connections, idList);
+    graph.nodes.forEach((node, index) => {
+      node.category = categoryList[index];
+    });
+    //console.log('graph : ',graph);
     return graph;  
   } catch (err) {
     connection?.release();
@@ -94,7 +104,6 @@ const getGraphData = async (userId) => {
     throw new Error('Internal Server Error');
   }
 };
-
 
 
 const sortDirection = (graphDirectionResult) => {
