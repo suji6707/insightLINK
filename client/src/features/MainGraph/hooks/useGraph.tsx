@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { Main_graph_Api, Main_graph_Api_DTO } from "@/axios/dashBoardApi";
 
-function useGraph(){
-  const [data, setData] = useState<Main_graph_Api_DTO>();
+function useGraph() {
+  const [data, setData] = useState<Main_graph_Api_DTO | undefined>(undefined);
 
   useEffect(() => {
     const getGraphData = async () => {
@@ -12,7 +12,7 @@ function useGraph(){
     getGraphData();
   }, []);
 
-  return [data]
+  return data;
 }
 
-export default useGraph
+export default useGraph;
