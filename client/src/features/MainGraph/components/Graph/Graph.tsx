@@ -6,8 +6,9 @@ import { DashBoardCardAtom, NodeIdAtom } from "@/recoil/atoms/MainGraphAtom";
 import * as echarts from "echarts";
 // type
 import { Main_graph_Api_DTO } from "@/types/dashborad.types";
-import handleNodeUnclick from "../OnClickEvent/MouseUp";
-import handleNodeLongClick from "../OnClickEvent/MouseDown";
+
+import handleNodeLongClick from "@/features/MainGraph/components/OnClickEvent/MouseUp";
+import handleNodeUnclick from "@/features/MainGraph/components/OnClickEvent/MouseUp";
 
 type MainGraphProps = {
   data: Main_graph_Api_DTO;
@@ -97,8 +98,11 @@ function Graph({ data: graph }: MainGraphProps) {
       chart.on("click", clickHandler);
 
       // 마우스 오래 클릭시 태그 병합
-      const handleMouseDown = (params: any) =>
+      const handleMouseDown = (params: any) => {
+        chart.getZr().off("mouseup", handleMouseDown);
         handleNodeLongClick(params, chart, longPressNode, pressTimer);
+        chart.getZr().on("mouseup", handleNodeUnclick(pressTimer));
+      };
 
       chart.getZr().on("mousedown", handleMouseDown);
       chart.getZr().on("mouseup", handleNodeUnclick(pressTimer));
