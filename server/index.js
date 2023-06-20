@@ -18,6 +18,7 @@ import tagRouter from './routes/tag.js';
 import cardRouter from './routes/cards.js';
 import userRouter from './routes/user.js'; 
 import searchRouter from './routes/search.js';
+import mypageRouter from './routes/mypage.js';
 
 import { authMiddleware } from './middlewares/auth-middleware.js';
 
@@ -40,6 +41,7 @@ app.use('/api/user',authMiddleware,userRouter);
 app.use('/api/graph', authMiddleware, graphRouter);
 app.use('/api/cards', cardRouter);
 app.use('/dashboard', searchRouter);
+app.use('/api/myinfo', authMiddleware, mypageRouter);
 app.use('/api/tag',authMiddleware,tagRouter);
 
 /* session management */
