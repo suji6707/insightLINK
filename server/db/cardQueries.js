@@ -17,3 +17,11 @@ export const copyQuery2 =
     SELECT ?, tag, tag_index
     FROM Tag
     WHERE file_id = ?`; 
+
+/* 최근 업데이트한 카드 조회 */
+export const updatedCardQuery = 
+  `SELECT File.file_id 
+    FROM File
+    WHERE user_id = ?
+    ORDER BY created_at DESC
+    LIMIT 10`;

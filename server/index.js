@@ -13,7 +13,6 @@ import graphRouter from './routes/graphs.js';
 
 import myinfoRouter from './routes/myInfo.js';
 import tagRouter from './routes/tag.js'; 
-// import testRouter from './routes/test.js';
 
 import cardRouter from './routes/cards.js';
 import socialRouter from './routes/social.js';
