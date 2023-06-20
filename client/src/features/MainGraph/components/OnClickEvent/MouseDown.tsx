@@ -21,7 +21,6 @@ const handleNodeLongClick = (
     const dataIndex = params.target[ecInnerKey].dataIndex;
 
     pressTimer.current = setTimeout(() => {
-      console.log("selected");
       const nodesOption = (chart.getOption() as any).series[0].data as any[];
       const nodeId = nodesOption[dataIndex].id;
       const currentNode = nodesOption.find((node) => node.id === nodeId);
@@ -30,13 +29,6 @@ const handleNodeLongClick = (
         const prevNode = nodesOption.find(
           (node) => node.id === longPressNode.current
         );
-        console.log({
-          chart,
-          nodes: nodesOption,
-          links: (chart.getOption() as any).series[0].links as any[],
-          node1: prevNode!,
-          node2: currentNode!,
-        });
         let success = 0;
 
         success = combineNodes({
