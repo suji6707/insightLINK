@@ -1,5 +1,9 @@
 import axios from "axios";
-import { Main_graph_Api_DTO, CardData_DTO } from "@/types/dashborad.types";
+import {
+  Main_graph_Api_DTO,
+  CardData_DTO,
+  CardDetail_DTO,
+} from "@/types/dashborad.types";
 
 const api = "http://localhost:8800/api";
 const testapi = "http://localhost:4000";
@@ -23,11 +27,21 @@ export const User_Info_Api = async (params: number | undefined) => {
 
 export const Card_Info_Api = async (
   params: string | undefined
-): Promise<CardData_DTO> => {
+): Promise<CardD_DTO> => {
   const response = await axios.get(`${api}/cards/tag?tagname=${params}`, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
   const card = response.data as Promise<CardData_DTO>;
+  return card;
+};
+
+export const Card_Detail_Api = async (
+  params: string | undefined
+): Promise<CardDetail_DTO> => {
+  const response = await axios.get(`${api}/cards/info?cardId=${params}`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+  const card = response.data as Promise<CardDetail_DTO>;
   return card;
 };
 
