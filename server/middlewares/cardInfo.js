@@ -1,6 +1,7 @@
 import '../dotenv.js';
 import { db } from '../connect.js';
-import { cardInfoQuery } from '../db/cardQueries.js';   
+import { cardInfoQuery } from '../db/cardQueries.js';  
+import { fileToUserQurey } from '../db/socialQueries.js'; 
 
 /* 카드정보 상세 조회 */
 export const getCardInfos = async (req, res) => {
@@ -32,18 +33,21 @@ const getCardInfo = async (userId, cardId) => {
   try {
     connection = await db.getConnection();
     const [result] = await connection.query(cardInfoQuery, [userId, cardId]);
+    const [userResult] = await connection.query(fileToUserQurey, [cardId]);
     connection.release();
-    console.log(result);
-
+    
     let cardTag = [];
     for (let i = 0; i < result.length; i++) {
       cardTag.push(result[i].tag);
     }
 
     const data = {
-      'cardId': parseInt(cardId),
-      'cardTag': cardTag,
-      'cardImage': result[0].img_url,
+      userId: userResult[0].user_id,
+      userName: userResult[0].user_name,
+      profile_img: userResult[0].profile_img,
+      cardId: parseInt(cardId),
+      cardTag: cardTag,
+      cardImage: result[0].img_url,
     };
     
     console.log(data);
