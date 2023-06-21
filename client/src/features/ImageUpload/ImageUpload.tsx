@@ -34,7 +34,7 @@ export default function ImageUpload({ setShowImgModal }: any) {
     setImgList(newImgList);
   };
 
-  const POSTImgAuto = () => {
+  const POSTImgAuto = async () => {
     const formData = new FormData();
     for (let file of imgList) {
       formData.append("photos", file);
@@ -43,15 +43,19 @@ export default function ImageUpload({ setShowImgModal }: any) {
     // 로컬 이미지 업로드 API
     const uploadImg = async () => {
       const token = localStorage.getItem("token");
-      await POST("upload", formData, {
+      const result = await POST("upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           authorization: `Bearer ${token}`,
         },
       });
+      return result;
     };
 
-    uploadImg();
+    const result: any = await uploadImg();
+    if (result) {
+      setShowImgModal(false);
+    }
   };
 
   const modalOutsideClicked = (e: any) => {
@@ -61,7 +65,7 @@ export default function ImageUpload({ setShowImgModal }: any) {
   };
 
   const ClasBtn = tw.p`
-  h-10 w-5/12 py-8 flex justify-center items-center text-xl rounded-lg hover:bg-yellow-300 hover:text-white transition-colors dark:border-white cursor-pointer border drop-shadow-xl
+  h-10 w-full py-8 flex justify-center items-center text-xl rounded-lg hover:bg-yellow-300 hover:text-white transition-colors dark:border-white cursor-pointer border drop-shadow-xl
   `;
 
   return (
@@ -89,10 +93,7 @@ export default function ImageUpload({ setShowImgModal }: any) {
         </div>
         <div className="w-5/12 h-4/6 flex flex-col justify-between">
           <ImageList imgList={imgList} deleteImg={deleteImg} />
-          <div className="mx-auto flex flex-row justify-between w-full">
-            <ClasBtn onClick={() => POSTImgAuto()}>자동</ClasBtn>
-            <ClasBtn>수동</ClasBtn>
-          </div>
+          <ClasBtn onClick={() => POSTImgAuto()}>자동</ClasBtn>
         </div>
       </Wrapper>
     </div>
