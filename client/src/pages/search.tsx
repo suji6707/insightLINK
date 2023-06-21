@@ -106,7 +106,7 @@ export default function Search() {
           {(contentsAllData === 0) ? (
             <div>검색 결과가 없습니다.</div>
           ) : (
-            <SearchResult data={contentsData} />
+            <SearchResult data={contentsData} keyword={Array.isArray(keywords) ? keywords.join(', ') : keywords || ""} />
           )}
           {/* <SearchResult data={contentsData?.results} /> */}
         </div>
@@ -125,7 +125,8 @@ export default function Search() {
           { (tagsAllData === 0) ? (
             <div>검색 결과가 없습니다.</div>
           ) : (
-            <SearchResult data={tagsData} />
+            <SearchResult data={tagsData} keyword={Array.isArray(keywords) ? keywords.join(', ') : keywords || ""} />
+            // <SearchResult data={tagsData} />
           )}
         </div>
       </Wrapper>
