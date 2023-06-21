@@ -83,7 +83,7 @@ export default function Search() {
               이전
             </p>
           </div>
-          <SearchResult data={findData} />
+          <SearchResult data={findData} keyword={Array.isArray(keywords) ? keywords.join(', ') : keywords || ""} />
         </div>
         <div className="flex justify-center items-center mt-4">
           <button
