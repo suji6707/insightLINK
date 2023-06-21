@@ -47,18 +47,21 @@ router.post('/', async (req, res) => {
 router.post('/generic', async(req, res) => {
   const { email, password } = req.body;
 
+  let connection = null;
+
   try {
-    let connection = null;
     connection = await db.getConnection();
     const sql = `SELECT * FROM User WHERE email = '${email}' AND password='${password}'`;
     const [result] = await connection.query(sql);
     connection.release();
+
+    console.log(result[0]);
   
     if (result[0]) {
       const token = jwt.sign({ userId: result[0].user_id }, 'customized-secret-key');
       res.send({ success: true, token });  
     } else {
-      res.send({ success: fail });
+      res.send({ success: false  });
     }
   } catch (err) {
     connection?.release();

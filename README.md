@@ -44,6 +44,11 @@ npx json-server ./db.json --port 4000
 ```
 
 <br />
+ERD <br />
+
+![2023-06-20_2 23 58](https://github.com/insight-LINK/insightLINK/assets/50854903/e8ac7096-acfd-4d47-b10b-acd52fa784cb)
+
+<br />
 로그인 기능 <br />
  - google 소셜 로그인 <br />
  - JWT Access Token (Chrom - [Application] - [Loal Storage] - [ https://localhost:3000/] - token 확인 가능)<br />
