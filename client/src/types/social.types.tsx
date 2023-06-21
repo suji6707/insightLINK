@@ -18,5 +18,5 @@ interface CardDetail {
   modalRef: React.ForwardedRef<HTMLDivElement>;
   modalOutsideClicked: (e: any) => void;
   cardId?: number;
-  userId?: string;
+  userId?: number;
 }
