@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import getToken from "@/axios/getToken";
 import { GET } from "@/axios/GET";
+import { POST } from "@/axios/POST";
 import { DELETE } from "@/axios/DELETE";
 // Assets
 import { AiFillCheckCircle, AiOutlinePlusCircle } from "react-icons/ai";
@@ -11,9 +12,10 @@ const Users = () => {
 
   // 추천 친구 조회
   const getUsers = async () => {
-    const data = await GET("social/user", getToken());
-    if (data.data) {
-      setUsers(data.data);
+    const token = getToken();
+    const data = await GET("social/user", token);
+    if (data) {
+      setUsers(data);
     }
   };
 
@@ -23,22 +25,16 @@ const Users = () => {
 
   // 팔로잉 등록
   const handleAddFollow = async (userId: number) => {
-    await GET(`friend/${userId}`);
-    setUsers((prevUsers) =>
-      prevUsers.map((user) =>
-        user.id === userId ? { ...user, isFriend: true } : user
-      )
-    );
+    const token = getToken();
+    await POST(`social/follow?followId=${userId}`, null, token);
+    getUsers();
   };
 
   // 팔로잉 취소
   const handleDeleteFollow = async (userId: number) => {
-    await DELETE(`friend/${userId}`);
-    setUsers((prevUsers) =>
-      prevUsers.map((user) =>
-        user.id === userId ? { ...user, isFriend: false } : user
-      )
-    );
+    const token = getToken();
+    await DELETE(`social/follow?followId=${userId}`, token);
+    getUsers();
   };
 
   return (
@@ -48,28 +44,30 @@ const Users = () => {
           users.map((u) => (
             <li
               key={u.userId}
-              className="flex flex-row items-center justify-around w-60 py-2 border"
+              className="flex flex-row items-center justify-around py-2 border"
             >
               <img
                 src={u.img}
-                className="w-10 h-10 rounded-full transform transition hover:-rotate-6 cursor-pointer"
+                className="w-10 h-10 rounded-full cursor-pointer"
                 alt="profile"
               />
               <p className="text-lg font-semibold">{u.userName}</p>
-              {u.tags.map((t: string, index: number) => (
-                <li key={index} className="flex flex-row">
-                  #{t}
-                </li>
-              ))}
+              <ul>
+                {u.tags.map((t: string, index: number) => (
+                  <li key={index} className="flex flex-row">
+                    #{t}
+                  </li>
+                ))}
+              </ul>
               {u.isFriend ? (
                 <AiFillCheckCircle
                   className="text-xl"
-                  onClick={() => handleDeleteFollow(u.id)}
+                  onClick={() => handleDeleteFollow(u.userId)}
                 />
               ) : (
                 <AiOutlinePlusCircle
                   className="text-xl"
-                  onClick={() => handleAddFollow(u.id)}
+                  onClick={() => handleAddFollow(u.userId)}
                 />
               )}
             </li>
