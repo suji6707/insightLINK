@@ -1,6 +1,6 @@
 /* 카드 상세정보 */
 export const cardInfoQuery = 
-  `SELECT Tag.tag, File.img_url
+  `SELECT Tag.tag, File.img_url, File.content
     FROM Tag
     JOIN File ON Tag.file_id = File.file_id
     WHERE File.user_id = ? AND File.file_id = ?`;
