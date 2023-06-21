@@ -13,6 +13,8 @@ const Friends = () => {
   // 모달
   const modalRef = useRef<HTMLDivElement>(null);
   const [showModal, setShowModal] = useState(false);
+  const [userId, setUserId] = useState(1);
+  const [cardId, setCardId] = useState(1);
 
   // 최근 업데이트 친구 조회
   const getFriends = async () => {
@@ -80,7 +82,11 @@ const Friends = () => {
                   src={f.profile_img}
                   className="w-24 h-24 rounded-full transform transition hover:-rotate-6 cursor-pointer"
                   alt="profile"
-                  onClick={() => setShowModal(true)}
+                  onClick={() => {
+                    setShowModal(true);
+                    setCardId(f.cardId);
+                    setUserId(f.userId);
+                  }}
                 />
               </li>
             );
@@ -90,6 +96,8 @@ const Friends = () => {
         <CardDetail
           modalRef={modalRef}
           modalOutsideClicked={modalOutsideClicked}
+          cardId={cardId}
+          userId={userId}
         />
       )}
     </div>

@@ -19,6 +19,7 @@ const Feeds = () => {
   // 모달
   const modalRef = useRef<HTMLDivElement>(null);
   const [showModal, setShowModal] = useState(false);
+  const [userId, setUserId] = useState(1);
   const [cardId, setCardId] = useState(1);
 
   const getFeeds = async () => {
@@ -80,7 +81,11 @@ const Feeds = () => {
 
                 <p
                   className="inline-block w-full p-2 break-words cursor-pointer white space-normal"
-                  onClick={() => setShowModal(true)}
+                  onClick={() => {
+                    setShowModal(true);
+                    setCardId(c.cardId);
+                    setUserId(c.userId);
+                  }}
                 >
                   {c.content}
                 </p>
@@ -93,6 +98,7 @@ const Feeds = () => {
           modalRef={modalRef}
           modalOutsideClicked={modalOutsideClicked}
           cardId={cardId}
+          userId={userId}
         />
       )}
     </div>
