@@ -64,7 +64,7 @@ export default function Home() {
               {!sessionData?.user && !token ? <SignupButton /> : null}
               {!sessionData?.user && !token ? <LoginBtn /> : null}
               {sessionData?.user ? (
-                <GoogleLogoutBtn router={router} />
+                <GoogleLogoutBtn />
               ) : (
                 <GoogleLoginBtn />
               )}
