@@ -22,6 +22,18 @@ function Graph({ data: graph }: MainGraphProps) {
   const pressTimer = useRef<any>(null);
   const longPressNode = useRef<string | null>(null);
 
+  //  카테고리 빈 객체 생성
+  const setCategories = (cnt: number) => {
+    const categories = [];
+
+    for (let i = 0; i < cnt; i++) {
+      const obj = {};
+      categories.push(obj);
+    }
+
+    return categories;
+  };
+
   const [options, setOptions] = useState<echarts.EChartsOption>({
     title: {
       text: "ㅇㅇ의 인사이트",
@@ -38,6 +50,7 @@ function Graph({ data: graph }: MainGraphProps) {
         layout: "force",
         data: graph?.nodes,
         links: graph?.links,
+        categories: setCategories(graph?.cnt),
         roam: false,
         label: {
           show: true, // 노드 이름 항상 표시

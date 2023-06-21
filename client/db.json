@@ -38,66 +38,32 @@
   "graph": {
     "nodes": [
       {
-        "id": "Node1",
-        "label": "Node 1"
+        "id": "0",          
+        "name": "1",        
+        "symbolSize": 30,    
+        "category": 0
       },
       {
-        "id": "Node2",
-        "label": "Node 2"
+        "id": "1",
+        "name": "2",
+        "symbolSize": 20,
+        "category": 0
       },
       {
-        "id": "Node3",
-        "label": "Node 3"
-      },
-      {
-        "id": "Node4",
-        "label": "Node 4"
-      },
-      {
-        "id": "Node5",
-        "label": "Node 5"
+        "id": "3",
+        "name": "3",
+        "symbolSize": 20,
+        "category": 1
       }
     ],
     "links": [
       {
-        "source": "Node1",
-        "target": "Node4"
-      },
-      {
-        "source": "Node1",
-        "target": "Node5"
-      },
-      {
-        "source": "Node2",
-        "target": "Node1"
-      },
-      {
-        "source": "Node2",
-        "target": "Node4"
-      },
-      {
-        "source": "Node3",
-        "target": "Node1"
-      },
-      {
-        "source": "Node4",
-        "target": "Node2"
-      },
-      {
-        "source": "Node4",
-        "target": "Node5"
-      },
-      {
-        "source": "Node5",
-        "target": "Node1"
-      },
-      {
-        "source": "Node5",
-        "target": "Node3"
+        "source": "0",       
+        "target": "1"        
       }
-    ]
-  },
-
+    ],
+    "cnt": 2
+    },
   "friends": [
     {
       "id": "1",
