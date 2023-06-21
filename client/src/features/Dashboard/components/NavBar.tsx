@@ -12,6 +12,10 @@ import { AiTwotoneBell } from "react-icons/ai";
 import { BiUser } from "react-icons/bi";
 import { BsShare, BsSunFill, BsFillMoonFill } from "react-icons/bs";
 
+const NavBarContainer = tw.div`
+  flex flex-row items-center justify-between p-7 fixed top-0 w-full z-50
+`;
+
 export default function NavBar() {
   const { systemTheme, theme, setTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
@@ -40,21 +44,17 @@ export default function NavBar() {
   };
 
   const CategoryLink = tw.p`
-  text-xl font-bold hover:underline underline-offset-8 active:text-yellow-400 mr-4
+    text-xl font-bold hover:underline underline-offset-8 active:text-yellow-400 mr-4
   `;
 
   return (
-    <div className="flex flex-row items-center justify-between p-7 fixed top-0 w-full">
+    <NavBarContainer>
       <Link href="/dashboard">
         <p className="text-3xl font-extrabold">insightLINK</p>
       </Link>
       <div className="flex flex-row justify-start w-2/3 ml-4">
         <Link href="/social">
           <CategoryLink>소셜</CategoryLink>
-        </Link>
-        {/* url 수정 필요 */}
-        <Link href="/explore">
-          <CategoryLink>탐색</CategoryLink>
         </Link>
       </div>
       <div className="flex flex-row items-center justify-between w-1/6">
@@ -76,6 +76,6 @@ export default function NavBar() {
         )}
       </div>
       {isUserModalOpen && <UserModal closeModal={closeModal} />}
-    </div>
+    </NavBarContainer>
   );
 }
