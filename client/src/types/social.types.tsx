@@ -1,14 +1,17 @@
 type Friends = {
-  id: number;
-  image: string;
+  cardId: number;
+  userId: number;
+  userName: string;
+  profile_img: string;
 };
 
-type Feeds = {
-  id: number;
-  nickName: string;
-  profile: string;
-  tags: string;
+type Cards = {
+  cardId: number;
   content: string;
+  img: string;
+  tag: string;
+  userId: number;
+  userName: string;
 };
 
 interface CardDetail {

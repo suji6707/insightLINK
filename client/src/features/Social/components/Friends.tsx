@@ -1,6 +1,6 @@
+import React, { useEffect, useRef, useState } from "react";
 import getToken from "@/axios/getToken";
 import { GET } from "@/axios/GET";
-import React, { useEffect, useRef, useState } from "react";
 import CardDetail from "./CardDetail";
 
 const Friends = () => {
@@ -16,9 +16,11 @@ const Friends = () => {
 
   // 최근 업데이트 친구 조회
   const getFriends = async () => {
-    const data = await GET("friend/updated", getToken());
+    const token = getToken();
+    const data = await GET("social/updated", token);
+    console.log(data);
     if (data != null) {
-      setFriends(data.data);
+      setFriends(data);
     }
   };
 
@@ -71,11 +73,11 @@ const Friends = () => {
           friends.map((f: Friends) => {
             return (
               <li
-                key={f.id}
+                key={f.userId}
                 className="m-2 p-2 flex-shrink-0 bg-gradient-to-tr from-violet-600 to-yellow-300 rounded-full"
               >
                 <img
-                  src={f.image}
+                  src={f.profile_img}
                   className="w-24 h-24 rounded-full transform transition hover:-rotate-6 cursor-pointer"
                   alt="profile"
                   onClick={() => setShowModal(true)}
