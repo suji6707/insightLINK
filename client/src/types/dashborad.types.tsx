@@ -21,6 +21,7 @@ interface GraphLink {
 export interface Main_graph_Api_DTO {
   nodes: GraphNode[];
   links: GraphLink[];
+  cnt: number;
 }
 
 export interface CardData {
