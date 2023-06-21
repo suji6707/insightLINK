@@ -19,7 +19,8 @@ export default function NavBar() {
   const [isUserModalOpen, setUserModalOpen] = useState(false);
 
   const getProfileImg = async () => {
-    const response = await GET("user/profile", getToken());
+    const token = getToken();
+    const response = await GET("user/profile", token);
     if (response) {
       console.log(response);
       setUserProfile(response.userProfile);
