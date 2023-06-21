@@ -23,9 +23,12 @@ router.get('/contents', async (req, res) => {
         cardContent: result[i * 2].content,
       });
     }
-    // console.log(arr[0]);
+    console.log("arr길이 " + arr.length);
 
-    return res.send({results: [arr[0]]});
+    return res.send({
+      results: [arr[0]],
+      cnt : arr.length,
+    });
   } catch(err) {
     connection?.release();
     console.log(err);
@@ -54,7 +57,10 @@ router.get('/tags', async (req, res) => {
     }
     // console.log(arr[0]);
 
-    return res.send({results: [arr[0]]});
+    return res.send({
+      results: [arr[0]],
+      cnt : arr.length,
+    });
   } catch(err) {
     connection?.release();
     console.log(err);
@@ -64,26 +70,39 @@ router.get('/tags', async (req, res) => {
 
 router.get('/contents/all', async (req, res) => {
   // console.log(req.query);
-  const { search } = req.query;
+  const { search, page, perPage } = req.query;
 
   let connection = null;
 
   try {
     connection = await db.getConnection();
     const [ result ] = await connection.query(searchContent(search));
-    console.log(result.length);
+    // console.log("result 갯수 : " + result.length);
 
     let arr = [];
-    for (let i = 0; i < result.length / 2; i++) {
+    for (let i = 0; i < Math.floor(result.length / 2); i++) {
       arr.push({
-        cardTags: [result[i * 2].tag, result[i + 1].tag],
+        cardTags: [result[i * 2].tag, result[i * 2 + 1].tag],
         cardKeyword: `# ${i+1}`,
         cardContent: result[i * 2].content,
       });
     }
-    // console.log(arr[0]);
+    
+    console.log("arr길이 " + arr.length);
 
-    return res.send({results: arr});
+    const startIndex = (page - 1) * perPage;
+    const endIndex = page * perPage;
+    const slicedResults = arr.slice(startIndex, endIndex);
+    
+    console.log("SI: " + startIndex +",EI: " + endIndex);
+    console.log(slicedResults);
+
+    return res.send({
+      results: slicedResults,
+      totalResults :  arr.length,
+      totalPages: Math.ceil(arr.length / perPage),
+      hasNextPage: endIndex < arr.length,
+    });
   } catch(err) {
     connection?.release();
     console.log(err);
@@ -93,26 +112,39 @@ router.get('/contents/all', async (req, res) => {
 
 router.get('/tags/all', async (req, res) => {
   // console.log(req.query);
-  const { search } = req.query;
+  const { search, page, perPage } = req.query;
 
   let connection = null;
 
   try {
     connection = await db.getConnection();
     const [ result ] = await connection.query(searchTag(search));
-    console.log(result.length);
+    // console.log("result 갯수 : " + result.length);
 
     let arr = [];
-    for (let i = 0; i < result.length / 2; i++) {
+    for (let i = 0; i < Math.floor(result.length / 2); i++) {
       arr.push({
-        cardTags: [result[i * 2].tag, result[i + 1].tag],
+        cardTags: [result[i * 2].tag, result[i * 2 + 1].tag],
         cardKeyword: `# ${i+1}`,
         cardContent: result[i * 2].content,
       });
     }
-    // console.log(arr[0]);
+    
+    console.log("arr길이 " + arr.length);
 
-    return res.send({results: arr});
+    const startIndex = (page - 1) * perPage;
+    const endIndex = page * perPage;
+    const slicedResults = arr.slice(startIndex, endIndex);
+    
+    console.log("SI: " + startIndex +",EI: " + endIndex);
+    console.log(slicedResults);
+
+    return res.send({
+      results: slicedResults,
+      totalResults :  arr.length,
+      totalPages: Math.ceil(arr.length / perPage),
+      hasNextPage: endIndex < arr.length,
+    });
   } catch(err) {
     connection?.release();
     console.log(err);

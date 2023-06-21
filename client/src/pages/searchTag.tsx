@@ -20,6 +20,8 @@ export default function Search() {
   const keywords = router.query.search;
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [hasNextPage, setHasNextPage] = useState(false);
   const resultsPerPage = 2; // Number of results to show per page
 
   const [findData, setFindData] = useState<ResponseData | null>(null);
@@ -32,10 +34,15 @@ export default function Search() {
           {
             params: {
               search: keywords,
+              page: currentPage,
+              perPage: resultsPerPage,
             },
           }
         );
-        setFindData(response.data);
+        setFindData(response.data.results);
+        setTotalPages(response.data.totalPages);
+        setHasNextPage(response.data.hasNextPage);
+        console.log(response.data);
       } catch (error) {
         console.error(error); // Handle any errors that occurred during the request
       }
@@ -44,29 +51,22 @@ export default function Search() {
     if (keywords) {
       fetchData();
     }
-  }, [keywords]);
-
-  //   console.log(data.results.length);
-  const totalResults = findData?.results?.length ?? 0;
-  const totalPages = Math.ceil(totalResults / resultsPerPage);
-
-  const testData = {
-    hasNext: currentPage < totalPages + 1,
-    results: findData?.results.slice(
-      (currentPage - 1) * resultsPerPage,
-      currentPage * resultsPerPage
-    ),
-  };
-
-  // Function to handle pagination
-  const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
+  }, [keywords, currentPage]); // Include currentPage in the dependency array
 
   const goBack = () => {
     router.back();
+  };
+
+  const goToPreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prevPage) => prevPage - 1);
+    }
+  };
+
+  const goToNextPage = () => {
+    if (hasNextPage) {
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
   };
 
   return (
@@ -74,7 +74,7 @@ export default function Search() {
       <NavBar />
       <Wrapper className="items-start">
         <p className="w-full p-4 border-b border-black dark:border-white text-3xl my-4">
-          `&apos;{keywords}&apos;`의 검색 결과입니다
+          '{keywords}'의 검색 결과입니다
         </p>
         <div className="w-full flex flex-col mt-4 px-2">
           <div className="flex flex-row justify-between items-center mb-4">
@@ -83,27 +83,26 @@ export default function Search() {
               이전
             </p>
           </div>
-          <SearchResult data={testData.results} />
-          {testData.hasNext && (
-            <div className="flex justify-center mt-4">
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="bg-black hover:bg-gray-300 text-white font-bold py-2 px-4 rounded mr-2"
-              >
-                이전
-              </button>
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className="bg-black hover:bg-gray-300 text-white font-bold py-2 px-4 rounded"
-              >
-                다음
-              </button>
-            </div>
-          )}
+          <SearchResult data={findData} />
+        </div>
+        <div className="flex justify-center items-center mt-4">
+          <button
+            onClick={goToPreviousPage}
+            disabled={currentPage === 1}
+            className="px-4 py-2 mx-2 rounded bg-gray-200 text-gray-700"
+          >
+            이전 페이지
+          </button>
+          <button
+            onClick={goToNextPage}
+            disabled={!hasNextPage}
+            className="px-4 py-2 mx-2 rounded bg-gray-200 text-gray-700"
+          >
+            다음 페이지
+          </button>
         </div>
       </Wrapper>
     </div>
   );
 }
+
