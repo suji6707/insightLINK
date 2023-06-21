@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import UserInfo from "./UseInfo";
+import UserInfo from "./UserInfo";
 import SearchBar from "./SearchBar";
 // Assets
 import { BsCamera } from "react-icons/bs";
