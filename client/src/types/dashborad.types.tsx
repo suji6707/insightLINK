@@ -1,9 +1,8 @@
 export interface UserInfo {
-  id: number;
-  username: string;
-  tags: number;
-  cards: number;
-  friends: number;
+  userName: string;
+  tagCnt: number;
+  cardCnt: number;
+  followCnt: number;
 }
 
 interface GraphNode {
@@ -28,6 +27,7 @@ export interface CardData {
   cardId: number;
   cardTag: string[];
   cardContent: string;
+  cardImage: string;
 }
 
 export interface CardData_DTO {
@@ -37,5 +37,6 @@ export interface CardData_DTO {
 export interface CardDetail_DTO {
   cardId: number;
   cardTag: string[];
+  cardContent: string;
   cardImage: string;
 }
