@@ -70,20 +70,17 @@ const getGraphData = async (userId) => {
 
     const [ graphCountResult ] = await connection.query(graphCountQuery(userId));
     const [ graphDirectionResult ] = await connection.query(graphDirectionQuery(userId));
-    //console.log('graphCountResult : \n\n',graphCountResult);
+    
     let graph = {
       nodes: graphCountResult,
       links: sortDirection(graphDirectionResult),
     };
     //source와 target 중복 값 제거
     graph.links = graph.links.filter(link => link.source !== link.target);
-    // id값들을 추출하여 리스트 생성
-    console.log('graph.nodes : ',graph.nodes);
+    
+    // graph.category
     const idList = graph.nodes.map(node => node.id);
-    console.log('idList : ',idList);
     const graphLinks = graph.links.map(link => [link.source,link.target]);
-    console.log('graphLinks : ',graphLinks);
-
     const connections = idList.map(node => ({ node, neighbors: [] }));
     for (const edge of graphLinks) {
       const [a, b] = edge;
@@ -96,7 +93,15 @@ const getGraphData = async (userId) => {
     graph.nodes.forEach((node, index) => {
       node.category = categoryList[index];
     });
-    //console.log('graph : ',graph);
+
+    // graph.cnt
+    let maxCategory = -Infinity;
+    for (const node of graph.nodes) {
+      if (node.category > maxCategory) {
+        maxCategory = node.category;
+      }
+    }
+    graph.cnt = maxCategory;
     return graph;  
   } catch (err) {
     connection?.release();
