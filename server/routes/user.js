@@ -13,13 +13,16 @@ router.get('/', async (req, res) => {
   try {
     connection = await db.getConnection();
     const [ result ] = await connection.query(userInfoQuery(userId));
+    const cnt_query = `select COUNT(*) AS cnt from Follow where user_id = ${userId}`;
+    const cnt = await connection.query(cnt_query);
     const { userName , tagCnt, cardCnt } = result[0];
     const data = {
       userName,
       tagCnt: parseInt(tagCnt),
       cardCnt: parseInt(cardCnt),
-      followCnt: 0, // 예시로 followCnt 값은 0으로 설정
+      followCnt: cnt[0][0]['cnt'], 
     };
+    console.log('data : ',data);
     connection.release();
     return res.status(200).send(data);
   } catch(err) {
@@ -27,7 +30,6 @@ router.get('/', async (req, res) => {
     console.log(err);
     res.status(500).send('Internal Server Error');
   }
-
 });
 
 router.get('/profile', async (req, res) => {
@@ -46,7 +48,6 @@ router.get('/profile', async (req, res) => {
       userProfile : profile_img,
     };
     console.log(profile_img);
-        
     connection.release();
     return res.status(200).send(data);
   } catch(err) {
