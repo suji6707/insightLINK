@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import getToken from "@/axios/getToken";
 import { GET } from "@/axios/GET";
-import CardDetail from "./CardDetail";
+import CardDetail from "@/features/Social/components/CardDetail";
+import { Friends } from "@/types/social.types"
+
 
 const Friends = () => {
   const [friends, setFriends] = useState([]);
@@ -65,7 +67,7 @@ const Friends = () => {
       <p className="text-3xl font-bold">친구</p>
       <ul
         ref={listRef}
-        className="flex justify-start py-5 overflow-x-hidden overflow-y-hidden scrolling-touch w-full cursor-grab"
+        className="flex justify-start w-full py-5 overflow-x-hidden overflow-y-hidden scrolling-touch cursor-grab"
         onMouseDown={handleMouseDown}
         onMouseLeave={handleMouseLeave}
         onMouseUp={handleMouseLeave}
@@ -76,11 +78,11 @@ const Friends = () => {
             return (
               <li
                 key={f.userId}
-                className="m-2 p-2 flex-shrink-0 bg-gradient-to-tr from-violet-600 to-yellow-300 rounded-full"
+                className="flex-shrink-0 p-2 m-2 rounded-full bg-gradient-to-tr from-violet-600 to-yellow-300"
               >
                 <img
                   src={f.profile_img}
-                  className="w-24 h-24 rounded-full transform transition hover:-rotate-6 cursor-pointer"
+                  className="w-24 h-24 transition transform rounded-full cursor-pointer hover:-rotate-6"
                   alt="profile"
                   onClick={() => {
                     setShowModal(true);

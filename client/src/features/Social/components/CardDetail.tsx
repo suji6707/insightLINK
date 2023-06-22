@@ -2,6 +2,9 @@ import { GET } from "@/axios/GET";
 import getToken from "@/axios/getToken";
 import React, { useEffect, useState } from "react";
 
+import { CardDetail } from "@/types/social.types";
+
+
 const CardDetail = ({
   modalRef,
   modalOutsideClicked,
@@ -32,8 +35,8 @@ const CardDetail = ({
       ref={modalRef}
       onClick={(e) => modalOutsideClicked(e)}
     >
-      <div className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 bg-white flex-col justify-start w-1/2 h-4/6 border drop-shadow-xl rounded-xl">
-        <div className="p-2 border-b border-current flex flex-row justify-between p-4">
+      <div className="absolute flex-col justify-start w-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white border top-1/2 left-1/2 h-4/6 drop-shadow-xl rounded-xl">
+        <div className="flex flex-row justify-between p-2 p-4 border-b border-current">
           <div className="flex flex-row">
             <img
               src={detail?.profile_img}
@@ -44,7 +47,7 @@ const CardDetail = ({
             {detail.cardTag &&
               detail.cardTag.map((t: string, index: number) => {
                 return (
-                  <p key={index} className="m-2 p-2">
+                  <p key={index} className="p-2 m-2">
                     #{t}
                   </p>
                 );
