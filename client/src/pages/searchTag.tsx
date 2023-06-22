@@ -73,8 +73,8 @@ export default function Search() {
     <div>
       <NavBar />
       <Wrapper className="items-start">
-        <p className="w-full p-4 my-4 text-3xl border-b border-black dark:border-white">
-          &apos;{keywords}&apos;의 검색 결과입니다
+        <p className="w-full p-4 border-b border-black dark:border-white text-3xl my-4">
+          &apos;{keywords}&apos; 의 검색 결과입니다
         </p>
         <div className="flex flex-col w-full px-2 mt-4">
           <div className="flex flex-row items-center justify-between mb-4">

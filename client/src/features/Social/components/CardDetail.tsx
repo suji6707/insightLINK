@@ -1,6 +1,7 @@
 import { GET } from "@/axios/GET";
 import getToken from "@/axios/getToken";
 import React, { useEffect, useState } from "react";
+import { AiFillPlusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 
 import { CardDetail } from "@/types/social.types";
 
@@ -12,6 +13,7 @@ const CardDetail = ({
   userId,
 }: CardDetail) => {
   const [detail, setDetail] = useState<any>();
+  const [isPlus, setIsPlus] = useState(false);
 
   const getDetail = async () => {
     const token = getToken();
@@ -29,6 +31,10 @@ const CardDetail = ({
     getDetail();
   }, []);
 
+  const handlePlusClicked = () => {
+    setIsPlus(!isPlus);
+  };
+
   return (
     <div
       className="fixed inset-0 bg-white bg-opacity-30"
@@ -43,9 +49,9 @@ const CardDetail = ({
               className="w-24 h-24 rounded-full"
               alt="screenshot"
             />
-            <p>{detail.userName}</p>
-            {detail.cardTag &&
-              detail.cardTag.map((t: string, index: number) => {
+            <p>{detail?.userName}</p>
+            {detail?.cardTag &&
+              detail?.cardTag.map((t: string, index: number) => {
                 return (
                   <p key={index} className="p-2 m-2">
                     #{t}
@@ -61,6 +67,13 @@ const CardDetail = ({
             className="w-24 h-24 cursor-pointer"
             alt="screenshot"
           />
+        </div>
+        <div className="w-full flex justify-center" onClick={handlePlusClicked}>
+          {isPlus ? (
+            <AiFillPlusCircle className="w-12 h-12 " />
+          ) : (
+            <AiOutlinePlusCircle className="w-12 h-12 " />
+          )}
         </div>
       </div>
     </div>
