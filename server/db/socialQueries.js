@@ -7,11 +7,15 @@ export const recomUserQuery =
     SELECT DISTINCT t1.tag
     FROM Tag AS t1
     JOIN File AS f1 ON t1.file_id = f1.file_id
-    WHERE f1.user_id = ?
+    WHERE f1.user_id = ? 
+  ) AND f.user_id NOT IN (
+    SELECT Follow.following_id
+    FROM Follow
+    WHERE user_id = ?
   ) AND f.user_id <> ?
   GROUP BY f.user_id
   ORDER BY shared_tags_count DESC, COUNT(DISTINCT f.file_id) DESC
-  LIMIT 10`;
+  LIMIT 5`;
 
 /* 가장 많은 카드 수가 달린 태그 상위 ?개 추출 */
 export const tagQuery = 
