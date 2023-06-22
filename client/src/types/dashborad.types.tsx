@@ -6,7 +6,7 @@ export interface UserInfo {
 }
 
 interface GraphNode {
-  id: string;
+  id: number;
   name: string;
   symbolSize: number;
   category: number;
@@ -29,11 +29,15 @@ export interface CardData {
   cardContent: string;
   cardImage: string;
 }
-
 export interface CardData_DTO {
-  data: CardData[];
+  cardData: CardData[];
 }
 
+interface CardDetail {
+  cardId?: number;
+  cardTag?: string[];
+  cardImage?: string;
+}
 export interface CardDetail_DTO {
   cardId: number;
   cardTag: string[];

@@ -9,9 +9,11 @@ import CardDetail from "@/features/MainCard/components/CardDetail";
 import useCard from "@/features/MainCard/hook/useCard";
 // types
 import { CardData, CardData_DTO } from "@/types/dashborad.types";
+// type
+import { CardData, CardData_DTO } from "@/types/dashborad.types";
 
 function CardPanel() {
-  const [cardData, setCardData] = useState<CardData_DTO>();
+  const [cardData, setCardData] = useState<any>();
   const detailOpen = useRecoilValue(CardDetailOpenAtom);
   const getData = useCard();
 
@@ -26,7 +28,7 @@ function CardPanel() {
       {detailOpen ? (
         <CardDetail />
       ) : (
-        cardData?.map((data: CardData, index: number) => {
+        cardData?.map((data: any, index: number) => {
           return <Card data={data} key={index} />;
         })
       )}
