@@ -7,7 +7,7 @@ import { copyQuery2 } from '../db/cardQueries.js';
 export const getCards =  async (req, res) => {
   /* 가져오려는 카드 */
   const cardId = req.query.cardId;
-  console.log(cardId);
+  // console.log(cardId);
   /* 로그인 유저 */
   const { user } = res.locals;    
   const userId = user.user_id;

@@ -12,7 +12,7 @@ export const recomUsers = async (req, res) => {
   let connection = null;
   try {
     connection = await db.getConnection();
-    const [recommendList] = await connection.query(recomUserQuery, [userId, userId]);
+    const [recommendList] = await connection.query(recomUserQuery, [userId, userId, userId]);
     // console.log(recommendList);
 
     /* 최종 리턴 */
