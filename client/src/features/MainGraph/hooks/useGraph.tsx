@@ -33,7 +33,10 @@ function useGraph() {
     if (!router.isReady) return; // if query values are not ready, return
 
     const getGraphData = async () => {
-      const graphData = await Main_graph_Api(router.query.userid);
+      const userid = Array.isArray(router.query.userid)
+        ? router.query.userid[0]
+        : router.query.userid;
+      const graphData = await Main_graph_Api(userid);
       setData(graphData);
     };
     getGraphData();

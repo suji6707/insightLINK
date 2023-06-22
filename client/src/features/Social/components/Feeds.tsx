@@ -7,10 +7,11 @@ import CardDetail from "./CardDetail";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
 interface Card {
-  id: number;
-  nickName: string;
-  profile: string;
-  tags: string;
+  cardId: number;
+  userId: number;
+  userName: string;
+  img: string;
+  tag: string;
   content: string;
 }
 
@@ -58,7 +59,7 @@ const Feeds = () => {
       <p className="mb-4 text-3xl font-bold">피드</p>
       <ul>
         {cards &&
-          cards.map((c: Cards, index: number) => {
+          cards.map((c: Card, index: number) => {
             return (
               <li
                 key={index}

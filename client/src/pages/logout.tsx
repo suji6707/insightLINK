@@ -32,7 +32,7 @@ export default function Home() {
           </div>
           <div className="flex justify-end mt-4">
             {typeof window !== "undefined" && sessionData?.user && token ? (
-              <GoogleLogoutBtn router={router} />
+              <GoogleLogoutBtn />
             ) : token ? (
               <button
                 onClick={handleLogout}

@@ -5,7 +5,7 @@ type Friends = {
   profile_img: string;
 };
 
-type Cards = {
+export interface Cards{
   cardId: number;
   content: string;
   img: string;

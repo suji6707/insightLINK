@@ -1,7 +1,7 @@
 import axios from "axios";
 import {
   Main_graph_Api_DTO,
-  CardData_DTO,
+  CardData,
   CardDetail_DTO,
 } from "@/types/dashborad.types";
 
@@ -39,11 +39,11 @@ export const User_Info_Api = async () => {
 
 export const Card_Info_Api = async (
   params: string | null
-): Promise<CardData_DTO> => {
+): Promise<CardData[]> => {
   const response = await axios.get(`${api}/cards/tag?tagname=${params}`, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
-  const card = response.data as Promise<CardData_DTO>;
+  const card = response.data as Promise<CardData[]>;
   console.log("Card_Info_Api 호출");
   return card;
 };
