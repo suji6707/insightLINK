@@ -8,7 +8,7 @@ import CardDetail from "@/features/MainCard/components/CardDetail";
 // custom hook
 import useCard from "@/features/MainCard/hook/useCard";
 // types
-import { CardData, CardData_DTO } from "@/types/dashborad.types";
+import { CardData } from "@/types/dashborad.types";
 
 function CardPanel() {
   const [cardData, setCardData] = useState<CardData[]>([]);
