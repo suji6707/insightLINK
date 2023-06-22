@@ -8,7 +8,7 @@ export const getCardInfos = async (req, res) => {
   /* 로그인 유저 */
   const { user } = res.locals;
   const userId = user.user_id;
-  console.log('userId: ', userId);
+  // console.log('userId: ', userId);
   /* 다른 유저 */
   const otherUserId = req.query.userId;
   /* cardId */
@@ -52,7 +52,7 @@ const getCardInfo = async (userId, cardId) => {
       content: result[0].content,
     };
     
-    console.log(data);
+    // console.log(data);
     return data;
     
   } catch (err) {

@@ -6,7 +6,7 @@ import { cardTagsQuery } from '../db/tagQueries.js';
 
 export const getTagInfos = async (req, res) => {
   const tagname = req.query.tagname;
-  console.log(tagname);
+  // console.log(tagname);
   /* 로그인 유저 */
   const { user } = res.locals;    // authMiddleware 리턴값
   const userId = user.user_id;
@@ -50,7 +50,7 @@ const getTagInfo = async (userId, tagname) => {
       data.push(obj);
     }    
     connection.release();
-    console.log(data);
+    // console.log(data);
     return data;
 
   } catch (err) {

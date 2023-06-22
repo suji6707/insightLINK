@@ -1,9 +1,11 @@
 import axios from "axios";
 import {
+  UserInfo,
   Main_graph_Api_DTO,
-  CardData_DTO,
+  CardData,
   CardDetail_DTO,
 } from "@/types/dashborad.types";
+import exp from "constants";
 
 const api = "http://localhost:8800/api";
 const testapi = "http://localhost:4000";
@@ -28,22 +30,22 @@ export const Main_graph_Api = async (
   return graph;
 };
 
-export const User_Info_Api = async () => {
+export const User_Info_Api = async ():Promise<UserInfo>  => {
   const response = await axios.get(`${api}/user`, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
-  const userData = response.data;
+  const userData = response.data as Promise<UserInfo>;
   console.log("User_Info_Api 호출");
   return userData;
 };
 
 export const Card_Info_Api = async (
   params: string | null
-): Promise<CardData_DTO> => {
+): Promise<CardData[]> => {
   const response = await axios.get(`${api}/cards/tag?tagname=${params}`, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
-  const card = response.data as Promise<CardData_DTO>;
+  const card = response.data as Promise<CardData[]>;
   console.log("Card_Info_Api 호출");
   return card;
 };
@@ -58,6 +60,10 @@ export const Card_Detail_Api = async (
   console.log("Card_Detail_Api 호출");
   return card;
 };
+
+// export const handleContentSave = async (
+//   const
+// )
 
 // export const Search_api = async (params: string | undefined) => {
 //   try {

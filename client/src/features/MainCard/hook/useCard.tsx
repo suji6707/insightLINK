@@ -5,10 +5,10 @@ import { NodeNameAtom } from "@/recoil/atoms/MainGraphAtom";
 // Api call
 import { Card_Info_Api } from "@/axios/dashBoardApi";
 // types
-import { CardData_DTO } from "@/types/dashborad.types";
+import { CardData } from "@/types/dashborad.types";
 
 function useCard() {
-  const [data, setData] = useState<CardData_DTO>();
+  const [data, setData] = useState<CardData[]>();
   const nodeName = useRecoilValue(NodeNameAtom);
 
 

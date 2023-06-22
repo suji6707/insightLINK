@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
-//recoil
 import { useRecoilState } from "recoil";
 import { CardDetailOpenAtom } from "@/recoil/atoms/MainGraphAtom";
-//  custom hook
 import useDetail from "@/features/MainCard/hook/useCard";
-// type
-import { CardDetail_DTO } from "@/types/dashborad.types";
-
 import { BiUndo } from "react-icons/bi";
 
 function CardDetail() {
@@ -31,9 +26,15 @@ function CardDetail() {
           <BiUndo />
         </button>
       </div>
-      <div> tag {cardDetailData[0].cardTag}</div>
-      <div> Content {cardDetailData[0].cardContent}</div>
-      <div> Image {cardDetailData[0].cardImage}</div>
+      {cardDetailData && cardDetailData.length > 0 ? (
+        <>
+          <div>Tag: {cardDetailData[0].cardTag}</div>
+          <div>Content: {cardDetailData[0].cardContent}</div>
+          <div>Image: {cardDetailData[0].cardImage}</div>
+        </>
+      ) : (
+        <div>No card details found.</div>
+      )}
     </div>
   );
 }

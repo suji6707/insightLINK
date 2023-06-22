@@ -2,7 +2,7 @@
 import { signOut } from "next-auth/react";
 
 const GoogleLogoutBtn = () => {
-  const handleLogout = async (e : any) => {
+  const handleLogout = async (e: any) => {
     e.preventDefault();
     await signOut({ callbackUrl: "/" });
     localStorage.removeItem("token");
@@ -11,7 +11,7 @@ const GoogleLogoutBtn = () => {
   return (
     <button
       type="button"
-      className="font-bold py-2 px-4 rounded mr-4 border-black border w-full"
+      className="w-full px-4 py-2 mr-4 font-bold border border-black rounded"
       onClick={handleLogout}
     >
       구글 로그아웃

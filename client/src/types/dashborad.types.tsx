@@ -1,8 +1,8 @@
 export interface UserInfo {
-  userName: string;
   tagCnt: number;
   cardCnt: number;
   followCnt: number;
+  userName: string;
 }
 
 interface GraphNode {
@@ -29,15 +29,13 @@ export interface CardData {
   cardContent: string;
   cardImage: string;
 }
-export interface CardData_DTO {
-  cardData: CardData[];
-}
 
 interface CardDetail {
   cardId?: number;
   cardTag?: string[];
   cardImage?: string;
 }
+
 export interface CardDetail_DTO {
   cardId: number;
   cardTag: string[];

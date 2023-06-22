@@ -4,17 +4,15 @@ import { UserInfo } from "@/types/dashborad.types";
 
 export default function UserInfo() {
   // 상태관리 로그인 id
-
   const [userInfo, setUserInfo] = useState<UserInfo>();
 
-  const getUserInfoData = async () => {
-    const response = await User_Info_Api();
-    setUserInfo(response);
-  };
-
   useEffect(() => {
+    const getUserInfoData = async () => {
+      const response = await User_Info_Api();
+      setUserInfo(response);
+      console.log("userInfo data: ", response);
+    };
     getUserInfoData();
-    console.log(userInfo);
   }, []);
 
   return (

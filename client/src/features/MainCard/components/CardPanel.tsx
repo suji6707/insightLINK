@@ -11,7 +11,7 @@ import useCard from "@/features/MainCard/hook/useCard";
 import { CardData, CardData_DTO } from "@/types/dashborad.types";
 
 function CardPanel() {
-  const [cardData, setCardData] = useState<any>();
+  const [cardData, setCardData] = useState<CardData[]>([]);
   const detailOpen = useRecoilValue(CardDetailOpenAtom);
   const getData = useCard();
 
@@ -21,12 +21,14 @@ function CardPanel() {
     }
   }, [getData]);
 
+  console.log(cardData);
+
   return (
     <div className="flex flex-wrap w-1/2 h-full bg-slate-100">
       {detailOpen ? (
         <CardDetail />
       ) : (
-        cardData?.map((data: any, index: number) => {
+        cardData?.map((data: CardData, index: number) => {
           return <Card data={data} key={index} />;
         })
       )}

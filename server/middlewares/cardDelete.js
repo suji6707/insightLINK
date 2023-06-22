@@ -19,7 +19,7 @@ export const deleteCard =  async (req, res) => {
     const query = `delete from File where user_id = ${userId} and file_id = ${cardId};`
     await connection.query(query);
     connection.release();
-    res.status(200).send('Success');
+    res.status(200).send({success: true});
     } catch (err) {
     console.log(err);
     res.status(500).send('Internal Server Error'); 
