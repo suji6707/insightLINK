@@ -25,7 +25,6 @@ export default function Home() {
     if (response.data.success) {
       alert(`로그인 성공!`);
       const token = response.data.token;
-      console.log(token);
 
       // Store the token in local storage
       localStorage.setItem("token", token);
@@ -36,17 +35,22 @@ export default function Home() {
     }
   };
 
+  useEffect(() => {
+    // Check if the user is already logged in
+    const token = localStorage.getItem("token");
+    if (token) {
+      // Redirect to the dashboard page
+      router.push("/dashboard");
+    }
+  }, []);
+
   return (
     <div>
       <NavBar />
       <Wrapper>
         <div className="flex flex-col items-center justify-center h-screen">
           <div className="container flex flex-col items-end max-w-md mx-auto">
-            {" "}
-            {/* Updated class */}
             <div className="flex items-center justify-end mb-4">
-              {" "}
-              {/* Updated class */}
               <label
                 className="block mr-2 text-sm font-bold text-gray-700"
                 htmlFor="email"
@@ -64,8 +68,6 @@ export default function Home() {
               </div>
             </div>
             <div className="flex items-center justify-end mb-4">
-              {" "}
-              {/* Updated class */}
               <label
                 className="block mr-2 text-sm font-bold text-gray-700"
                 htmlFor="password"
@@ -85,8 +87,6 @@ export default function Home() {
             </div>
           </div>
           <div className="flex justify-end mt-4">
-            {" "}
-            {/* Updated class */}
             <button
               onClick={handleLogin}
               className="px-4 py-2 mr-4 font-bold text-white bg-black rounded"

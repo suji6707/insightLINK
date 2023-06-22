@@ -7,7 +7,6 @@ const router = express.Router();
 // 일반 유저 회원가입
 router.post('/', async (req, res) => {
     const { email, name, password} = req.body;
-    console.log(req.body);
 
     let connection = null;
 
@@ -15,6 +14,14 @@ router.post('/', async (req, res) => {
 
     try {
       connection = await db.getConnection();
+      const findUserSql = `SELECT * FROM User WHERE email = '${email}'`;
+      const [result] = await connection.query(findUserSql)
+      
+      if(result[0]) {
+        res.send({ success: false});
+        return
+      }
+
       const insertSql = `INSERT INTO User(email, user_name, profile_img, password) 
           VALUES (?, ?, ?, ?)`;
       await connection.query(insertSql, [email, name, imageUrl, password]);

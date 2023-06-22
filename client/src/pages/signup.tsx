@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import NavBar from "@/features/Dashboard/components/NavBar";
@@ -14,21 +14,42 @@ export default function Home() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [userName, setUserName] = useState("");
   const [passwordMatchError, setPasswordMatchError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
   const [emailFormatError, setEmailFormatError] = useState(false);
+  const [checkUserEmail, setCheckUserEmail] = useState(false);
 
   const doUserRegistration = async (res: any) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/;
+
+    // Validate email format
     if (!emailRegex.test(userEmail)) {
       setEmailFormatError(true);
       setPasswordMatchError(false);
+      setPasswordError(false);
+      setCheckUserEmail(false); // Reset checkUserEmail state
       return;
     } else {
       setEmailFormatError(false);
     }
 
+    // Validate password format
+    if (!passwordRegex.test(password)) {
+      setPasswordError(true);
+      setEmailFormatError(false);
+      setPasswordMatchError(false);
+      setCheckUserEmail(false); // Reset checkUserEmail state
+      return;
+    } else {
+      setPasswordError(false);
+    }
+
+    // Validate password match
     if (password !== confirmPassword) {
       setPasswordMatchError(true);
       setEmailFormatError(false);
+      setPasswordError(false);
+      setCheckUserEmail(false); // Reset checkUserEmail state
       return;
     } else {
       setPasswordMatchError(false);
@@ -40,29 +61,33 @@ export default function Home() {
       password: password,
     });
 
-    setUserEmail("");
-    setPassword("");
-    setConfirmPassword("");
-    setUserName("");
-
     if (response.data.success) {
       alert(`Success! User ${userName} was successfully created!`);
+      setUserEmail("");
+      setPassword("");
+      setConfirmPassword("");
+      setUserName("");
       router.push("/login");
     } else {
-      alert("fail!!");
+      setCheckUserEmail(true);
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      // User is already logged in, redirect to another page
+      router.replace("/dashboard");
+    }
+  }, []);
 
   return (
     <div>
       <NavBar />
       <div className="flex flex-col items-center justify-center h-screen">
         <div className="container mx-auto max-w-md flex flex-col items-end">
-          {" "}
-          {/* Updated class */}
           <div className="mb-4 flex items-center justify-end">
-            {" "}
-            {/* Updated class */}
             <label
               className="block text-gray-700 text-sm font-bold mr-2"
               htmlFor="email"
@@ -84,9 +109,12 @@ export default function Home() {
               이메일 형식이 아닙니다.
             </div>
           )}
+          {checkUserEmail && (
+            <div className="text-red-500 text-right">
+              이미 회원가입한 이메일입니다.
+            </div>
+          )}
           <div className="mb-4 flex items-center justify-end">
-            {" "}
-            {/* Updated class */}
             <label
               className="block text-gray-700 text-sm font-bold mr-2"
               htmlFor="password"
@@ -105,8 +133,6 @@ export default function Home() {
             </div>
           </div>
           <div className="mb-4 flex items-center justify-end">
-            {" "}
-            {/* Updated class */}
             <label
               className="block text-gray-700 text-sm font-bold mr-2"
               htmlFor="confirmPassword"
@@ -129,9 +155,13 @@ export default function Home() {
               비밀번호가 일치하지 않습니다.
             </div>
           )}
+          {passwordError && (
+            <div className="text-red-500 text-right">
+              비밀번호는 문자(대문자 또는 소문자)와 숫자의 조합을 최소 5자
+              이상이여야 합니다.
+            </div>
+          )}
           <div className="mb-4 flex items-center justify-end">
-            {" "}
-            {/* Updated class */}
             <label
               className="block text-gray-700 text-sm font-bold mr-2"
               htmlFor="userName"
@@ -150,8 +180,6 @@ export default function Home() {
           </div>
         </div>
         <div className="flex justify-end mt-4">
-          {" "}
-          {/* Updated class */}
           <button
             onClick={doUserRegistration}
             className="bg-black text-white font-bold py-2 px-4 rounded"

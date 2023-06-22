@@ -18,7 +18,7 @@ export default function Home() {
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     setToken(storedToken);
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     if (status === "authenticated" && sessionData?.user) {
@@ -34,8 +34,6 @@ export default function Home() {
         imageUrl: userData.image,
       });
 
-      console.log("사용자 정보가 성공적으로 저장되었습니다.");
-
       if (response.data.success) {
         alert("로그인 성공!");
         const token = response.data.token;
@@ -43,12 +41,12 @@ export default function Home() {
         router.push("/dashboard");
       } else {
         alert("로그인에 실패했습니다.ㅠㅠ");
-        console.log(response.data);
       }
     } catch (error) {
       console.error("사용자 정보 저장 중 오류가 발생했습니다.", error);
     }
   };
+
 
   return (
     <div>
@@ -63,11 +61,7 @@ export default function Home() {
             <div className="flex justify-between h-11">
               {!sessionData?.user && !token ? <SignupButton /> : null}
               {!sessionData?.user && !token ? <LoginBtn /> : null}
-              {sessionData?.user ? (
-                <GoogleLogoutBtn />
-              ) : (
-                <GoogleLoginBtn />
-              )}
+              {sessionData?.user === undefined && !token ? <GoogleLoginBtn /> : token? null : <GoogleLogoutBtn />}
             </div>
           </div>
         </div>
