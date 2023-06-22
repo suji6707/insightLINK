@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  UserInfo,
   Main_graph_Api_DTO,
   CardData,
   CardDetail_DTO,
@@ -28,11 +29,11 @@ export const Main_graph_Api = async (
   return graph;
 };
 
-export const User_Info_Api = async () => {
+export const User_Info_Api = async ():Promise<UserInfo>  => {
   const response = await axios.get(`${api}/user`, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
-  const userData = response.data;
+  const userData = response.data as Promise<UserInfo>;
   console.log("User_Info_Api 호출");
   return userData;
 };

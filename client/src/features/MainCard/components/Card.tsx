@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useRecoilState } from "recoil";
 import { CardDetailOpenAtom, ClickedCardDetailAtom } from "@/recoil/atoms/MainGraphAtom";
-import { CardData } from "../../../types/dashborad.types";
+import { CardData } from "@/types/dashborad.types";
 import { AiFillEdit, AiOutlineExpandAlt, AiOutlineDeliveredProcedure } from "react-icons/ai";
 import axios from "axios";
 
