@@ -5,6 +5,7 @@ import {
   CardData,
   CardDetail_DTO,
 } from "@/types/dashborad.types";
+import exp from "constants";
 
 const api = "http://localhost:8800/api";
 const testapi = "http://localhost:4000";
@@ -59,6 +60,10 @@ export const Card_Detail_Api = async (
   console.log("Card_Detail_Api 호출");
   return card;
 };
+
+// export const handleContentSave = async (
+//   const
+// )
 
 // export const Search_api = async (params: string | undefined) => {
 //   try {
