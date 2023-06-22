@@ -73,30 +73,35 @@ export default function Search() {
     <div>
       <NavBar />
       <Wrapper className="items-start">
-        <p className="w-full p-4 border-b border-black dark:border-white text-3xl my-4">
-          '{keywords}'의 검색 결과입니다
+        <p className="w-full p-4 my-4 text-3xl border-b border-black dark:border-white">
+          &apos;{keywords}&apos;의 검색 결과입니다
         </p>
-        <div className="w-full flex flex-col mt-4 px-2">
-          <div className="flex flex-row justify-between items-center mb-4">
-            <p className="text-2xl font-bold px-2">태그</p>
+        <div className="flex flex-col w-full px-2 mt-4">
+          <div className="flex flex-row items-center justify-between mb-4">
+            <p className="px-2 text-2xl font-bold">태그</p>
             <p onClick={goBack} className="text-xl text-gray-500">
               이전
             </p>
           </div>
-          <SearchResult data={findData} keyword={Array.isArray(keywords) ? keywords.join(', ') : keywords || ""}/>
+          <SearchResult
+            data={findData}
+            keyword={
+              Array.isArray(keywords) ? keywords.join(", ") : keywords || ""
+            }
+          />
         </div>
-        <div className="flex justify-center items-center mt-4">
+        <div className="flex items-center justify-center mt-4">
           <button
             onClick={goToPreviousPage}
             disabled={currentPage === 1}
-            className="px-4 py-2 mx-2 rounded bg-gray-200 text-gray-700"
+            className="px-4 py-2 mx-2 text-gray-700 bg-gray-200 rounded"
           >
             이전 페이지
           </button>
           <button
             onClick={goToNextPage}
             disabled={!hasNextPage}
-            className="px-4 py-2 mx-2 rounded bg-gray-200 text-gray-700"
+            className="px-4 py-2 mx-2 text-gray-700 bg-gray-200 rounded"
           >
             다음 페이지
           </button>
@@ -105,4 +110,3 @@ export default function Search() {
     </div>
   );
 }
-

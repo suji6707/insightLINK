@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { DashBoardCardAtom } from "@/recoil/atoms/MainGraphAtom";
 // Component
@@ -13,16 +12,12 @@ import Loading from "@/features/MainGraph/components/Loading/Loading";
 import useGraph from "@/features/MainGraph/hooks/useGraph";
 
 export default function Dashboard() {
-  const router = useRouter();
-  const { userid } = router.query;
 
   const [openCard, setOpenCard] = useRecoilState(DashBoardCardAtom);
   const [showImgModal, setShowImgModal] = useState(false);
 
-  console.log("대시보드 아이디:" , userid)
-  
-  const graphData = useGraph(userid as string);
-  
+  const graphData = useGraph();
+
   return (
     <>
       {graphData ? (

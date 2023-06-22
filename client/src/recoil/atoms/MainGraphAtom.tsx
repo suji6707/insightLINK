@@ -1,6 +1,6 @@
 import React from "react";
 import { atom } from "recoil";
-import { CardData_DTO, CardDetail_DTO } from "@/types/dashborad.types";
+import { CardData, CardDetail_DTO } from "@/types/dashborad.types";
 
 export const DashBoardCardAtom = atom({
   key: "DashBoardCardAtom",
@@ -22,7 +22,7 @@ export const NodeNameAtom = atom<string | null>({
   default: null,
 });
 
-export const CardDataAtom = atom<CardData_DTO | null>({
+export const CardDataAtom = atom<CardData | null>({
   key: "CardDataAtom",
   default: null,
 });

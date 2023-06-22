@@ -29,9 +29,6 @@ export interface CardData {
   cardContent: string;
   cardImage: string;
 }
-export interface CardData_DTO {
-  cardData: CardData[];
-}
 
 interface CardDetail {
   cardId?: number;
