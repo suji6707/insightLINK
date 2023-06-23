@@ -3,7 +3,7 @@ import {
   UserInfo,
   Main_graph_Api_DTO,
   CardData,
-  CardDataDetail
+  CardDataDetail,
 } from "@/types/dashborad.types";
 
 const api = "http://localhost:8800/api";
@@ -29,7 +29,7 @@ export const Main_graph_Api = async (
   return graph;
 };
 
-export const User_Info_Api = async ():Promise<UserInfo>  => {
+export const User_Info_Api = async (): Promise<UserInfo> => {
   const response = await axios.get(`${api}/user`, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
@@ -55,28 +55,29 @@ export const Card_Detail_Api = async (
   const response = await axios.get(`${api}/cards/info?cardId=${params}`, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
-  const card = response.data as Promise<CardDataDetail[]>;
+  const card = response.data as Promise<CardDataDetail>;
   console.log("Card_Detail_Api 호출");
   return card;
 };
 
-
-export const Card_Edit_Api = async (params: number | null, data: string | null) => {
-
+export const Card_Edit_Api = async (
+  params: number | undefined,
+  data: string | undefined
+) => {
   const response = await axios.patch(
     `${api}/cards/update/${params}`,
-    { content: data},
+    { content: data },
     {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-    },
+    }
   );
-  
-  return response
-}
 
-export const Card_Delete_Api = async (params: number | null) => {
+  return response;
+};
+
+export const Card_Delete_Api = async (params: number | undefined) => {
   const response = await axios.delete(`${api}}/cards/delete/${params}`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -84,4 +85,4 @@ export const Card_Delete_Api = async (params: number | null) => {
   });
 
   return response;
-}
+};

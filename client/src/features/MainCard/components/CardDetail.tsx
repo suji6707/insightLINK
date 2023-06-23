@@ -20,15 +20,15 @@ import {
 } from "react-icons/ai";
 
 function CardDetail() {
-  const [cardDetailData, setCardDetailData] = useState<CardDataDetail>({});
+  const [cardDetailData, setCardDetailData] = useState<Partial<CardDataDetail>>(
+    {}
+  );
   const [detailOpen, setDetailOpen] = useRecoilState(CardDetailOpenAtom);
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
   const loginId = useRecoilValue(LoginStateAtom);
 
-  const [editedContent, setEditedContent] = useState<string>(
-    cardDetailData?.content
-  );
+  const [editedContent, setEditedContent] = useState<any>("");
   const [isEditingContent, setIsEditingContent] = useState(false);
   // 데이터 fetch
   const detailData = useDetail();
@@ -72,7 +72,6 @@ function CardDetail() {
       setIsLogin(false);
     }
   }, [loginId, cardDetailData?.userId]);
-  
 
   return (
     <>
@@ -94,7 +93,7 @@ function CardDetail() {
                   <textarea
                     value={editedContent}
                     onChange={handleContentChange}
-                    rows={editedContent.length / 15}
+                    rows={editedContent?.length / 15}
                     style={{ width: "100%" }}
                   />
                   <AiOutlineDeliveredProcedure onClick={handleContentSave} />
