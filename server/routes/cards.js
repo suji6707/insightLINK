@@ -3,7 +3,7 @@ import { getCardInfos } from '../middlewares/cardInfo.js';
 import { getTagInfos } from '../middlewares/cardTag.js';
 import { getCards } from '../middlewares/cardCopy.js';
 import { updateCard } from '../middlewares/cardUpdate.js';
-import { deleteCard } from '../middlewares/cardDelete.js'
+import { deleteCard } from '../middlewares/cardDelete.js';
 import { authMiddleware } from '../middlewares/auth-middleware.js';
 
 
