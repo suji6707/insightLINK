@@ -30,10 +30,10 @@ export interface CardData {
   cardImage: string;
 }
 
-interface CardDetail {
-  cardId?: number;
-  cardTag?: string[];
-  cardImage?: string;
+export interface CardDataDetail {
+  cardTag: string[];
+  content: string;
+  cardImage: string;
 }
 
 export interface CardDetail_DTO {

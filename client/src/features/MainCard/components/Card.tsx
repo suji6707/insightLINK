@@ -1,9 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { useRecoilState } from "recoil";
-import { CardDetailOpenAtom, ClickedCardDetailAtom } from "@/recoil/atoms/MainGraphAtom";
+import React, { useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  CardDetailOpenAtom,
+  ClickedCardDetailAtom,
+} from "@/recoil/atoms/MainGraphAtom";
+import { LoginStateAtom } from "@/recoil/atoms/LoginStateAtom";
+
 import { CardData } from "../../../types/dashborad.types";
-import { AiFillEdit, AiOutlineExpandAlt, AiOutlineDeliveredProcedure, AiOutlineClose } from "react-icons/ai";
-import axios from "axios";
+import {
+  AiFillEdit,
+  AiOutlineExpandAlt,
+  AiOutlineDeliveredProcedure,
+  AiOutlineClose,
+} from "react-icons/ai";
+
+import { Card_Edit_Api, Card_Delete_Api } from "@/axios/dashBoardApi";
 
 interface CardProps {
   data: CardData;
@@ -11,7 +22,10 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ data }) => {
   const [detailOpen, setDetailOpen] = useRecoilState(CardDetailOpenAtom);
-  const [clickedDetail, setClickedDetail] = useRecoilState(ClickedCardDetailAtom);
+  const [clickedDetail, setClickedDetail] = useRecoilState(
+    ClickedCardDetailAtom
+  );
+  const isLogin = useRecoilValue(LoginStateAtom);
   const [editedContent, setEditedContent] = useState<string>("");
   const [isEditingContent, setIsEditingContent] = useState(false);
 
@@ -25,46 +39,23 @@ const Card: React.FC<CardProps> = ({ data }) => {
     setEditedContent(data?.cardContent);
   };
 
+  /**
+   * @params data.cardId number | null
+   */
+  const handleCardDelete = async () => {
+    Card_Delete_Api(data?.cardId);
+  };
+
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setEditedContent(e.target.value);
   };
 
   const handleContentSave = async () => {
-    try {
-      console.log(data?.cardId);
-      const response = await axios.patch(
-        "http://localhost:8800/api/cards/update/" + data?.cardId,
-        { content: editedContent },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+    const response = await Card_Edit_Api(data?.cardId, editedContent);
 
-      if (response.data.success) {
-        setIsEditingContent(false);
-        console.log("Save edited content:", editedContent);
-      }
-    } catch (error) {
-      console.error("Error saving the edited nickname:", error);
-    }
-  };
-
-  const handleCardDelete = async () => {
-    try {
-      console.log(data?.cardId);
-      const response = await axios.delete("http://localhost:8800/api/cards/delete/" + data?.cardId, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-
-      if (response.data.success) {
-        console.log("Delete CardId : ", data?.cardId);
-      }
-    } catch (error) {
-      console.error("Error saving the edited nickname:", error);
+    if (response.data.success) {
+      setIsEditingContent(false);
+      console.log("Save edited content:", editedContent);
     }
   };
 
@@ -75,7 +66,6 @@ const Card: React.FC<CardProps> = ({ data }) => {
       </div>
       <div>tag {data?.cardTag}</div>
       <div>
-        Content
         {isEditingContent ? (
           <>
             <textarea
@@ -88,7 +78,8 @@ const Card: React.FC<CardProps> = ({ data }) => {
           </>
         ) : (
           <>
-            <AiFillEdit onClick={handleContentEdit} /> {editedContent || data?.cardContent}
+            <AiFillEdit onClick={handleContentEdit} />{" "}
+            {editedContent || data?.cardContent}
           </>
         )}
       </div>

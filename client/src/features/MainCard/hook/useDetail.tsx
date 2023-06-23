@@ -5,10 +5,10 @@ import { ClickedCardDetailAtom } from "@/recoil/atoms/MainGraphAtom";
 // Api call
 import { Card_Detail_Api } from "@/axios/dashBoardApi";
 // types
-import { CardDetail_DTO } from "@/types/dashborad.types";
+import { CardDataDetail } from "@/types/dashborad.types";
 
 function useDetail() {
-  const [data, setData] = useState<CardDetail_DTO>();
+  const [data, setData] = useState<CardDataDetail>();
   const cardId = useRecoilValue(ClickedCardDetailAtom);
 
   useEffect(() => {
@@ -19,7 +19,6 @@ function useDetail() {
     getCardData();
   }, [cardId]);
 
-  console.log("useDetail data: ", data);
   return data;
 }
 

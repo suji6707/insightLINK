@@ -6,6 +6,8 @@ import { AiFillPlusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 import { CardDetail } from "@/types/social.types";
 
 
+import { CardDetail } from "@/types/social.types";
+
 const CardDetail = ({
   modalRef,
   modalOutsideClicked,
