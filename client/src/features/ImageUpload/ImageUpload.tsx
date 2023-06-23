@@ -86,11 +86,12 @@ export default function ImageUpload({ setShowImgModal }: any) {
       });
 
       const uploadedImageUrls = await Promise.all(promises);
+      console.log(uploadedImageUrls)
       setImageUrl(uploadedImageUrls);
 
       const POSTImgLink = async () => {
         const token = getToken();
-        const result = await POST("upload", { imageUrl: imageUrl }, token);
+        const result = await POST("upload", uploadedImageUrls, token);
         console.log(result);
       };
 
