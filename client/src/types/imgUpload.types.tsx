@@ -1,4 +1,4 @@
 type ImageListProps = {
-  imgList: string[];
+  imgList: Array<{ name: string; type: string; size: number }>;
   deleteImg: (index: number) => void;
 };
