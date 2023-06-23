@@ -23,7 +23,7 @@ router.get('/contents', async (req, res) => {
         cardContent: result[i * 2].content,
       });
     }
-    console.log("arr길이 " + arr.length);
+    console.log("내용 수 :", arr.length);
 
     return res.send({
       results: [arr[0]],
@@ -55,7 +55,7 @@ router.get('/tags', async (req, res) => {
         cardContent: result[i * 2].content,
       });
     }
-    // console.log(arr[0]);
+    console.log("태그 수 :", arr.length);
 
     return res.send({
       results: [arr[0]],
@@ -95,7 +95,7 @@ router.get('/contents/all', async (req, res) => {
     const slicedResults = arr.slice(startIndex, endIndex);
     
     console.log("SI: " + startIndex +",EI: " + endIndex);
-    console.log(slicedResults);
+    // console.log(slicedResults);
 
     return res.send({
       results: slicedResults,
@@ -137,7 +137,7 @@ router.get('/tags/all', async (req, res) => {
     const slicedResults = arr.slice(startIndex, endIndex);
     
     console.log("SI: " + startIndex +",EI: " + endIndex);
-    console.log(slicedResults);
+    // console.log(slicedResults);
 
     return res.send({
       results: slicedResults,

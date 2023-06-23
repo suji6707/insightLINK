@@ -91,20 +91,22 @@ export default function Search() {
           />
         </div>
         <div className="flex items-center justify-center mt-4">
-          <button
-            onClick={goToPreviousPage}
-            disabled={currentPage === 1}
-            className="px-4 py-2 mx-2 text-gray-700 bg-gray-200 rounded"
-          >
-            이전 페이지
-          </button>
-          <button
+          {currentPage > 1 && (
+            <button
+              onClick={goToPreviousPage}
+              className="px-4 py-2 mx-2 text-gray-700 bg-gray-200 rounded"
+            >
+              이전 페이지
+            </button>
+          )}
+          {hasNextPage &&(
+            <button
             onClick={goToNextPage}
             disabled={!hasNextPage}
             className="px-4 py-2 mx-2 text-gray-700 bg-gray-200 rounded"
           >
             다음 페이지
-          </button>
+          </button>)}
         </div>
       </Wrapper>
     </div>
