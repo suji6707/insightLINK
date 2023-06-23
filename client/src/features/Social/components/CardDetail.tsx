@@ -5,9 +5,6 @@ import { AiFillPlusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 
 import { CardDetail } from "@/types/social.types";
 
-
-import { CardDetail } from "@/types/social.types";
-
 const CardDetail = ({
   modalRef,
   modalOutsideClicked,
@@ -70,7 +67,7 @@ const CardDetail = ({
             alt="screenshot"
           />
         </div>
-        <div className="w-full flex justify-center" onClick={handlePlusClicked}>
+        <div className="flex justify-center w-full" onClick={handlePlusClicked}>
           {isPlus ? (
             <AiFillPlusCircle className="w-12 h-12 " />
           ) : (
