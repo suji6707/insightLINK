@@ -2,6 +2,8 @@ import express from 'express';
 import '../dotenv.js';
 import { db } from '../connect.js';
 import { graphCountQuery, graphDirectionQuery } from '../db/graphQueries.js';
+// import Redis from 'ioredis';
+// const redis = new Redis();
 
 function cycleCount(connections, nodes) {
   let count = 0;
@@ -63,6 +65,13 @@ router.get('/', async (req, res) => {
 
 
 const getGraphData = async (userId) => {
+
+  /* Check cache */
+  // const cacheData = await redis.get(`graphUser:${userId}`);
+  // if (cacheData) {
+  //   return JSON.parse(cacheData);
+  // }
+
   let connection = null;
   try {
     connection = await db.getConnection();
@@ -102,6 +111,9 @@ const getGraphData = async (userId) => {
       }
     }
     graph.cnt = maxCategory;
+
+    // redis.set(`graphUser:${userId}`, JSON.stringify(graph), 'EX', 3600);
+
     return graph;  
   } catch (err) {
     connection?.release();
