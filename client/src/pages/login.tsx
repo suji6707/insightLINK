@@ -26,6 +26,9 @@ export default function Home() {
       alert(`로그인 성공!`);
       const token = response.data.token;
 
+      const userId = response.data.userId;
+      console.log("로그인한 userId : ", userId);
+
       // Store the token in local storage
       localStorage.setItem("token", token);
 

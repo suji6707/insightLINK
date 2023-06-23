@@ -20,7 +20,8 @@ router.post('/', async (req, res) => {
     if (result[0]) {
       console.log(`userId : ${result[0].user_id} has been logged in!`);
       const token = jwt.sign({ userId: result[0].user_id }, 'customized-secret-key');
-      res.send({ success: true, token });  
+      const userId = result[0].user_id;
+      res.send({ success: true, token, userId });  
     } else {
 
       /* 회원가입 */
@@ -54,7 +55,8 @@ router.post('/generic', async(req, res) => {
   
     if (result[0]) {
       const token = jwt.sign({ userId: result[0].user_id }, 'customized-secret-key');
-      res.send({ success: true, token });  
+      const userId = result[0].user_id;
+      res.send({ success: true, token, userId });  
     } else {
       res.send({ success: false  });
     }
