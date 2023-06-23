@@ -4,10 +4,19 @@ import { recomUserQuery } from '../db/socialQueries.js';
 import { tagQuery } from '../db/socialQueries.js';
 import { profileQuery } from '../db/socialQueries.js';
 import { followCheckQuery } from '../db/followQueries.js';
+// import Redis from 'ioredis';
+// const redis = new Redis();
+
 
 export const recomUsers = async (req, res) => {
   const { user } = res.locals;
   const userId = user.user_id;
+
+  /* Check cache */
+  // const cacheData = await redis.get(`recomUser:${userId}`);
+  // if (cacheData) {
+  //   return res.status(200).send(JSON.parse(cacheData));
+  // }
 
   let connection = null;
   try {
@@ -43,6 +52,9 @@ export const recomUsers = async (req, res) => {
 
       data.push(userProfile);
     }
+    /* Save to cache */
+    // redis.set(`recomUser:${userId}`, JSON.stringify(data), 'EX', 3600);
+
     connection.release();
     res.status(200).send(data);  
   } catch (err) {

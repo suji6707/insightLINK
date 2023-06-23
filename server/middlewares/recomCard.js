@@ -4,8 +4,8 @@ import { recommendSimilarQuery } from '../db/socialQueries.js';
 import { recommendDiscoverQuery } from '../db/socialQueries.js';
 import { fileToUserQurey } from '../db/socialQueries.js';
 import { rejectCardQuery } from '../db/socialQueries.js';
-import Redis from 'ioredis';
-const redis = new Redis();
+// import Redis from 'ioredis';
+// const redis = new Redis();
 
 
 export const recomCards = async (req, res) => {

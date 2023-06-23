@@ -14,6 +14,9 @@ import { generate } from '../services/generate.js';
 import { extractJson } from '../services/jsonUtils.js';
 import { combinedList }  from '../services/taglist.js';  
 /* Tag ENDED */
+/* Socket LINE ADDED */
+// import ws from 'ws';
+/* Socket ENDED */
 
 
 const s3 = new S3Client({
@@ -49,6 +52,9 @@ const isImage = (ocrResult) => {
   return false;
 };
 
+/* Socket */
+// const wsServer = new ws.Server({ noServer: true });
+
 
 /* Multer */
 router.get('/', (req, res) => {
@@ -68,7 +74,7 @@ router.post('/', upload.array('photos'),
 
       let connection = null;
       try {
-        connection = await db.getConnection();
+        connection = await db.getConnection();  
         const q1 = 'INSERT INTO File (user_id, img_url, content) VALUES (?, ?, ?)';   // SQL - File 
         const q2 = 'INSERT INTO Tag (file_id, tag, tag_index) VALUES (?, ?, ?)';      // SQL - Tag  
         
@@ -79,10 +85,22 @@ router.post('/', upload.array('photos'),
           const imgUrl = file.location; // S3 링크
           const sumText = await processOCR(imgUrl);  
           if (isImage(sumText)) {
+            /* Socket */
+            // wsServer.clients.forEach(client => {
+            //   if (client.readyState === ws.OPEN) {
+            //     client.send('<Image>');
+            //   }
+            // });
             tagList.push('<Image>');
           } else {
             const tag = await generate(req, res, sumText); 
             const tagJSON = extractJson(tag);
+
+            // wsServer.clients.forEach(client => {
+            //   if (client.readyState === ws.OPEN) {
+            //     client.send(JSON.stringify(tagJSON));
+            //   }
+            // });
             tagList.push(tagJSON);
 
             /* Tag 가공 -> index, KR */

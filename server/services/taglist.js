@@ -38,6 +38,7 @@ export const screenshotSubjects_en = [
   'Cryptocurrency/Stock Price',
   'Weather Forecast',
   'Idea Brainstorming',
+  'Animation',
 ];
   
 export const screenshotSubjects_kr = [
@@ -80,6 +81,7 @@ export const screenshotSubjects_kr = [
   '암호화폐/주식 가격',
   '날씨 예보',
   '아이디어 브레인스토밍',
+  '애니메이션',
 ];
 
 
