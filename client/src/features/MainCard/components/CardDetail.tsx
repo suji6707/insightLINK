@@ -22,9 +22,10 @@ import {
 function CardDetail() {
   const [cardDetailData, setCardDetailData] = useState<CardDataDetail>({});
   const [detailOpen, setDetailOpen] = useRecoilState(CardDetailOpenAtom);
-  
+  const [isLogin, setIsLogin] = useState<boolean>(false);
+
   const loginId = useRecoilValue(LoginStateAtom);
-  
+
   const [editedContent, setEditedContent] = useState<string>(
     cardDetailData?.content
   );
@@ -62,43 +63,61 @@ function CardDetail() {
     if (detailData) {
       setCardDetailData(detailData);
     }
-
   }, [detailOpen, detailData]);
 
+  useEffect(() => {
+    if (loginId === cardDetailData?.userId) {
+      setIsLogin(true);
+    } else {
+      setIsLogin(false);
+    }
+  }, [loginId, cardDetailData?.userId]);
+  
+
   return (
-    <div className="w-full h-full bg-red-200">
-      <div className="flex ml-auto">
-        <button onClick={handleDetailOpen}>
-          <BiUndo />
-        </button>
-        <AiOutlineClose onClick={handleCardDelete} />
-      </div>
+    <>
+      <div className="w-full h-full bg-red-200">
+        <div className="flex ml-auto">
+          <button onClick={handleDetailOpen}>
+            <BiUndo />
+          </button>
+        </div>
 
-      <div>Tag: {cardDetailData?.cardTag}</div>
+        <div>Tag: {cardDetailData?.cardTag}</div>
 
-      <div>
-        {isEditingContent ? (
+        {isLogin ? (
           <>
-            <textarea
-              value={editedContent}
-              onChange={handleContentChange}
-              rows={editedContent.length / 15}
-              style={{ width: "100%" }}
-            />
-            <AiOutlineDeliveredProcedure onClick={handleContentSave} />
+            <AiOutlineClose onClick={handleCardDelete} />
+            <div>
+              {isEditingContent ? (
+                <>
+                  <textarea
+                    value={editedContent}
+                    onChange={handleContentChange}
+                    rows={editedContent.length / 15}
+                    style={{ width: "100%" }}
+                  />
+                  <AiOutlineDeliveredProcedure onClick={handleContentSave} />
+                </>
+              ) : (
+                <>
+                  <AiFillEdit onClick={handleContentEdit} />{" "}
+                  {editedContent || cardDetailData?.content}
+                </>
+              )}
+            </div>
           </>
         ) : (
           <>
-            <AiFillEdit onClick={handleContentEdit} />{" "}
-            {editedContent || cardDetailData?.content}
+            <div>{cardDetailData?.content}</div>
           </>
         )}
+
+        <div>Content: {cardDetailData?.content}</div>
+
+        <div>Image: {cardDetailData?.cardImage}</div>
       </div>
-
-      <div>Content: {cardDetailData?.content}</div>
-
-      <div>Image: {cardDetailData?.cardImage}</div>
-    </div>
+    </>
   );
 }
 
