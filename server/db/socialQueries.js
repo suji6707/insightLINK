@@ -44,7 +44,7 @@ export const rejectCardQuery =
 'INSERT INTO z_DeletedCards (user_id, file_id) VALUES (?, ?)';
 
 /************************ 카드 추천 로직 ************************/
-/* 1. 같은 관심사내 유사한 카드 */
+/* 1. 친구 피드 */
 export const recommendSimilarQuery = (userId) => {
   return `SELECT *
     FROM (
@@ -68,7 +68,11 @@ export const recommendSimilarQuery = (userId) => {
             FROM Tag AS t1
             JOIN File AS f1 ON t1.file_id = f1.file_id
             WHERE f1.user_id = ${userId}
-          ) AND f.user_id <> ${userId}
+          ) AND f.user_id IN (
+            SELECT Follow.following_id
+            FROM Follow
+            WHERE Follow.user_id = ${userId}
+          )
           GROUP BY f.user_id
           ORDER BY shared_tags_count DESC, COUNT(DISTINCT f.file_id) DESC
           LIMIT 10
@@ -81,22 +85,15 @@ export const recommendSimilarQuery = (userId) => {
           SELECT file_id
           FROM z_DeletedCards
           WHERE File.user_id = ${userId}
-      ) AND Tag.tag IN (
-          SELECT DISTINCT Tag.tag
-          FROM Tag
-          JOIN File ON Tag.file_id = File.file_id
-          WHERE File.user_id = ${userId}
-          GROUP BY Tag.tag
-          ORDER BY COUNT(*) DESC
-      )
+      ) 
     ) AS subquery
     WHERE rn <= 2
-    LIMIT 5;
+    LIMIT 8;
   `;
 };
 
  
-/* 2. 같은 관심사내 새로운 태그 발견 */
+/* 2. 친구 아닌 사람의 추천카드 */
 export const recommendDiscoverQuery = (userId) => {
   return `SELECT *
   FROM (
@@ -121,6 +118,11 @@ export const recommendDiscoverQuery = (userId) => {
           JOIN File AS f1 ON t1.file_id = f1.file_id
           WHERE f1.user_id = ${userId}
         ) AND f.user_id <> ${userId}
+        AND f.user_id NOT IN (
+          SELECT Follow.following_id
+          FROM Follow
+          WHERE Follow.user_id = ${userId}
+        )
         GROUP BY f.user_id
         ORDER BY shared_tags_count DESC, COUNT(DISTINCT f.file_id) DESC
         LIMIT 10
@@ -141,7 +143,7 @@ export const recommendDiscoverQuery = (userId) => {
     )
   ) AS subquery
 WHERE rn <= 2
-LIMIT 5;`;
+LIMIT 4;`;
 };
 
 

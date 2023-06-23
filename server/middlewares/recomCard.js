@@ -4,23 +4,32 @@ import { recommendSimilarQuery } from '../db/socialQueries.js';
 import { recommendDiscoverQuery } from '../db/socialQueries.js';
 import { fileToUserQurey } from '../db/socialQueries.js';
 import { rejectCardQuery } from '../db/socialQueries.js';
+import Redis from 'ioredis';
+const redis = new Redis();
 
 
 export const recomCards = async (req, res) => {
   const { user } = res.locals;
   const userId = user.user_id;
 
+  /* Check cache */
+  // const cacheData = await redis.get(`recomCard:${userId}`);
+  // if (cacheData) {
+  //   return res.status(200).send(JSON.parse(cacheData));
+  // }
+
   let connection = null;
   try {
     connection = await db.getConnection();
     /* 유사 카드 추천 */
-    const [similarCardList] = await connection.query(recommendSimilarQuery(userId));
+    const [friendCardList] = await connection.query(recommendSimilarQuery(userId));
+    console.log(friendCardList);
 
     let cardList = [];
     // let similarCards = [];
-    for (let i = 0; i < similarCardList.length; i++) {
+    for (let i = 0; i < friendCardList.length; i++) {
       /* 해당 file_id에 대한 user -> img, userName  */
-      const file_id = similarCardList[i].file_id;
+      const file_id = friendCardList[i].file_id;
       const [userResult] = await connection.query(fileToUserQurey, [file_id]);
 
       const obj = {
@@ -28,8 +37,9 @@ export const recomCards = async (req, res) => {
         img: userResult[0].profile_img,
         userName: userResult[0].user_name,
         cardId: file_id,
-        tag: similarCardList[i].tag,
-        content: similarCardList[i].content,
+        tag: friendCardList[i].tag,
+        content: friendCardList[i].content,
+        isFriend: true,
       };
       cardList.push(obj);
     }
@@ -50,12 +60,16 @@ export const recomCards = async (req, res) => {
         cardId: file_id,
         tag: discoveryCardList[i].tag,
         content: discoveryCardList[i].content,
+        isFriend: false,
       };
       cardList.push(obj);
     }
     
-    console.log(cardList);
+    // console.log(cardList);
     shuffleArray(cardList);
+
+    /* Save to cache */
+    // redis.set(`recomCard:${userId}`, JSON.stringify(cardList), 'EX', 3600);
 
     connection.release();
     res.status(200).send(cardList);
