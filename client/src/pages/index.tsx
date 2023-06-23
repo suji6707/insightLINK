@@ -38,6 +38,10 @@ export default function Home() {
         alert("로그인 성공!");
         const token = response.data.token;
         localStorage.setItem("token", token);
+
+        const userId = response.data.userId;
+        console.log("로그인한 userId : ", userId);
+        
         router.push("/dashboard");
       } else {
         alert("로그인에 실패했습니다.ㅠㅠ");
@@ -46,7 +50,6 @@ export default function Home() {
       console.error("사용자 정보 저장 중 오류가 발생했습니다.", error);
     }
   };
-
 
   return (
     <div>
@@ -61,7 +64,11 @@ export default function Home() {
             <div className="flex justify-between h-11">
               {!sessionData?.user && !token ? <SignupButton /> : null}
               {!sessionData?.user && !token ? <LoginBtn /> : null}
-              {sessionData?.user === undefined && !token ? <GoogleLoginBtn /> : token? null : <GoogleLogoutBtn />}
+              {sessionData?.user === undefined && !token ? (
+                <GoogleLoginBtn />
+              ) : token ? null : (
+                <GoogleLogoutBtn />
+              )}
             </div>
           </div>
         </div>
