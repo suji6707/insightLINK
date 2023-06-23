@@ -31,6 +31,8 @@ export interface CardData {
 }
 
 export interface CardDataDetail {
+  userId: number;
+  cardId: number;
   cardTag: string[];
   content: string;
   cardImage: string;
