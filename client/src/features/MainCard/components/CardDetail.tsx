@@ -22,7 +22,8 @@ import {
 function CardDetail() {
   const [cardDetailData, setCardDetailData] = useState<CardDataDetail>({});
   const [detailOpen, setDetailOpen] = useRecoilState(CardDetailOpenAtom);
-  const isLogin = useRecoilValue(LoginStateAtom);
+  
+  const loginId = useRecoilValue(LoginStateAtom);
   
   const [editedContent, setEditedContent] = useState<string>(
     cardDetailData?.content
