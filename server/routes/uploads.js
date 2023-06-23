@@ -68,76 +68,73 @@ router.post('/', upload.array('photos'),
     const { user } = res.locals;    // authMiddleware 리턴값
     const useId = user.user_id;
 
-    if (req.files) {
-      console.log('files uploaded');
-      console.log(req.files); 
+    const imgUrlList = req.body;
 
-      let connection = null;
-      try {
-        connection = await db.getConnection();  
-        const q1 = 'INSERT INTO File (user_id, img_url, content) VALUES (?, ?, ?)';   // SQL - File 
-        const q2 = 'INSERT INTO Tag (file_id, tag, tag_index) VALUES (?, ?, ?)';      // SQL - Tag  
-        
-        /* 모든 이미지를 S3로 저장, sumText.length != 0 인 것만 OCR 및 태그 추출 후 저장 */
-        let tagList = [];
+    let connection = null;
+    try {
+      connection = await db.getConnection();  
+      const q1 = 'INSERT INTO File (user_id, img_url, content) VALUES (?, ?, ?)';   // SQL - File 
+      const q2 = 'INSERT INTO Tag (file_id, tag, tag_index) VALUES (?, ?, ?)';      // SQL - Tag  
+      
+      /* 모든 이미지를 S3로 저장, sumText.length != 0 인 것만 OCR 및 태그 추출 후 저장 */
+      let tagList = [];
 
-        for (const file of req.files) { 
-          const imgUrl = file.location; // S3 링크
-          const sumText = await processOCR(imgUrl);  
-          if (isImage(sumText)) {
-            /* Socket */
-            // wsServer.clients.forEach(client => {
-            //   if (client.readyState === ws.OPEN) {
-            //     client.send('<Image>');
-            //   }
-            // });
-            tagList.push('<Image>');
-          } else {
-            const tag = await generate(req, res, sumText); 
-            const tagJSON = extractJson(tag);
+      for (const imgUrl of imgUrlList) { 
+        const sumText = await processOCR(imgUrl);  
+        if (isImage(sumText)) {
+          /* Socket */
+          // wsServer.clients.forEach(client => {
+          //   if (client.readyState === ws.OPEN) {
+          //     client.send('<Image>');
+          //   }
+          // });
+          tagList.push('<Image>');
+        } else {
+          const tag = await generate(req, res, sumText); 
+          const tagJSON = extractJson(tag);
 
-            // wsServer.clients.forEach(client => {
-            //   if (client.readyState === ws.OPEN) {
-            //     client.send(JSON.stringify(tagJSON));
-            //   }
-            // });
-            tagList.push(tagJSON);
+          // wsServer.clients.forEach(client => {
+          //   if (client.readyState === ws.OPEN) {
+          //     client.send(JSON.stringify(tagJSON));
+          //   }
+          // });
+          tagList.push(tagJSON);
 
-            /* Tag 가공 -> index, KR */
-            const tag1 = tagJSON.tags[0];   // tag english string
-            const tag2 = tagJSON.tags[1];
-            // tag[0]
+          /* Tag 가공 -> index, KR */
+          const tag1 = tagJSON.tags[0];   // tag english string
+          const tag2 = tagJSON.tags[1];
+          // tag[0]
 
-            const tagRow1 = combinedList.find(item => item.englishKeyword === tag1);
-            if (!tagRow1) {
-              console.log(`No matching element found for ${tag1}.`);
-            }
-            // tag[1]
-            const tagRow2 = combinedList.find(item => item.englishKeyword === tag2);
-            if (!tagRow2) {
-              console.log(`No matching element found for ${tag2}.`);
-            }
+          const tagRow1 = combinedList.find(item => item.englishKeyword === tag1);
+          if (!tagRow1) {
+            console.log(`No matching element found for ${tag1}.`);
+          }
+          // tag[1]
+          const tagRow2 = combinedList.find(item => item.englishKeyword === tag2);
+          if (!tagRow2) {
+            console.log(`No matching element found for ${tag2}.`);
+          }
 
-            /* SQL - File */
-            const [ result1 ] = await connection.query(q1, [ useId, imgUrl, sumText ]);
-            // console.log(result1);
-            /* SQL - Tag */
-            const [ result2 ] = await connection.query(q2, [ result1.insertId, tagRow1.koreanKeyword, tagRow1.index ]);   // file's insertId, tag name(KR), tag[0] enum
-            const [ result3 ] = await connection.query(q2, [ result1.insertId, tagRow2.koreanKeyword, tagRow2.index ]);   // file's insertId, tag name(KR), tag[1] enum
-          };
-        }
-
-        console.log(tagList);
-        connection.release();
-
-        return res.status(200).send('SUCCESS');
-
-      } catch (err) {
-        connection?.release();
-        console.log(err);
-        res.status(400).send('ERROR');
+          /* SQL - File */
+          const [ result1 ] = await connection.query(q1, [ useId, imgUrl, sumText ]);
+          // console.log(result1);
+          /* SQL - Tag */
+          const [ result2 ] = await connection.query(q2, [ result1.insertId, tagRow1.koreanKeyword, tagRow1.index ]);   // file's insertId, tag name(KR), tag[0] enum
+          const [ result3 ] = await connection.query(q2, [ result1.insertId, tagRow2.koreanKeyword, tagRow2.index ]);   // file's insertId, tag name(KR), tag[1] enum
+        };
       }
+
+      console.log(tagList);
+      connection.release();
+
+      return res.status(200).send('SUCCESS');
+
+    } catch (err) {
+      connection?.release();
+      console.log(err);
+      res.status(400).send('ERROR');
     }
+    
   },
 );
 
