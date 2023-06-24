@@ -57,42 +57,105 @@ export default function ImageUpload({ setShowImgModal }: any) {
     });
   }
 
+  const resizeImage = (image: Blob, width: number): Promise<Blob> => {
+    return new Promise<Blob>((resolve, reject) => {
+      const img = new Image();
+      img.src = URL.createObjectURL(image);
+
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        if (ctx) {
+          const aspectRatio = img.width / img.height;
+          const height = width / aspectRatio;
+
+          canvas.width = width;
+          canvas.height = height;
+
+          ctx.drawImage(img, 0, 0, width, height);
+
+          canvas.toBlob(
+            (resizedBlob) => {
+              if (resizedBlob) {
+                resolve(resizedBlob);
+              } else {
+                reject(new Error("이미지 리사이징 실패"));
+              }
+            },
+            "image/jpeg",
+            0.9
+          );
+        } else {
+          reject(new Error("캔버스 컨텍스트 가져오기 실패"));
+        }
+      };
+
+      img.onerror = () => {
+        reject(new Error("이미지 로딩 실패"));
+      };
+    });
+  };
+
   const uploadImages = async () => {
+    const startTime = performance.now();
     try {
       const promises = imgList.map((file) => {
         return new Promise<string>((resolve, reject) => {
           const { blob } = file;
           const fileName = `${Date.now()}.${file.name}`;
-          const s3 = new AWS.S3();
-          s3.upload(
-            {
-              Bucket: "sw-jungle-s3",
-              Key: fileName,
-              Body: blob,
-              ContentType: file.type,
-            },
-            (error, data) => {
-              if (error) {
-                reject(error);
-              } else if (data && data.Location) {
-                resolve(data.Location);
-                // 하나씩 받음 console.log("?", data.Location);
-              } else {
-                reject(new Error("이미지 업로드 실패 - S3"));
-              }
-            }
-          );
+
+          // 이미지 리사이징
+          const width = 400;
+          resizeImage(blob, width)
+            .then((resizedBlob) => {
+              console.log("원본 Image Size:", blob.size);
+              console.log("Resized Image Size:", resizedBlob.size);
+
+              // 리사이즈된 이미지 업로드
+              const s3 = new AWS.S3();
+              s3.upload(
+                {
+                  Bucket: "sw-jungle-s3",
+                  Key: fileName,
+                  Body: resizedBlob,
+                  ContentType: file.type,
+                },
+                (
+                  uploadError: Error | null,
+                  data: AWS.S3.ManagedUpload.SendData
+                ) => {
+                  if (uploadError) {
+                    reject(uploadError);
+                  } else if (data && data.Location) {
+                    resolve(data.Location);
+                  } else {
+                    reject(new Error("이미지 업로드 실패 - S3"));
+                  }
+                }
+              );
+            })
+            .catch((error) => {
+              reject(error);
+            });
         });
       });
 
       const uploadedImageUrls = await Promise.all(promises);
-      console.log(uploadedImageUrls)
       setImageUrl(uploadedImageUrls);
 
       const POSTImgLink = async () => {
         const token = getToken();
         const result = await POST("upload", uploadedImageUrls, token);
-        console.log(result);
+
+        const endTime = performance.now();
+        const executionTime = endTime - startTime;
+        console.log("Execution time:", executionTime, "ms");
+
+        if (result) {
+          setShowImgModal(false);
+        }
+        return result;
       };
 
       POSTImgLink();
