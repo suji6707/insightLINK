@@ -29,7 +29,9 @@ export const Main_graph_Api = async (
   return graph;
 };
 
-export const User_Info_Api = async (userid): Promise<UserInfo> => {
+export const User_Info_Api = async (
+  userid: string | undefined
+): Promise<UserInfo> => {
   let url = `${api}/user`;
   if (userid) {
     url += `/${userid}`;
@@ -45,7 +47,7 @@ export const User_Info_Api = async (userid): Promise<UserInfo> => {
 
 export const Card_Info_Api = async (
   params: string | null,
-  userid
+  userid: string | undefined
 ): Promise<CardData[]> => {
   let url = `${api}/cards/tag?tagname=${params}`;
   if (userid) {
@@ -62,7 +64,7 @@ export const Card_Info_Api = async (
 
 export const Card_Detail_Api = async (
   params: number | null,
-  userid
+  userid: string | undefined
 ): Promise<CardDataDetail> => {
   let url = `${api}/cards/info?cardId=${params}`;
   if (userid) {
@@ -95,7 +97,27 @@ export const Card_Edit_Api = async (
 };
 
 export const Card_Delete_Api = async (params: number | undefined) => {
-  const response = await axios.delete(`${api}}/cards/delete/${params}`, {
+  const response = await axios.delete(`${api}/cards/delete/${params}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+
+  return response;
+};
+
+export const Add_Follow_API = async (params: string | undefined) => {
+  const response = await axios.get(`${api}/social/follow/${params}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+
+  return response;
+};
+
+export const Cancel_Follow_API = async (params: string | undefined) => {
+  const response = await axios.delete(`${api}/social/follow/${params}`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
