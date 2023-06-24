@@ -46,7 +46,7 @@ const CardDetail = ({
             <img
               src={detail?.profile_img}
               className="w-24 h-24 rounded-full"
-              alt="screenshot"
+              alt="profile"
             />
             <p>{detail?.userName}</p>
             {detail?.cardTag &&

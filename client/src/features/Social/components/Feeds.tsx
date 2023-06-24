@@ -13,6 +13,7 @@ interface Card {
   img: string;
   tag: string;
   content: string;
+  isFriend: boolean;
 }
 
 const Feeds = () => {
@@ -63,9 +64,14 @@ const Feeds = () => {
             return (
               <li
                 key={index}
-                className="flex flex-col py-4 border-t border-b"
+                className={`flex flex-col py-4 border-t border-b  ${
+                  !c.isFriend ? "bg-blue-100" : ""
+                }`}
                 onClick={() => setCardId(c.cardId)}
               >
+                {!c.isFriend && (
+                  <p className="mb-4">이런 인사이트는 어떤가요?</p>
+                )}
                 <div className="flex flex-row items-center w-full">
                   <img src={c.img} className="w-12 h-12 rounded-full" />
                   <div className="flex items-center justify-between w-full p-2">
@@ -79,7 +85,6 @@ const Feeds = () => {
                     </div>
                   </div>
                 </div>
-
                 <p
                   className="inline-block w-full p-2 break-words cursor-pointer white space-normal"
                   onClick={() => {
