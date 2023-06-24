@@ -11,7 +11,6 @@ function useCard() {
   const [data, setData] = useState<CardData[]>();
   const nodeName = useRecoilValue(NodeNameAtom);
 
-
   useEffect(() => {
     const getCardData = async () => {
       const cardData = await Card_Info_Api(nodeName);

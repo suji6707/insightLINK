@@ -29,7 +29,12 @@ export const Main_graph_Api = async (
   return graph;
 };
 
-export const User_Info_Api = async (): Promise<UserInfo> => {
+export const User_Info_Api = async (userid): Promise<UserInfo> => {
+  let url = `${api}/user`;
+  if (userid) {
+    url += `/${userid}`;
+  }
+
   const response = await axios.get(`${api}/user`, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
@@ -39,9 +44,15 @@ export const User_Info_Api = async (): Promise<UserInfo> => {
 };
 
 export const Card_Info_Api = async (
-  params: string | null
+  params: string | null,
+  userid
 ): Promise<CardData[]> => {
-  const response = await axios.get(`${api}/cards/tag?tagname=${params}`, {
+  let url = `${api}/cards/tag?tagname=${params}`;
+  if (userid) {
+    url += `&{:userId}`;
+  }
+
+  const response = await axios.get(url, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
   const card = response.data as Promise<CardData[]>;
@@ -50,9 +61,15 @@ export const Card_Info_Api = async (
 };
 
 export const Card_Detail_Api = async (
-  params: number | null
+  params: number | null,
+  userid
 ): Promise<CardDataDetail> => {
-  const response = await axios.get(`${api}/cards/info?cardId=${params}`, {
+  let url = `${api}/cards/info?cardId=${params}`;
+  if (userid) {
+    url += `&${userid}`;
+  }
+
+  const response = await axios.get(url, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
   const card = response.data as Promise<CardDataDetail>;

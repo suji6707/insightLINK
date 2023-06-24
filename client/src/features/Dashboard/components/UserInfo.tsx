@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { User_Info_Api } from "@/axios/dashBoardApi";
 import { UserInfo } from "@/types/dashborad.types";
 
 export default function UserInfo() {
-  // 상태관리 로그인 id
+
   const [userInfo, setUserInfo] = useState<UserInfo>();
+  const router = useRouter();
 
   useEffect(() => {
     const getUserInfoData = async () => {
-      const response = await User_Info_Api();
+      const userid = Array.isArray(router.query.userid)
+      ? router.query.userid[0]
+      : router.query.userid;
+      
+      const response = await User_Info_Api(userid);
       setUserInfo(response);
       console.log("userInfo data: ", response);
     };
