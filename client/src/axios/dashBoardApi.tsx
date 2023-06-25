@@ -6,122 +6,126 @@ import {
   CardDataDetail,
 } from "@/types/dashborad.types";
 
-const api = "http://localhost:8800/api";
-const testapi = "http://localhost:4000";
+const axiosInstance = axios.create({
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  },
+});
 
 export const Main_graph_Api = async (
   userid?: string
 ): Promise<Main_graph_Api_DTO> => {
-  console.log("api", userid);
-  let url = `${api}/graph`;
-  if (userid) {
-    url += `?userId=${userid}`;
+  let url = `/graph${userid ? `?userId=${userid}` : ""}`;
+
+  try {
+    const response = await axiosInstance.get(url);
+    return response.data;
+  } catch (err) {
+    console.error(err);
+    throw err;
   }
-  console.log("url check 1", url);
-
-  const response = await axios.get(url, {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  });
-  const graph = response.data as Main_graph_Api_DTO;
-
-  console.log("url check 2", url);
-
-  return graph;
 };
 
-export const User_Info_Api = async (
-  userid: string | undefined
-): Promise<UserInfo> => {
-  let url = `${api}/user`;
-  if (userid) {
-    url += `/${userid}`;
-  }
+export const User_Info_Api = async (userid?: string): Promise<UserInfo> => {
+  let url = `/user${userid ? `/${userid}` : ""}`;
 
-  const response = await axios.get(`${api}/user`, {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  });
-  const userData = response.data as Promise<UserInfo>;
-  console.log("User_Info_Api 호출");
-  return userData;
+  try {
+    const response = await axiosInstance.get(url);
+    return response.data;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
 };
 
 export const Card_Info_Api = async (
-  params: string | null,
-  userid: string | undefined
+  tagname?: string,
+  userid?: string
 ): Promise<CardData[]> => {
-  let url = `${api}/cards/tag?tagname=${params}`;
-  if (userid) {
-    url += `&{:userId}`;
-  }
+  let url = `/cards/tag${tagname ? `?tagname=${tagname}` : ""}${
+    userid ? `&userId=${userid}` : ""
+  }`;
 
-  const response = await axios.get(url, {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  });
-  const card = response.data as Promise<CardData[]>;
-  console.log("Card_Info_Api 호출");
-  return card;
+  try {
+    const response = await axiosInstance.get(url);
+    return response.data;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
 };
 
 export const Card_Detail_Api = async (
-  params: number | null,
-  userid: string | undefined
+  cardId?: number,
+  userid?: string
 ): Promise<CardDataDetail> => {
-  let url = `${api}/cards/info?cardId=${params}`;
-  if (userid) {
-    url += `&${userid}`;
+  let url = `/cards/info${cardId ? `?cardId=${cardId}` : ""}${
+    userid ? `&userId=${userid}` : ""
+  }`;
+
+  try {
+    const response = await axiosInstance.get(url);
+    return response.data;
+  } catch (err) {
+    console.error(err);
+    throw err;
   }
-
-  const response = await axios.get(url, {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  });
-  const card = response.data as Promise<CardDataDetail>;
-  console.log("Card_Detail_Api 호출");
-  return card;
 };
 
-export const Card_Edit_Api = async (
-  params: number | undefined,
-  data: string | undefined
-) => {
-  const response = await axios.patch(
-    `${api}/cards/update/${params}`,
-    { content: data },
-    {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    }
-  );
-
-  return response;
+export const Card_Edit_Api = async (params?: number, data?: string) => {
+  try {
+    const response = await axiosInstance.patch(`/cards/update/${params}`, {
+      content: data,
+    });
+    return response;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
 };
 
-export const Card_Delete_Api = async (params: number | undefined) => {
-  const response = await axios.delete(`${api}/cards/delete/${params}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  });
-
-  return response;
+export const Card_Delete_Api = async (params?: number) => {
+  try {
+    const response = await axiosInstance.delete(`/cards/delete/${params}`);
+    return response;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
 };
 
-export const Add_Follow_API = async (params: string | undefined) => {
-  const response = await axios.get(`${api}/social/follow/${params}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  });
-
-  return response;
+export const Add_Follow_API = async (followId?: string) => {
+  try {
+    const response = await axiosInstance.post(
+      `/social/follow${followId ? `?followId=${followId}` : ""}`
+    );
+    return response;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
 };
 
-export const Cancel_Follow_API = async (params: string | undefined) => {
-  const response = await axios.delete(`${api}/social/follow/${params}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  });
+export const Cancel_Follow_API = async (params?: string) => {
+  try {
+    const response = await axiosInstance.delete(`/social/follow/${params}`);
+    return response;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};
 
-  return response;
+export const Duplicate_Card_API = async (cardId?: string, tagId?: string) => {
+  let url = `/cards/copy${cardId ? `?cardId=${cardId}` : ""}${
+    tagId ? `&tagId=${tagId}` : ""
+  }`;
+
+  try {
+    const response = await axiosInstance.post(url);
+    return response;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
 };

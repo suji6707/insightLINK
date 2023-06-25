@@ -4,9 +4,9 @@ export const GET = async (uri: string, headers?: any): Promise<any | null> => {
   try {
     let res: AxiosResponse;
     if (headers) {
-      res = await axios.get(`http://localhost:8800/api/${uri}`, headers);
+      res = await axios.get(`${uri}`, headers);
     } else {
-      res = await axios.get(`http://localhost:8800/api/${uri}`);
+      res = await axios.get(`${uri}`);
     }
     console.log("GET 성공");
     return res.data;

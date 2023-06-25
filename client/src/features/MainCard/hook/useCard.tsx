@@ -14,6 +14,8 @@ function useCard() {
   const router = useRouter();
 
   useEffect(() => {
+    if (!router.isReady) return;
+
     const getCardData = async () => {
       const userid = Array.isArray(router.query.userid)
         ? router.query.userid[0]
@@ -23,7 +25,7 @@ function useCard() {
       setData(cardData);
     };
     getCardData();
-  }, [nodeName]);
+  }, [router.isReady, nodeName]);
 
   return data;
 }
