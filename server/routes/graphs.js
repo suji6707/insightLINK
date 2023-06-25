@@ -66,12 +66,6 @@ router.get('/', async (req, res) => {
 
 const getGraphData = async (userId) => {
 
-  /* Check cache */
-  // const cacheData = await redis.get(`graphUser:${userId}`);
-  // if (cacheData) {
-  //   return JSON.parse(cacheData);
-  // }
-
   let connection = null;
   try {
     connection = await db.getConnection();

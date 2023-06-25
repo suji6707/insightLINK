@@ -10,7 +10,7 @@ import uploadRouter from './routes/uploads.js';
 import loginRouter from './routes/login.js';
 import signupRouter from './routes/signup.js';
 import graphRouter from './routes/graphs.js';
-
+import notificationRouter from './routes/notification.js';
 import myinfoRouter from './routes/myInfo.js';
 import tagRouter from './routes/tag.js'; 
 
@@ -44,7 +44,7 @@ app.use('/api/social', socialRouter);
 app.use('/dashboard', searchRouter);
 app.use('/api/myinfo', authMiddleware, mypageRouter);
 app.use('/api/tag',authMiddleware,tagRouter);
-
+app.use('/api/notification',authMiddleware,notificationRouter);
 
 /* session management */
 app.get('/api/users/me', authMiddleware, async (req, res) => {
@@ -55,7 +55,6 @@ app.get('/api/users/me', authMiddleware, async (req, res) => {
     user,
   });
 });
-
 
 /* Server */
 server.listen(port, () => {
