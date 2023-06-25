@@ -5,10 +5,17 @@ import {
   CardData,
   CardDataDetail,
 } from "@/types/dashborad.types";
+import dynamic from "next/dynamic";
+
+let token;
+
+if (typeof window !== "undefined") {
+  token = localStorage.getItem("token");
+}
 
 const axiosInstance = axios.create({
   headers: {
-    Authorization: `Bearer ${localStorage.getItem("token")}`,
+    Authorization: `Bearer ${token}`,
   },
 });
 
@@ -39,8 +46,8 @@ export const User_Info_Api = async (userid?: string): Promise<UserInfo> => {
 };
 
 export const Card_Info_Api = async (
-  tagname?: string,
-  userid?: string
+  tagname?: string | null,
+  userid?: string | undefined
 ): Promise<CardData[]> => {
   let url = `/cards/tag${tagname ? `?tagname=${tagname}` : ""}${
     userid ? `&userId=${userid}` : ""
@@ -56,8 +63,8 @@ export const Card_Info_Api = async (
 };
 
 export const Card_Detail_Api = async (
-  cardId?: number,
-  userid?: string
+  cardId?: number | null,
+  userid?: string | undefined
 ): Promise<CardDataDetail> => {
   let url = `/cards/info${cardId ? `?cardId=${cardId}` : ""}${
     userid ? `&userId=${userid}` : ""
@@ -72,7 +79,10 @@ export const Card_Detail_Api = async (
   }
 };
 
-export const Card_Edit_Api = async (params?: number, data?: string) => {
+export const Card_Edit_Api = async (
+  params?: number | undefined,
+  data?: string | undefined
+) => {
   try {
     const response = await axiosInstance.patch(`/cards/update/${params}`, {
       content: data,
@@ -84,7 +94,7 @@ export const Card_Edit_Api = async (params?: number, data?: string) => {
   }
 };
 
-export const Card_Delete_Api = async (params?: number) => {
+export const Card_Delete_Api = async (params?: number | undefined) => {
   try {
     const response = await axiosInstance.delete(`/cards/delete/${params}`);
     return response;
@@ -94,7 +104,7 @@ export const Card_Delete_Api = async (params?: number) => {
   }
 };
 
-export const Add_Follow_API = async (followId?: string) => {
+export const Add_Follow_API = async (followId?: string | undefined) => {
   try {
     const response = await axiosInstance.post(
       `/social/follow${followId ? `?followId=${followId}` : ""}`
@@ -106,7 +116,7 @@ export const Add_Follow_API = async (followId?: string) => {
   }
 };
 
-export const Cancel_Follow_API = async (params?: string) => {
+export const Cancel_Follow_API = async (params?: string | undefined) => {
   try {
     const response = await axiosInstance.delete(`/social/follow/${params}`);
     return response;
@@ -116,7 +126,10 @@ export const Cancel_Follow_API = async (params?: string) => {
   }
 };
 
-export const Duplicate_Card_API = async (cardId?: string, tagId?: string) => {
+export const Duplicate_Card_API = async (
+  cardId?: string | undefined,
+  tagId?: string | undefined
+) => {
   let url = `/cards/copy${cardId ? `?cardId=${cardId}` : ""}${
     tagId ? `&tagId=${tagId}` : ""
   }`;
