@@ -25,7 +25,7 @@ function useDetail() {
       setData(cardData);
     };
     getCardData();
-  }, [cardId]);
+  }, [router.isReady, cardId]);
 
   return data;
 }
