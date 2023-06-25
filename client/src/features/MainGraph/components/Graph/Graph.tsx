@@ -26,10 +26,11 @@ function Graph({ data: graph, editMode }: MainGraphProps) {
   //  카테고리 빈 객체 생성
   const setCategories = (cnt: number): Array<{ name: string }> => {
     const categories = [];
-    for (let i = 1; i < cnt + 1; i++) {
+    for (let i = 1; i <= cnt + 1; i++) {
       const obj = { name: `${i}` };
       categories.push(obj);
     }
+    console.log(categories);
     return categories;
   };
 
@@ -56,8 +57,7 @@ function Graph({ data: graph, editMode }: MainGraphProps) {
         draggable: true,
         label: {
           show: true, // 노드 이름 항상 표시
-          position: "inside", // 레이블을 위로 정렬
-          fontSize: 15,
+          position: "top", // 레이블을 위로 정렬
           formatter: "{b}",
         },
         labelLayout: {
@@ -111,7 +111,9 @@ function Graph({ data: graph, editMode }: MainGraphProps) {
 
       graph.nodes.forEach((node: any) => {
         node.label = {
-          show: node.symbolSize >= 15,
+          show: node.symbolSize >= 10,
+          fontSize: node.symbolSize >= 10 ? 17 : 15,
+          // color: (params: any) => params.data.itemStyle.color,
         };
       });
 
