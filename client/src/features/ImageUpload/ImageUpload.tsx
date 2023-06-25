@@ -17,7 +17,11 @@ type ImgInfo = {
   type: string;
 };
 
-export default function ImageUpload({ setShowImgModal }: any) {
+export default function ImageUpload({
+  setShowImgModal,
+  setUploading,
+  uploading,
+}: any) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
   const [imgList, setImgList] = useState<ImgInfo[]>([]);
@@ -98,6 +102,7 @@ export default function ImageUpload({ setShowImgModal }: any) {
   };
 
   const uploadImages = async () => {
+    setShowImgModal(false);
     const startTime = performance.now();
     try {
       const promises = imgList.map((file) => {
@@ -153,7 +158,7 @@ export default function ImageUpload({ setShowImgModal }: any) {
         console.log("Execution time:", executionTime, "ms");
 
         if (result) {
-          setShowImgModal(false);
+          setUploading(false);
         }
         return result;
       };
@@ -199,7 +204,14 @@ export default function ImageUpload({ setShowImgModal }: any) {
         </div>
         <div className="w-5/12 h-4/6 flex flex-col justify-between">
           <ImageList imgList={imgList} deleteImg={deleteImg} />
-          <ClasBtn onClick={uploadImages}>자동</ClasBtn>
+          <ClasBtn
+            onClick={() => {
+              setUploading(true);
+              uploadImages();
+            }}
+          >
+            자동
+          </ClasBtn>
         </div>
       </Wrapper>
     </div>
