@@ -3,9 +3,8 @@ import {
   UserInfo,
   Main_graph_Api_DTO,
   CardData,
-  CardDetail_DTO,
+  CardDataDetail,
 } from "@/types/dashborad.types";
-import exp from "constants";
 
 const api = "http://localhost:8800/api";
 const testapi = "http://localhost:4000";
@@ -30,7 +29,14 @@ export const Main_graph_Api = async (
   return graph;
 };
 
-export const User_Info_Api = async ():Promise<UserInfo>  => {
+export const User_Info_Api = async (
+  userid: string | undefined
+): Promise<UserInfo> => {
+  let url = `${api}/user`;
+  if (userid) {
+    url += `/${userid}`;
+  }
+
   const response = await axios.get(`${api}/user`, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
@@ -40,9 +46,15 @@ export const User_Info_Api = async ():Promise<UserInfo>  => {
 };
 
 export const Card_Info_Api = async (
-  params: string | null
+  params: string | null,
+  userid: string | undefined
 ): Promise<CardData[]> => {
-  const response = await axios.get(`${api}/cards/tag?tagname=${params}`, {
+  let url = `${api}/cards/tag?tagname=${params}`;
+  if (userid) {
+    url += `&{:userId}`;
+  }
+
+  const response = await axios.get(url, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
   const card = response.data as Promise<CardData[]>;
@@ -51,25 +63,65 @@ export const Card_Info_Api = async (
 };
 
 export const Card_Detail_Api = async (
-  params: number | null
-): Promise<CardDetail_DTO> => {
-  const response = await axios.get(`${api}/cards/info?cardId=${params}`, {
+  params: number | null,
+  userid: string | undefined
+): Promise<CardDataDetail> => {
+  let url = `${api}/cards/info?cardId=${params}`;
+  if (userid) {
+    url += `&${userid}`;
+  }
+
+  const response = await axios.get(url, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
-  const card = response.data as Promise<CardDetail_DTO>;
+  const card = response.data as Promise<CardDataDetail>;
   console.log("Card_Detail_Api 호출");
   return card;
 };
 
-// export const handleContentSave = async (
-//   const
-// )
+export const Card_Edit_Api = async (
+  params: number | undefined,
+  data: string | undefined
+) => {
+  const response = await axios.patch(
+    `${api}/cards/update/${params}`,
+    { content: data },
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }
+  );
 
-// export const Search_api = async (params: string | undefined) => {
-//   try {
-//     const response = await axios.post();
-//     return response;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
+  return response;
+};
+
+export const Card_Delete_Api = async (params: number | undefined) => {
+  const response = await axios.delete(`${api}/cards/delete/${params}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+
+  return response;
+};
+
+export const Add_Follow_API = async (params: string | undefined) => {
+  const response = await axios.get(`${api}/social/follow/${params}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+
+  return response;
+};
+
+export const Cancel_Follow_API = async (params: string | undefined) => {
+  const response = await axios.delete(`${api}/social/follow/${params}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+
+  return response;
+};

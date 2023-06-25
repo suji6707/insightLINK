@@ -1,9 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { useRecoilState } from "recoil";
-import { CardDetailOpenAtom, ClickedCardDetailAtom } from "@/recoil/atoms/MainGraphAtom";
-import { CardData } from "../../../types/dashborad.types";
-import { AiFillEdit, AiOutlineExpandAlt, AiOutlineDeliveredProcedure, AiOutlineClose } from "react-icons/ai";
-import axios from "axios";
+import React, { useState } from "react";
+// recoil
+import { useRecoilState, useSetRecoilState } from "recoil";
+import {
+  CardDetailOpenAtom,
+  ClickedCardDetailAtom,
+} from "@/recoil/atoms/MainGraphAtom";
+// types
+import { CardData } from "@/types/dashborad.types";
+import {
+  AiOutlineExpandAlt,
+} from "react-icons/ai";
 
 interface CardProps {
   data: CardData;
@@ -11,61 +17,13 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ data }) => {
   const [detailOpen, setDetailOpen] = useRecoilState(CardDetailOpenAtom);
-  const [clickedDetail, setClickedDetail] = useRecoilState(ClickedCardDetailAtom);
-  const [editedContent, setEditedContent] = useState<string>("");
-  const [isEditingContent, setIsEditingContent] = useState(false);
-
+  const setClickedDetail = useSetRecoilState(
+    ClickedCardDetailAtom
+  );
+  
   const handleCardClick = () => {
     setDetailOpen(!detailOpen);
     setClickedDetail(data?.cardId);
-  };
-
-  const handleContentEdit = () => {
-    setIsEditingContent(true);
-    setEditedContent(data?.cardContent);
-  };
-
-  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setEditedContent(e.target.value);
-  };
-
-  const handleContentSave = async () => {
-    try {
-      console.log(data?.cardId);
-      const response = await axios.patch(
-        "http://localhost:8800/api/cards/update/" + data?.cardId,
-        { content: editedContent },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-
-      if (response.data.success) {
-        setIsEditingContent(false);
-        console.log("Save edited content:", editedContent);
-      }
-    } catch (error) {
-      console.error("Error saving the edited nickname:", error);
-    }
-  };
-
-  const handleCardDelete = async () => {
-    try {
-      console.log(data?.cardId);
-      const response = await axios.delete("http://localhost:8800/api/cards/delete/" + data?.cardId, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-
-      if (response.data.success) {
-        console.log("Delete CardId : ", data?.cardId);
-      }
-    } catch (error) {
-      console.error("Error saving the edited nickname:", error);
-    }
   };
 
   return (
@@ -74,25 +32,7 @@ const Card: React.FC<CardProps> = ({ data }) => {
         card <AiOutlineExpandAlt onClick={handleCardClick} />
       </div>
       <div>tag {data?.cardTag}</div>
-      <div>
-        Content
-        {isEditingContent ? (
-          <>
-            <textarea
-              value={editedContent}
-              onChange={handleContentChange}
-              rows={editedContent.length / 15}
-              style={{ width: "100%" }}
-            />
-            <AiOutlineDeliveredProcedure onClick={handleContentSave} />
-          </>
-        ) : (
-          <>
-            <AiFillEdit onClick={handleContentEdit} /> {editedContent || data?.cardContent}
-          </>
-        )}
-      </div>
-      <AiOutlineClose onClick={handleCardDelete} />
+      <div>{data?.cardContent}</div>
     </div>
   );
 };
