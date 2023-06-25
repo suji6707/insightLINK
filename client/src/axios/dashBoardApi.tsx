@@ -5,7 +5,6 @@ import {
   CardData,
   CardDataDetail,
 } from "@/types/dashborad.types";
-import dynamic from "next/dynamic";
 
 let token;
 
@@ -22,7 +21,7 @@ const axiosInstance = axios.create({
 export const Main_graph_Api = async (
   userid?: string
 ): Promise<Main_graph_Api_DTO> => {
-  let url = `/graph${userid ? `?userId=${userid}` : ""}`;
+  let url = `/api/graph${userid ? `?userId=${userid}` : ""}`;
 
   try {
     const response = await axiosInstance.get(url);
@@ -34,7 +33,7 @@ export const Main_graph_Api = async (
 };
 
 export const User_Info_Api = async (userid?: string): Promise<UserInfo> => {
-  let url = `/user${userid ? `/${userid}` : ""}`;
+  let url = `/api/user${userid ? `/${userid}` : ""}`;
 
   try {
     const response = await axiosInstance.get(url);
@@ -49,7 +48,7 @@ export const Card_Info_Api = async (
   tagname?: string | null,
   userid?: string | undefined
 ): Promise<CardData[]> => {
-  let url = `/cards/tag${tagname ? `?tagname=${tagname}` : ""}${
+  let url = `/api/cards/tag${tagname ? `?tagname=${tagname}` : ""}${
     userid ? `&userId=${userid}` : ""
   }`;
 
@@ -66,7 +65,7 @@ export const Card_Detail_Api = async (
   cardId?: number | null,
   userid?: string | undefined
 ): Promise<CardDataDetail> => {
-  let url = `/cards/info${cardId ? `?cardId=${cardId}` : ""}${
+  let url = `/api/cards/info${cardId ? `?cardId=${cardId}` : ""}${
     userid ? `&userId=${userid}` : ""
   }`;
 
@@ -84,7 +83,7 @@ export const Card_Edit_Api = async (
   data?: string | undefined
 ) => {
   try {
-    const response = await axiosInstance.patch(`/cards/update/${params}`, {
+    const response = await axiosInstance.patch(`/api/cards/update/${params}`, {
       content: data,
     });
     return response;
@@ -96,7 +95,7 @@ export const Card_Edit_Api = async (
 
 export const Card_Delete_Api = async (params?: number | undefined) => {
   try {
-    const response = await axiosInstance.delete(`/cards/delete/${params}`);
+    const response = await axiosInstance.delete(`/api/cards/delete/${params}`);
     return response;
   } catch (err) {
     console.error(err);
@@ -107,7 +106,7 @@ export const Card_Delete_Api = async (params?: number | undefined) => {
 export const Add_Follow_API = async (followId?: string | undefined) => {
   try {
     const response = await axiosInstance.post(
-      `/social/follow${followId ? `?followId=${followId}` : ""}`
+      `/api/social/follow${followId ? `?followId=${followId}` : ""}`
     );
     return response;
   } catch (err) {
@@ -118,7 +117,7 @@ export const Add_Follow_API = async (followId?: string | undefined) => {
 
 export const Cancel_Follow_API = async (params?: string | undefined) => {
   try {
-    const response = await axiosInstance.delete(`/social/follow/${params}`);
+    const response = await axiosInstance.delete(`/api/social/follow/${params}`);
     return response;
   } catch (err) {
     console.error(err);
@@ -130,7 +129,7 @@ export const Duplicate_Card_API = async (
   cardId?: string | undefined,
   tagId?: string | undefined
 ) => {
-  let url = `/cards/copy${cardId ? `?cardId=${cardId}` : ""}${
+  let url = `/api/cards/copy${cardId ? `?cardId=${cardId}` : ""}${
     tagId ? `&tagId=${tagId}` : ""
   }`;
 

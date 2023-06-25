@@ -3,7 +3,7 @@ import axios from "axios";
 export const POST = async (uri: string, data: any, headers: any) => {
   try {
     const res = await axios.post(
-      uri,
+      `/api/${uri}`,
       data,
       headers
     );

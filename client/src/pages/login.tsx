@@ -20,7 +20,7 @@ export default function Home() {
   const setLoginId = useSetRecoilState(LoginStateAtom);
 
   const handleLogin = async (res: any) => {
-    const response = await axios.post(`/login/generic`, {
+    const response = await axios.post(`/api/login/generic`, {
       email: userEmail,
       password: password,
     });
