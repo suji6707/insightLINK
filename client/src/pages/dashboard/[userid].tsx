@@ -8,11 +8,10 @@ import MainGraph from "@/features/MainGraph/components/MainGraph/MainGraph";
 import CardPanel from "@/features/MainCard/components/CardPanel";
 import ImageUpload from "@/features/ImageUpload/ImageUpload";
 import { Wrapper } from "@/styles/wrapper";
-import Loading from "@/features/MainGraph/components/Loading/Loading";
+import Loading from "@/features/MainGraph/components/Loading/GraphLoading";
 import useGraph from "@/features/MainGraph/hooks/useGraph";
 
 export default function Dashboard() {
-
   const [openCard, setOpenCard] = useRecoilState(DashBoardCardAtom);
   const [showImgModal, setShowImgModal] = useState(false);
 
