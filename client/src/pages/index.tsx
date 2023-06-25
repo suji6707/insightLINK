@@ -34,7 +34,7 @@ export default function Home() {
 
   const saveUserData = async (userData: any) => {
     try {
-      const response = await axios.post("http://localhost:8800/api/login", {
+      const response = await axios.post("http://3.35.239.116:8800/api/login", {
         email: userData.email,
         givenName: userData.name,
         imageUrl: userData.image,

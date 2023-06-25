@@ -6,8 +6,8 @@ import {
   CardDataDetail,
 } from "@/types/dashborad.types";
 
-const api = "http://localhost:8800/api";
-const testapi = "http://localhost:4000";
+const api = "http://3.35.239.116:8800/api";
+const testapi = "http://3.35.239.116:4000";
 
 export const Main_graph_Api = async (
   userid?: string

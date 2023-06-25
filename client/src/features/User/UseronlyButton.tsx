@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
-const serverPath = "http://localhost:8800"
+const serverPath = "http://3.35.239.116:8800"
 
 function UseronlyButton() {
   const sessionManage = async () => {

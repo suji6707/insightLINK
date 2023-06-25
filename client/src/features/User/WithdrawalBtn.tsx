@@ -10,7 +10,7 @@ type WithdrawalBtnProps = {
 
     const handleWithdrawal = async () => {
         try {
-          const response = await axios.delete("http://localhost:8800/api/myinfo", {
+          const response = await axios.delete("http://3.35.239.116:8800/api/myinfo", {
             headers: {
               Authorization: `Bearer ${token}`,
             },

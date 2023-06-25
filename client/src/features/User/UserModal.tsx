@@ -30,7 +30,7 @@ const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const response = await axios.get("http://localhost:8800/api/myinfo", {
+        const response = await axios.get("http://3.35.239.116:8800/api/myinfo", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -61,7 +61,7 @@ const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
   const handleNicknameSave = async () => {
     try {
       const response = await axios.patch(
-        "http://localhost:8800/api/myinfo",
+        "http://3.35.239.116:8800/api/myinfo",
         {
           editedNickname: editedNickname,
         },

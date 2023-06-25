@@ -33,7 +33,7 @@ export default function Search() {
     const contentsData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8800/dashboard/contents",
+          "http://3.35.239.116:8800/dashboard/contents",
           {
             params: {
               search: keywords,
@@ -50,7 +50,7 @@ export default function Search() {
     const tagsData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8800/dashboard/tags",
+          "http://3.35.239.116:8800/dashboard/tags",
           {
             params: {
               search: keywords,

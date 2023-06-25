@@ -3,7 +3,7 @@ import axios from "axios";
 export const POST = async (uri: string, data: any, headers: any) => {
   try {
     const res = await axios.post(
-      "http://localhost:8800/api/" + uri,
+      "http://3.35.239.116:8800/api/" + uri,
       data,
       headers
     );
