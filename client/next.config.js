@@ -10,7 +10,7 @@ const nextConfig = {
     console.log("Rewrites called");
     return [
       {
-        source: "/:path*",
+        source: "/api/:path*",
         // destination: "https://insightlinkapi.jisuheo.shop/api/:path*", // Proxy to Backend
         destination: "http://localhost:8800/api/:path*", // Proxy to Backend
       },
