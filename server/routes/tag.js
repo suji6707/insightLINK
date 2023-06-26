@@ -2,6 +2,8 @@ import express from 'express';
 import '../dotenv.js';
 import { db } from '../connect.js';
 
+import { logger } from '../winston/logger.js';
+
 const router = express.Router();
 let connection = null;
 router.post('/merge', async (req, res) => {
@@ -19,10 +21,12 @@ router.post('/merge', async (req, res) => {
         await connection.query(resultQuery);
 
         connection.release();
+
+        logger.info(`/routes/tag 폴더 /merge라우터, post 성공 !`);
         return res.status(200).send('success');
     } catch(err) {
         connection?.release();
-        console.log(err);
+        logger.error("/routes/tag 폴더 /merge라우터, post, err : ", err);
         res.status(400).send('request data 형식 오류');
     }
     }

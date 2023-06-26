@@ -2,6 +2,9 @@ import express from 'express';
 import '../dotenv.js';
 import { db } from '../connect.js';
 
+/* log */
+import { logger } from '../winston/logger.js';
+
 const router = express.Router();
 
 // 일반 유저 회원가입
@@ -18,6 +21,7 @@ router.post('/', async (req, res) => {
       const [result] = await connection.query(findUserSql)
       
       if(result[0]) {
+        logger.info(`/routes/signup 폴더, post, ${email} 기존 회원이므로 회원가입 실패 !`);
         res.send({ success: false});
         return
       }
@@ -27,11 +31,12 @@ router.post('/', async (req, res) => {
       await connection.query(insertSql, [email, name, imageUrl, password]);
       connection.release();
 
+      logger.info(`/routes/signup 폴더, post, ${email} 회원가입 성공 !`);
       res.send({ success: true});
 
     } catch (err) {
       connection?.release();
-      console.log(err);
+      logger.error("/routes/signup 폴더, post, err : ", err);
       res.status(500).send('Internal Server Error'); // Send error response
     }
   

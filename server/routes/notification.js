@@ -2,6 +2,7 @@ import express from 'express';
 import '../dotenv.js';
 import { db } from '../connect.js';
 
+import { logger } from '../winston/logger.js';
 
 const router = express.Router();
 
@@ -21,7 +22,7 @@ router.get('/', async (req, res) => {
       connection = await db.getConnection();
       const interval = setInterval(() => {
         res.write(`data: ${JSON.stringify(eventData)}\n\n`);
-        console.log('진행중이야~~');
+        logger.info(`/routes/notification 폴더, get 진행중이야 !`);
       }, 2000);
   
     // 클라이언트와의 연결이 종료될 때 interval 제거
@@ -31,7 +32,7 @@ router.get('/', async (req, res) => {
       });
     } catch(err) {
       connection?.release();
-      console.log(err);
+      logger.error("/routes/notification 폴더, get, err : ", err);
       res.status(500).send('Internal Server Error');
     }
   });

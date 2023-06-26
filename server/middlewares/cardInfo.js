@@ -3,6 +3,8 @@ import { db } from '../connect.js';
 import { cardInfoQuery } from '../db/cardQueries.js';  
 import { fileToUserQurey } from '../db/socialQueries.js'; 
 
+import { logger } from '../winston/logger.js';
+
 /* 카드정보 상세 조회 */
 export const getCardInfos = async (req, res) => {
   /* 로그인 유저 */
@@ -18,13 +20,15 @@ export const getCardInfos = async (req, res) => {
     if (otherUserId) {
       /* 다른 유저 카드 조회 */
       const cardInfo = await getCardInfo(otherUserId, cardId);
+      logger.info(`/routes/cards/cardInfo 폴더 getCardInfos함수, get, cardId : ${cardId} 다른 유저 카드 조회!`);
       return res.status(200).send(cardInfo); 
     }
     /* 내 카드 조회 */
     const cardInfo = await getCardInfo(userId, cardId);
+    logger.info(`/routes/cards/cardInfo 폴더 getCardInfos함수, get, cardId : ${cardId} 내 카드 조회!`);
     res.status(200).send(cardInfo);  
   } catch (err) {
-    console.log(err);
+    logger.error("/routes/cards/cardInfo 폴더 getCardInfos함수, get, err : ", err);
     res.status(500).send('Internal Server Error');
   }
 };
@@ -52,12 +56,12 @@ const getCardInfo = async (userId, cardId) => {
       content: result[0].content,
     };
     
-    // console.log(data);
+    logger.info(`/routes/cards/cardInfo 폴더 getCardInfo함수, get, data : ${data}!`);
     return data;
     
   } catch (err) {
     connection?.release();
-    console.log(err);
+    logger.error("/routes/cards/cardInfo 폴더 getCardInfo함수, get, err : ", err);
     throw new Error('Internal Server Error');
   }
 };
