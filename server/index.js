@@ -19,11 +19,13 @@ import socialRouter from './routes/social.js';
 import userRouter from './routes/user.js'; 
 import searchRouter from './routes/search.js';
 import mypageRouter from './routes/mypage.js';
+import dummyRouter from './routes/z_dummy.js';
 
 import { authMiddleware } from './middlewares/auth-middleware.js';
+import { setTimeout } from 'timers/promises';
 
 const app = express();
-const server = http.createServer(app);
+export const server = http.createServer(app);
 const port = process.env.PORT || 8000;
 
 /* Middleware */
@@ -43,7 +45,18 @@ app.use('/api/cards', cardRouter);
 app.use('/api/social', socialRouter);
 app.use('/dashboard', searchRouter);
 app.use('/api/myinfo', authMiddleware, mypageRouter);
-app.use('/api/tag',authMiddleware,tagRouter);
+app.use('/api/tag', authMiddleware,tagRouter);
+app.use('/api/dummy', dummyRouter);
+
+
+/* NGINX test */
+app.get('/hello', async (req, res) => {
+  res.write('hello');
+  await setTimeout(500);
+  res.write('world');
+  res.end();
+});
+
 
 
 /* session management */
