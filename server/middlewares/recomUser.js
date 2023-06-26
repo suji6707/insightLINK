@@ -7,6 +7,8 @@ import { followCheckQuery } from '../db/followQueries.js';
 // import Redis from 'ioredis';
 // const redis = new Redis();
 
+import { logger } from '../winston/logger.js';
+
 
 export const recomUsers = async (req, res) => {
   const { user } = res.locals;
@@ -56,10 +58,11 @@ export const recomUsers = async (req, res) => {
     // redis.set(`recomUser:${userId}`, JSON.stringify(data), 'EX', 3600);
 
     connection.release();
+    logger.info(`/routes/social/recomUser 폴더, get 성공 !`);
     res.status(200).send(data);  
   } catch (err) {
     connection?.release();
-    console.log(err);
+    logger.error("/routes/social/recomUser 폴더, get, err : ", err);
     res.status(500).send('Internal Server Error');
   }
 };

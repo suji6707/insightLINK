@@ -3,6 +3,8 @@ import { db } from '../connect.js';
 import { tagCardsQuery } from '../db/tagQueries.js';
 import { cardTagsQuery } from '../db/tagQueries.js';
 
+import { logger } from '../winston/logger.js';
+
 
 export const getTagInfos = async (req, res) => {
   const tagname = req.query.tagname;
@@ -16,13 +18,15 @@ export const getTagInfos = async (req, res) => {
     /* 다른 유저 태그 조회 */
     if (otherUserId) {
       const data = await getTagInfo(otherUserId, tagname);
+      logger.info(`/routes/cards/cardTag 폴더 getTagInfos함수, get, otherUserId : ${otherUserId} 다른 유저 태그 조회!`);
       return res.status(200).send(data);
     }
     /* 내 태그 조회 */
     const data = await getTagInfo(userId, tagname);
+    logger.info(`/routes/cards/cardTag 폴더 getTagInfos함수, get, userId : ${userId} 내 태그 조회!`);
     res.status(200).send(data);
   } catch (err) {
-    console.log(err);
+    logger.error("/routes/cards/cardTag 폴더 getTagInfos함수, get, err : ", err);
     res.status(500).send('Internal Server Error'); // Send error response
   }
 };
@@ -50,12 +54,12 @@ const getTagInfo = async (userId, tagname) => {
       data.push(obj);
     }    
     connection.release();
-    // console.log(data);
+    logger.info(`/routes/cards/cardTag 폴더 getTagInfo함수, get, data : ${data}`);
     return data;
 
   } catch (err) {
     connection?.release();
-    console.log(err);
+    logger.error("/routes/cards/cardTag 폴더 getTagInfo함수, get, err : ", err);
     throw new Error('Internal Server Error'); // Send error response
   }
 };

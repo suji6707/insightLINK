@@ -16,6 +16,8 @@ import { combinedList }  from '../services/taglist.js';
 /* Tag ENDED */
 // import { setTimeout } from 'timers/promises';   
 
+/* log */
+import { logger } from '../winston/logger.js';
 
 const s3 = new S3Client({
   region: 'ap-northeast-2',
@@ -103,12 +105,12 @@ router.post('/', upload.array('photos'),
 
         const tagRow1 = combinedList.find(item => item.englishKeyword === tag1);
         if (!tagRow1) {
-          console.log(`No matching element found for ${tag1}.`);
+          logger.info(`/routes/uploads 폴더, post, No matching element found for ${tag1}.`);
         }
         // tag[1]
         const tagRow2 = combinedList.find(item => item.englishKeyword === tag2);
         if (!tagRow2) {
-          console.log(`No matching element found for ${tag2}.`);
+          logger.info(`/routes/uploads 폴더, post, No matching element found for ${tag2}.`);
         }
 
         /* SQL - File */
@@ -128,7 +130,7 @@ router.post('/', upload.array('photos'),
 
     } catch (err) {
       connection?.release();
-      console.log(err);
+      logger.error('/routes/uploads 폴더, post, err : ', err);
       res.status(400).send('ERROR');
     }
     

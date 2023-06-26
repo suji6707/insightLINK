@@ -24,17 +24,26 @@ function Graph({ data: graph, editMode }: MainGraphProps) {
   const longPressNode = useRef<string | null>(null);
 
   //  카테고리 빈 객체 생성
-  const setCategories = (cnt: number) => {
+  const setCategories = (cnt: number): Array<{ name: string }> => {
     const categories = [];
-    for (let i = 0; i < cnt; i++) {
-      const obj = {};
+    for (let i = 1; i <= cnt + 1; i++) {
+      const obj = { name: `${i}` };
       categories.push(obj);
     }
+    console.log(categories);
     return categories;
   };
 
   const [options, setOptions] = useState<any>({
     tooltip: {},
+    legend: [
+      {
+        data: setCategories(graph?.cnt).map(function (a) {
+          return a.name;
+        }),
+      },
+    ],
+    animation: true,
     animationDuration: 1500,
     animationEasingUpdate: "quinticInOut",
     series: [
@@ -44,17 +53,24 @@ function Graph({ data: graph, editMode }: MainGraphProps) {
         data: graph?.nodes,
         links: graph?.links,
         categories: setCategories(graph?.cnt),
-        roam: false,
+        roam: true,
+        draggable: true,
         label: {
           show: true, // 노드 이름 항상 표시
-          position: "inside", // 레이블을 위로 정렬
-          fontSize: 12,
+          position: "top", // 레이블을 위로 정렬
           formatter: "{b}",
+        },
+        labelLayout: {
+          hideOverlap: true,
+        },
+        scaleLimit: {
+          min: 2,
+          max: 5,
         },
         lineStyle: {
           width: 2, // edge의 두께
           color: "source",
-          curveness: 0.1, // edge의 곡률, 0은 직선
+          curveness: 0, // edge의 곡률, 0은 직선
         },
         emphasis: {
           focus: "adjacency",
@@ -63,10 +79,9 @@ function Graph({ data: graph, editMode }: MainGraphProps) {
           },
         },
         force: {
-          repulsion: 100, // 노드 간 반발력 조정
-          gravity: 0.1, // 중력
-          edgeLength: [100, 500], // 노드 간 거리
-          initLayout: "none",
+          repulsion: 350, // 노드 간 반발력 조정
+          gravity: 0.5, // 중력
+          edgeLength: [20, 90], // 노드 간 거리 [minlength, maxlength]
         },
       },
     ],
@@ -96,7 +111,9 @@ function Graph({ data: graph, editMode }: MainGraphProps) {
 
       graph.nodes.forEach((node: any) => {
         node.label = {
-          show: node.symbolSize >= 15,
+          show: node.symbolSize >= 10,
+          fontSize: node.symbolSize >= 10 ? 17 : 15,
+          // color: (params: any) => params.data.itemStyle.color,
         };
       });
 

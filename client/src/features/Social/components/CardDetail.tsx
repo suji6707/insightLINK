@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { AiFillPlusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 
 import { CardDetail } from "@/types/social.types";
-
+import { POST } from "@/axios/POST";
 
 const CardDetail = ({
   modalRef,
@@ -21,19 +21,20 @@ const CardDetail = ({
       `cards/info?cardId=${cardId}&userId=${userId}`,
       token
     );
-    console.log(data);
     if (data) {
       setDetail(data);
     }
   };
 
+  const cloneCard = async () => {
+    const token = getToken();
+    await POST(`social/clone`, { cardId: cardId }, token);
+    setIsPlus(true);
+  };
+
   useEffect(() => {
     getDetail();
   }, []);
-
-  const handlePlusClicked = () => {
-    setIsPlus(!isPlus);
-  };
 
   return (
     <div
@@ -47,7 +48,7 @@ const CardDetail = ({
             <img
               src={detail?.profile_img}
               className="w-24 h-24 rounded-full"
-              alt="screenshot"
+              alt="profile"
             />
             <p>{detail?.userName}</p>
             {detail?.cardTag &&
@@ -68,11 +69,11 @@ const CardDetail = ({
             alt="screenshot"
           />
         </div>
-        <div className="w-full flex justify-center" onClick={handlePlusClicked}>
+        <div className="flex justify-center w-full">
           {isPlus ? (
-            <AiFillPlusCircle className="w-12 h-12 " />
+            <AiFillPlusCircle className="w-12 h-12" />
           ) : (
-            <AiOutlinePlusCircle className="w-12 h-12 " />
+            <AiOutlinePlusCircle className="w-12 h-12" onClick={cloneCard} />
           )}
         </div>
       </div>

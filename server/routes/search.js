@@ -3,6 +3,8 @@ import '../dotenv.js';
 import { db } from '../connect.js';
 import { searchContent , searchTag} from '../db/searchQueries.js';
 
+import { logger } from '../winston/logger.js';
+
 const router = express.Router();
 
 router.get('/contents', async (req, res) => {
@@ -23,7 +25,8 @@ router.get('/contents', async (req, res) => {
         cardContent: result[i * 2].content,
       });
     }
-    console.log("내용 수 :", arr.length);
+
+    logger.info(`/routes/search/contents 폴더, get, 내옹수 : ${arr.length} !`);
 
     return res.send({
       results: [arr[0]],
@@ -31,7 +34,7 @@ router.get('/contents', async (req, res) => {
     });
   } catch(err) {
     connection?.release();
-    console.log(err);
+    logger.error("/routes/search/contents 폴더, get, err : ", err);
     res.status(500).send('Internal Server Error');
   }
 });
@@ -39,7 +42,6 @@ router.get('/contents', async (req, res) => {
 router.get('/tags', async (req, res) => {
   // console.log(req.query);
   const { search } = req.query;
-  console.log(req.query);
 
   let connection = null;
 
@@ -55,7 +57,7 @@ router.get('/tags', async (req, res) => {
         cardContent: result[i * 2].content,
       });
     }
-    console.log("태그 수 :", arr.length);
+    logger.info(`/routes/search/tags 폴더, get, 내옹수 : ${arr.length} !`);
 
     return res.send({
       results: [arr[0]],
@@ -63,13 +65,12 @@ router.get('/tags', async (req, res) => {
     });
   } catch(err) {
     connection?.release();
-    console.log(err);
+    logger.error("/routes/search/tags 폴더, get, err : ", err);
     res.status(500).send('Internal Server Error');
   }
 });
 
 router.get('/contents/all', async (req, res) => {
-  // console.log(req.query);
   const { search, page, perPage } = req.query;
 
   let connection = null;
@@ -77,7 +78,6 @@ router.get('/contents/all', async (req, res) => {
   try {
     connection = await db.getConnection();
     const [ result ] = await connection.query(searchContent(search));
-    // console.log("result 갯수 : " + result.length);
 
     let arr = [];
     for (let i = 0; i < Math.floor(result.length / 2); i++) {
@@ -88,14 +88,13 @@ router.get('/contents/all', async (req, res) => {
       });
     }
     
-    console.log("arr길이 " + arr.length);
+    logger.info(`/routes/search/contents/all 폴더, get, 내옹수 : ${arr.length} !`);
 
     const startIndex = (page - 1) * perPage;
     const endIndex = page * perPage;
     const slicedResults = arr.slice(startIndex, endIndex);
     
-    console.log("SI: " + startIndex +",EI: " + endIndex);
-    // console.log(slicedResults);
+    logger.info(`/routes/search/contents/all 폴더, get, SI: ${startIndex}, EI: ${endIndex}`);
 
     return res.send({
       results: slicedResults,
@@ -105,13 +104,12 @@ router.get('/contents/all', async (req, res) => {
     });
   } catch(err) {
     connection?.release();
-    console.log(err);
+    logger.error("/routes/search/contents/all 폴더, get, err : ", err);
     res.status(500).send('Internal Server Error');
   }
 });
 
 router.get('/tags/all', async (req, res) => {
-  // console.log(req.query);
   const { search, page, perPage } = req.query;
 
   let connection = null;
@@ -119,7 +117,6 @@ router.get('/tags/all', async (req, res) => {
   try {
     connection = await db.getConnection();
     const [ result ] = await connection.query(searchTag(search));
-    // console.log("result 갯수 : " + result.length);
 
     let arr = [];
     for (let i = 0; i < Math.floor(result.length / 2); i++) {
@@ -130,14 +127,13 @@ router.get('/tags/all', async (req, res) => {
       });
     }
     
-    console.log("arr길이 " + arr.length);
+    logger.info(`/routes/search/tags/all 폴더, get, 내옹수 : ${arr.length} !`);
 
     const startIndex = (page - 1) * perPage;
     const endIndex = page * perPage;
     const slicedResults = arr.slice(startIndex, endIndex);
     
-    console.log("SI: " + startIndex +",EI: " + endIndex);
-    // console.log(slicedResults);
+    logger.info(`/routes/search/tags/all 폴더, get, SI: ${startIndex}, EI: ${endIndex}`);
 
     return res.send({
       results: slicedResults,
@@ -147,7 +143,7 @@ router.get('/tags/all', async (req, res) => {
     });
   } catch(err) {
     connection?.release();
-    console.log(err);
+    logger.error("/routes/search/tags/all 폴더, get, err : ", err);
     res.status(500).send('Internal Server Error');
   }
 });

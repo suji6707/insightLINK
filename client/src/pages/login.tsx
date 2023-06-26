@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
+// recoil
+import { useSetRecoilState } from "recoil";
+import { LoginStateAtom } from "@/recoil/atoms/LoginStateAtom";
+
 import axios from "axios";
 import { useRouter } from "next/router";
 // Component
 import NavBar from "@/features/Dashboard/components/NavBar";
 import { Wrapper } from "@/styles/wrapper";
 
-const serverPath = "http://localhost:8800";
+// const serverPath = "http://localhost:8800";
 
 export default function Home() {
   const router = useRouter();
@@ -13,8 +17,10 @@ export default function Home() {
   const [userEmail, setUserEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const setLoginId = useSetRecoilState(LoginStateAtom);
+
   const handleLogin = async (res: any) => {
-    const response = await axios.post(`${serverPath}/api/login/generic`, {
+    const response = await axios.post(`/api/login/generic`, {
       email: userEmail,
       password: password,
     });
@@ -28,6 +34,8 @@ export default function Home() {
 
       const userId = response.data.userId;
       console.log("로그인한 userId : ", userId);
+
+      setLoginId(userId);
 
       // Store the token in local storage
       localStorage.setItem("token", token);

@@ -1,14 +1,16 @@
 import React, { useRef, useState } from "react";
 import AWS from "aws-sdk";
-import tw from "tailwind-styled-components";
 
 import { POST } from "@/axios/POST";
-// Components
-import { Wrapper } from "@/styles/wrapper";
 // Assets
-import { FiUploadCloud } from "react-icons/fi";
 import ImageList from "@/features/ImageUpload/ImgList";
 import getToken from "@/axios/getToken";
+import { BiLoader } from "react-icons/bi";
+import {
+  AiOutlineCheck,
+  AiOutlineClose,
+  AiOutlineUpload,
+} from "react-icons/ai";
 
 type ImgInfo = {
   blob: Blob;
@@ -17,7 +19,13 @@ type ImgInfo = {
   type: string;
 };
 
-export default function ImageUpload({ setShowImgModal }: any) {
+export default function ImageUpload({
+  setShowImgModal,
+  setUploading,
+  uploading,
+  imgNum,
+  setImgNum,
+}: any) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
   const [imgList, setImgList] = useState<ImgInfo[]>([]);
@@ -39,11 +47,13 @@ export default function ImageUpload({ setShowImgModal }: any) {
       return { name: file.name, type: file.type, size: file.size, blob };
     });
     setImgList(selectedImgArray);
+    setImgNum(selectedImgArray.length);
   };
 
   const deleteImg = (selectedIndex: number) => {
     const newImgList = imgList.filter((_, index) => index !== selectedIndex);
     setImgList(newImgList);
+    setImgNum(newImgList.length);
   };
 
   if (process.env.S3_ACCESS_KEY && process.env.S3_SECRET_KEY) {
@@ -57,42 +67,106 @@ export default function ImageUpload({ setShowImgModal }: any) {
     });
   }
 
+  const resizeImage = (image: Blob, width: number): Promise<Blob> => {
+    return new Promise<Blob>((resolve, reject) => {
+      const img = new Image();
+      img.src = URL.createObjectURL(image);
+
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        if (ctx) {
+          const aspectRatio = img.width / img.height;
+          const height = width / aspectRatio;
+
+          canvas.width = width;
+          canvas.height = height;
+
+          ctx.drawImage(img, 0, 0, width, height);
+
+          canvas.toBlob(
+            (resizedBlob) => {
+              if (resizedBlob) {
+                resolve(resizedBlob);
+              } else {
+                reject(new Error("이미지 리사이징 실패"));
+              }
+            },
+            "image/jpeg",
+            0.9
+          );
+        } else {
+          reject(new Error("캔버스 컨텍스트 가져오기 실패"));
+        }
+      };
+
+      img.onerror = () => {
+        reject(new Error("이미지 로딩 실패"));
+      };
+    });
+  };
+
   const uploadImages = async () => {
+    setShowImgModal(false);
+    const startTime = performance.now();
     try {
       const promises = imgList.map((file) => {
         return new Promise<string>((resolve, reject) => {
           const { blob } = file;
           const fileName = `${Date.now()}.${file.name}`;
-          const s3 = new AWS.S3();
-          s3.upload(
-            {
-              Bucket: "sw-jungle-s3",
-              Key: fileName,
-              Body: blob,
-              ContentType: file.type,
-            },
-            (error, data) => {
-              if (error) {
-                reject(error);
-              } else if (data && data.Location) {
-                resolve(data.Location);
-                // 하나씩 받음 console.log("?", data.Location);
-              } else {
-                reject(new Error("이미지 업로드 실패 - S3"));
-              }
-            }
-          );
+
+          // 이미지 리사이징
+          const width = 400;
+          resizeImage(blob, width)
+            .then((resizedBlob) => {
+              console.log("원본 Image Size:", blob.size);
+              console.log("Resized Image Size:", resizedBlob.size);
+
+              // 리사이즈된 이미지 업로드
+              const s3 = new AWS.S3();
+              s3.upload(
+                {
+                  Bucket: "sw-jungle-s3",
+                  Key: fileName,
+                  Body: resizedBlob,
+                  ContentType: file.type,
+                },
+                (
+                  uploadError: Error | null,
+                  data: AWS.S3.ManagedUpload.SendData
+                ) => {
+                  if (uploadError) {
+                    reject(uploadError);
+                  } else if (data && data.Location) {
+                    resolve(data.Location);
+                  } else {
+                    reject(new Error("이미지 업로드 실패 - S3"));
+                  }
+                }
+              );
+            })
+            .catch((error) => {
+              reject(error);
+            });
         });
       });
 
       const uploadedImageUrls = await Promise.all(promises);
-      console.log(uploadedImageUrls)
       setImageUrl(uploadedImageUrls);
 
       const POSTImgLink = async () => {
         const token = getToken();
         const result = await POST("upload", uploadedImageUrls, token);
-        console.log(result);
+
+        const endTime = performance.now();
+        const executionTime = endTime - startTime;
+        console.log("Execution time:", executionTime, "ms");
+
+        if (result) {
+          setUploading(false);
+        }
+        return result;
       };
 
       POSTImgLink();
@@ -101,24 +175,109 @@ export default function ImageUpload({ setShowImgModal }: any) {
     }
   };
 
-  const modalOutsideClicked = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (modalRef.current === e.target) {
-      setShowImgModal(false);
-    }
-  };
-
-  const ClasBtn = tw.p`
-  h-10 w-full py-8 flex justify-center items-center text-xl rounded-lg hover:bg-yellow-300 hover:text-white transition-colors dark:border-white cursor-pointer border drop-shadow-xl
-  `;
+  // const modalOutsideClicked = (e: React.MouseEvent<HTMLDivElement>) => {
+  //   if (modalRef.current === e.target) {
+  //     setShowImgModal(false);
+  //   }
+  // };
 
   return (
     <div
-      className="fixed inset-0 bg-white bg-opacity-30"
-      ref={modalRef}
-      onClick={(e) => modalOutsideClicked(e)}
+      className="flex flex-col items-start p-3 rounded-xl border border-gray-300 bg-white shadow-md fixed bottom-2 right-2"
+      style={{ width: "22.5rem", height: "30rem" }}
     >
-      <Wrapper className="flex-row justify-between absolute top-2/3 left-1/2 transform -translate-y-2/3 -translate-x-1/2 bg-white w-3/5 h-4/6 border drop-shadow-xl px-12 rounded-xl">
-        <div className="border-8 w-2/4 h-4/6 border-dashed flex flex-col justify-center items-center">
+      <div
+        className="flex justify-between items-center flex-shrink-0 self-stretch"
+        style={{
+          height: "3.75rem",
+          background: "#FFF",
+        }}
+      >
+        <div className="flex items-center gap-2">
+          <p
+            className="text-lg font-semibold leading-6"
+            style={{
+              color: "#181818",
+              fontFamily: "IBM Plex Sans",
+              letterSpacing: "-0.0125rem",
+            }}
+          >
+            스크린샷 업로드
+          </p>
+          <BiLoader
+            className="text-base leading-none"
+            style={{ fontFamily: "xeicon" }}
+          />
+          <p
+            className="text-sm font-light leading-7"
+            style={{
+              color: "#181818",
+              fontFamily: "IBM Plex Sans",
+              letterSpacing: "-0.02625rem",
+            }}
+          >
+            {imgNum} ...
+          </p>
+        </div>
+        <div className="flex items-start gap-3">
+          {/* <FiMinimize2
+            className="text-lg leading-none"
+            style={{
+              color: "#A1A1A1",
+              fontFamily: "xeicon",
+            }}
+          /> */}
+          <AiOutlineClose
+            className="text-lg leading-none cursor-pointer"
+            style={{
+              color: "#A1A1A1",
+              fontFamily: "xeicon",
+            }}
+            onClick={() => setShowImgModal(false)}
+          />
+        </div>
+      </div>
+      <ImageList imgList={imgList} deleteImg={deleteImg} />
+      <div
+        className="flex items-center justify-end flex-shrink-0 self-stretch bg-white"
+        style={{
+          height: "3.75rem",
+          borderTop: "1px solid #DADADA",
+          background: "#FFF",
+        }}
+      >
+        <div className="flex items-start gap-2">
+          <div
+            onClick={() => {
+              setUploading(true);
+              uploadImages();
+            }}
+            className="flex items-center justify-center h-10 px-4 gap-1 rounded border-2 bg-white cursor-pointer"
+            style={{
+              borderColor: "#FFDF6D",
+              background: "#FFF",
+            }}
+          >
+            <AiOutlineCheck
+              style={{
+                color: "var(--gray-900, #181818)",
+                fontSize: "1rem",
+                fontFamily: "xeicon",
+                lineHeight: "100%",
+              }}
+            />
+            <p
+              className="text-xl font-semibold leading-none tracking-tight"
+              style={{
+                color: "var(--gray-900, #181818)",
+                fontFamily: "Kanit",
+                letterSpacing: "0.0225rem",
+              }}
+            >
+              분석
+            </p>
+          </div>
+
           <input
             type="file"
             multiple
@@ -127,18 +286,39 @@ export default function ImageUpload({ setShowImgModal }: any) {
             ref={fileInputRef}
             onChange={handleImgChange}
           />
-          <FiUploadCloud
-            size={180}
+          <div
             onClick={handleInput}
-            className="text-gray-300 my-4"
-          />
-          <p className="text-lg">스크린샷을 업로드하세요</p>
+            className="flex items-center justify-center h-10 px-4 gap-1 rounded cursor-pointer"
+            style={{
+              background:
+                "linear-gradient(144deg, #FFDF6D 26.86%, #FFC591 66.47%, #FFB7BF 100%)",
+            }}
+          >
+            <AiOutlineUpload
+              className="text-base leading-none"
+              style={{
+                color: "var(--white, #FFF)",
+                fontSize: "1rem",
+                fontFamily: "xeicon",
+                lineHeight: "100%",
+              }}
+            />
+            <p
+              className="text-xl font-semibold leading-none tracking-tight"
+              style={{
+                color: "var(--white, #FFF)",
+                fontSize: "1.125rem",
+                fontFamily: "Kanit",
+                fontWeight: 600,
+                lineHeight: "100%",
+                letterSpacing: "0.0225rem",
+              }}
+            >
+              업로드
+            </p>
+          </div>
         </div>
-        <div className="w-5/12 h-4/6 flex flex-col justify-between">
-          <ImageList imgList={imgList} deleteImg={deleteImg} />
-          <ClasBtn onClick={uploadImages}>자동</ClasBtn>
-        </div>
-      </Wrapper>
+      </div>
     </div>
   );
 }

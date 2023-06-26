@@ -8,43 +8,53 @@ import MainGraph from "@/features/MainGraph/components/MainGraph/MainGraph";
 import CardPanel from "@/features/MainCard/components/CardPanel";
 import ImageUpload from "@/features/ImageUpload/ImageUpload";
 import { Wrapper } from "@/styles/wrapper";
-import Loading from "@/features/MainGraph/components/Loading/Loading";
 import useGraph from "@/features/MainGraph/hooks/useGraph";
+import GraphLoading from "@/features/MainGraph/components/Loading/GraphLoading";
+import UploadLoading from "@/features/MainGraph/components/Loading/UploadLoading";
 
 export default function Dashboard() {
   const [openCard, setOpenCard] = useRecoilState(DashBoardCardAtom);
   const [showImgModal, setShowImgModal] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [imgNum, setImgNum] = useState(0);
+
   const graphData = useGraph();
 
   return (
     <>
       {graphData ? (
-        <>
-          <NavBar />
-          <Wrapper className="w-full px-10">
-            <div className="flex flex-col justify-between w-full">
-              <UserPanel
-                showImgModal={showImgModal}
-                setShowImgModal={setShowImgModal}
-                editMode={editMode}
-                setEditMode={setEditMode}
-              />
-              <div className="flex flex-row justify-between w-full">
-                <MainGraph data={graphData} editMode={editMode} />
-                {openCard ? <CardPanel /> : <></>}
+        uploading ? (
+          <UploadLoading imgNum={imgNum} />
+        ) : (
+          <>
+            <NavBar />
+            <Wrapper className="w-full px-10">
+              <div className="flex flex-col justify-between w-full">
+                <UserPanel
+                  showImgModal={showImgModal}
+                  setShowImgModal={setShowImgModal}
+                  editMode={editMode}
+                  setEditMode={setEditMode}
+                />
+                <div className="flex flex-row justify-between w-full">
+                  <MainGraph data={graphData} editMode={editMode} />
+                  {openCard ? <CardPanel /> : <></>}
+                </div>
               </div>
-            </div>
-            {showImgModal && (
-              <ImageUpload
-                showImgModal={showImgModal}
-                setShowImgModal={setShowImgModal}
-              />
-            )}
-          </Wrapper>
-        </>
+              {showImgModal && (
+                <ImageUpload
+                  setShowImgModal={setShowImgModal}
+                  setUploading={setUploading}
+                  imgNum={imgNum}
+                  setImgNum={setImgNum}
+                />
+              )}
+            </Wrapper>
+          </>
+        )
       ) : (
-        <Loading />
+        <GraphLoading />
       )}
     </>
   );

@@ -7,6 +7,8 @@ import { rejectCardQuery } from '../db/socialQueries.js';
 // import Redis from 'ioredis';
 // const redis = new Redis();
 
+import { logger } from '../winston/logger.js';
+
 
 export const recomCards = async (req, res) => {
   const { user } = res.locals;
@@ -72,10 +74,11 @@ export const recomCards = async (req, res) => {
     // redis.set(`recomCard:${userId}`, JSON.stringify(cardList), 'EX', 3600);
 
     connection.release();
+    logger.info(`/routes/social/recomCard 폴더 recomCards함수, get 성공 !`);
     res.status(200).send(cardList);
   } catch (err) {
     connection?.release();
-    console.log(err);
+    logger.error("/routes/social/recomCard 폴더 recomCards함수, get, err : ", err);
     res.status(500).send('Internal Server Error');
   }
 };
@@ -90,10 +93,11 @@ export const rejectCard = async (req, res) => {
     connection = await db.getConnection();
     const [result] = await connection.query(rejectCardQuery, [userId, cardId ]);
     connection.release();
+    logger.info(`/routes/social/recomCard 폴더 rejectCard함수, get 성공 !`);
     res.status(200).send(`User ${userId} rejected card ${cardId}`);
   } catch (err) {
     connection?.release();
-    console.log(err);
+    logger.error("`/routes/social/recomCard 폴더 rejectCard함수, get, err : ", err);
     res.status(500).send('Internal Server Error');
   }
 };
@@ -104,5 +108,6 @@ function shuffleArray(array) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]]; // swap elements
   }
+  logger.info(`/routes/social/recomCard 폴더 shuffleArray함수, return 성공 !`);
   return array;
 }

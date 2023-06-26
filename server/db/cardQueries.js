@@ -25,3 +25,11 @@ export const updatedCardQuery =
     WHERE user_id = ?
     ORDER BY created_at DESC
     LIMIT 10`;
+
+
+export const selectCardToClone = 
+  `SELECT a.tag_id, a.file_id as cardId
+    FROM Tag a
+    JOIN File b
+    ON a.file_id = b.file_id
+    WHERE a.File_id = ?`; 
