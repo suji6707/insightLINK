@@ -1,6 +1,6 @@
 import '../dotenv.js';
 import { db } from '../connect.js';
-import { userInfoQuery  } from '../db/userQueries.js';
+import { userInfoQuery,followCntQuery,tagCntQuery  } from '../db/userQueries.js';
 
 
 export const getUserInfo = async (req, res) => {
@@ -9,22 +9,20 @@ export const getUserInfo = async (req, res) => {
   let connection = null;
   try {
     connection = await db.getConnection();
-    console.log('--- userInfo ---');
+
     const [ result ] = await connection.query(userInfoQuery(userId));
-    const cnt_query = `select COUNT(*) AS cnt from Follow where user_id = ${userId}`;
-    const cnt = await connection.query(cnt_query);
-    const { userName , tagCnt, cardCnt } = result[0];
-    
-    let val = parseInt(tagCnt) / 2;
-    let updatedTagCnt = val | 0;
+    const follow_cnt = await connection.query(followCntQuery(userId));
+    const tag_cnt = await connection.query(tagCntQuery(userId));
+    const { userName , cardCnt } = result[0];
+    let tagCnt = tag_cnt[0][0].tag_count;
+
     const data = {
       userName,
-      tagCnt : updatedTagCnt,
+      tagCnt,
       cardCnt: parseInt(cardCnt),
-      followCnt: cnt[0][0]['cnt'], 
+      followCnt: follow_cnt[0][0]['cnt'], 
     };
-    //console.log('tagCnt :',parseInt(tagCnt));
-    console.log('data : ',data);
+    
     connection.release();
     return res.status(200).send(data);
   } catch(err) {
