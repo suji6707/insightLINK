@@ -4,6 +4,8 @@ import { selectCardToClone } from '../db/cardQueries.js';
 import { copyQuery1 } from '../db/cardQueries.js';
 import { copyQuery2 } from '../db/cardQueries.js';
 
+import { logger } from '../winston/logger.js';
+
 
 export const cloneCard =  async (req, res) => {
   /* 가져오려는 카드 */
