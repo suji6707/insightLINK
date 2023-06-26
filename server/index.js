@@ -19,6 +19,7 @@ import socialRouter from './routes/social.js'
 import userRouter from './routes/user.js'
 import searchRouter from './routes/search.js'
 import mypageRouter from './routes/mypage.js'
+import otherRouter from './routes/other.js';
 
 import { authMiddleware } from './middlewares/auth-middleware.js'
 
@@ -37,7 +38,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/api/upload', authMiddleware, uploadRouter);
 app.use('/api/login', loginRouter);
 app.use('/api/signup', signupRouter);
-app.use('/api/user',authMiddleware,userRouter);
+app.use('/api/user', userRouter);
 app.use('/api/graph', authMiddleware, graphRouter);
 app.use('/api/cards', cardRouter);
 app.use('/api/social', socialRouter);
@@ -45,6 +46,7 @@ app.use('/dashboard', searchRouter);
 app.use('/api/myinfo', authMiddleware, mypageRouter);
 app.use('/api/tag',authMiddleware,tagRouter);
 app.use('/api/notification',authMiddleware,notificationRouter);
+app.use('/api/other',authMiddleware,otherRouter);
 
 /* session management */
 app.get('/api/users/me', authMiddleware, async (req, res) => {
