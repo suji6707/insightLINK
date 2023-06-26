@@ -25,7 +25,7 @@ import { authMiddleware } from './middlewares/auth-middleware.js';
 import { setTimeout } from 'timers/promises';
 
 const app = express();
-export const server = http.createServer(app);
+const server = http.createServer(app);
 const port = process.env.PORT || 8000;
 
 /* Middleware */
