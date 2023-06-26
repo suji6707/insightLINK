@@ -1,6 +1,8 @@
 import '../dotenv.js';
 import { db } from '../connect.js';
 
+import { logger } from '../winston/logger.js';
+
 
 export const updateCard =  async (req, res) => {
   /* 가져오려는 카드 */
