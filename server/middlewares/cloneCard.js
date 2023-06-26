@@ -15,9 +15,10 @@ export const cloneCard =  async (req, res) => {
 
   try { 
     await cloneCards(userId, cardId); // userId ='me'
+    logger.info(`/routes/social/cloneCard 폴더 cloneCard함수, post 성공 !`);
     res.status(200).send('SUCCESS');
   } catch (err) {
-    console.log(err);
+    logger.error("/routes/social/cloneCard 폴더 cloneCard함수, post, err : ", err);
     res.status(500).send('Internal Server Error'); // Send error response
   }
 };
@@ -28,17 +29,19 @@ export const cloneCard =  async (req, res) => {
 
 /* user_id만 다른, 동일한 File row 생성 */
 const cloneCards = async (userId, cardId) => {
-  console.log('getCardToClone');
+  logger.info(`/routes/social/cloneCard 폴더 cloneCards함수, getCardToClone`);
   let connection = null;
   try {
     connection = await db.getConnection();
     const [selectResults] = await connection.query(selectCardToClone, [cardId]);
     for (let selectResult of selectResults) {
-      console.log('selectResult :', selectResult); 
+      logger.info(`/routes/social/cloneCard 폴더 cloneCards함수, selectResult : ${selectResult}`);
       const [insertResult] = await connection.query(copyQuery1, [userId, selectResult.cardId]);
       const newFileId = insertResult.insertId;
       await connection.query(copyQuery2, [newFileId, newFileId]);
-      console.log(`Copying card ${cardId} to user ${userId} successed!`);
+      logger.info(`/routes/social/cloneCard 폴더 cloneCard함수, post 성공 !`);
+
+      logger.info(`/routes/social/cloneCard 폴더 cloneCards함수, Copying card ${cardId} to user ${userId} successed!`);
     }
     connection.release();
     /* 기존 cardId가 아니라 새로 생성된 cardId를 넣어야 함 */
@@ -46,7 +49,7 @@ const cloneCards = async (userId, cardId) => {
     // console.log(`Copying card ${cardId} to user ${userId} successed!`);
   } catch (err) {
     connection?.release();
-    console.log(err);
+    logger.error("/routes/social/cloneCard 폴더 cloneCards함수, post, err : ", err);
     throw new Error('Internal Server Error');   // Send error response
   }
 };
