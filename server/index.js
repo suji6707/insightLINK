@@ -14,12 +14,15 @@ import notificationRouter from './routes/notification.js';
 import myinfoRouter from './routes/myInfo.js';
 import tagRouter from './routes/tag.js'; 
 
-import cardRouter from './routes/cards.js';
-import socialRouter from './routes/social.js';
-import userRouter from './routes/user.js'; 
-import searchRouter from './routes/search.js';
-import mypageRouter from './routes/mypage.js';
+
+import cardRouter from './routes/cards.js'
+import socialRouter from './routes/social.js'
+import userRouter from './routes/user.js'
+import searchRouter from './routes/search.js'
+import mypageRouter from './routes/mypage.js'
+import otherRouter from './routes/other.js';
 import dummyRouter from './routes/z_dummy.js';
+
 
 import { authMiddleware } from './middlewares/auth-middleware.js';
 import { setTimeout } from 'timers/promises';
@@ -39,7 +42,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/api/upload', authMiddleware, uploadRouter);
 app.use('/api/login', loginRouter);
 app.use('/api/signup', signupRouter);
-app.use('/api/user',authMiddleware,userRouter);
+app.use('/api/user', userRouter);
 app.use('/api/graph', authMiddleware, graphRouter);
 app.use('/api/cards', cardRouter);
 app.use('/api/social', socialRouter);
@@ -49,6 +52,7 @@ app.use('/api/myinfo', authMiddleware, mypageRouter);
 app.use('/api/tag', authMiddleware, tagRouter);
 app.use('/api/dummy', dummyRouter);
 app.use('/api/notification',authMiddleware,notificationRouter);
+app.use('/api/other',authMiddleware,otherRouter);
 
 
 /* NGINX test */
