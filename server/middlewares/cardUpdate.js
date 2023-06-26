@@ -1,6 +1,8 @@
 import '../dotenv.js';
 import { db } from '../connect.js';
 
+import { logger } from '../winston/logger.js';
+
 
 export const updateCard =  async (req, res) => {
   /* 가져오려는 카드 */
@@ -19,9 +21,10 @@ export const updateCard =  async (req, res) => {
     const query = `update File set content = '${content}' where file_id = ${cardId} and user_id = ${userId}`
     await connection.query(query);
     connection.release();
+    logger.info(`/routes/cards/cardUpdate 폴더 updateCard함수, patch, cardId : ${cardId} 수정 성공 !`);
     res.status(200).send({success: true});
     } catch (err) {
-    console.log(err);
+      logger.error("/routes/cards/cardUpdate 폴더 updateCard함수, patch, err : ", err);
     res.status(500).send('Internal Server Error'); 
   }
 };
