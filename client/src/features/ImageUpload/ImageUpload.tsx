@@ -1,14 +1,16 @@
 import React, { useRef, useState } from "react";
 import AWS from "aws-sdk";
-import tw from "tailwind-styled-components";
 
 import { POST } from "@/axios/POST";
-// Components
-import { Wrapper } from "@/styles/wrapper";
 // Assets
-import { FiUploadCloud } from "react-icons/fi";
 import ImageList from "@/features/ImageUpload/ImgList";
 import getToken from "@/axios/getToken";
+import { BiLoader } from "react-icons/bi";
+import {
+  AiOutlineCheck,
+  AiOutlineClose,
+  AiOutlineUpload,
+} from "react-icons/ai";
 
 type ImgInfo = {
   blob: Blob;
@@ -21,6 +23,8 @@ export default function ImageUpload({
   setShowImgModal,
   setUploading,
   uploading,
+  imgNum,
+  setImgNum,
 }: any) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -43,11 +47,13 @@ export default function ImageUpload({
       return { name: file.name, type: file.type, size: file.size, blob };
     });
     setImgList(selectedImgArray);
+    setImgNum(selectedImgArray.length);
   };
 
   const deleteImg = (selectedIndex: number) => {
     const newImgList = imgList.filter((_, index) => index !== selectedIndex);
     setImgList(newImgList);
+    setImgNum(newImgList.length);
   };
 
   if (process.env.S3_ACCESS_KEY && process.env.S3_SECRET_KEY) {
@@ -169,24 +175,109 @@ export default function ImageUpload({
     }
   };
 
-  const modalOutsideClicked = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (modalRef.current === e.target) {
-      setShowImgModal(false);
-    }
-  };
-
-  const ClasBtn = tw.p`
-  h-10 w-full py-8 flex justify-center items-center text-xl rounded-lg hover:bg-yellow-300 hover:text-white transition-colors dark:border-white cursor-pointer border drop-shadow-xl
-  `;
+  // const modalOutsideClicked = (e: React.MouseEvent<HTMLDivElement>) => {
+  //   if (modalRef.current === e.target) {
+  //     setShowImgModal(false);
+  //   }
+  // };
 
   return (
     <div
-      className="fixed inset-0 bg-white bg-opacity-30"
-      ref={modalRef}
-      onClick={(e) => modalOutsideClicked(e)}
+      className="flex flex-col items-start p-3 rounded-xl border border-gray-300 bg-white shadow-md fixed bottom-2 right-2"
+      style={{ width: "22.5rem", height: "30rem" }}
     >
-      <Wrapper className="flex-row justify-between absolute top-2/3 left-1/2 transform -translate-y-2/3 -translate-x-1/2 bg-white w-3/5 h-4/6 border drop-shadow-xl px-12 rounded-xl">
-        <div className="border-8 w-2/4 h-4/6 border-dashed flex flex-col justify-center items-center">
+      <div
+        className="flex justify-between items-center flex-shrink-0 self-stretch"
+        style={{
+          height: "3.75rem",
+          background: "#FFF",
+        }}
+      >
+        <div className="flex items-center gap-2">
+          <p
+            className="text-lg font-semibold leading-6"
+            style={{
+              color: "#181818",
+              fontFamily: "IBM Plex Sans",
+              letterSpacing: "-0.0125rem",
+            }}
+          >
+            스크린샷 업로드
+          </p>
+          <BiLoader
+            className="text-base leading-none"
+            style={{ fontFamily: "xeicon" }}
+          />
+          <p
+            className="text-sm font-light leading-7"
+            style={{
+              color: "#181818",
+              fontFamily: "IBM Plex Sans",
+              letterSpacing: "-0.02625rem",
+            }}
+          >
+            {imgNum} ...
+          </p>
+        </div>
+        <div className="flex items-start gap-3">
+          {/* <FiMinimize2
+            className="text-lg leading-none"
+            style={{
+              color: "#A1A1A1",
+              fontFamily: "xeicon",
+            }}
+          /> */}
+          <AiOutlineClose
+            className="text-lg leading-none cursor-pointer"
+            style={{
+              color: "#A1A1A1",
+              fontFamily: "xeicon",
+            }}
+            onClick={() => setShowImgModal(false)}
+          />
+        </div>
+      </div>
+      <ImageList imgList={imgList} deleteImg={deleteImg} />
+      <div
+        className="flex items-center justify-end flex-shrink-0 self-stretch bg-white"
+        style={{
+          height: "3.75rem",
+          borderTop: "1px solid #DADADA",
+          background: "#FFF",
+        }}
+      >
+        <div className="flex items-start gap-2">
+          <div
+            onClick={() => {
+              setUploading(true);
+              uploadImages();
+            }}
+            className="flex items-center justify-center h-10 px-4 gap-1 rounded border-2 bg-white cursor-pointer"
+            style={{
+              borderColor: "#FFDF6D",
+              background: "#FFF",
+            }}
+          >
+            <AiOutlineCheck
+              style={{
+                color: "var(--gray-900, #181818)",
+                fontSize: "1rem",
+                fontFamily: "xeicon",
+                lineHeight: "100%",
+              }}
+            />
+            <p
+              className="text-xl font-semibold leading-none tracking-tight"
+              style={{
+                color: "var(--gray-900, #181818)",
+                fontFamily: "Kanit",
+                letterSpacing: "0.0225rem",
+              }}
+            >
+              분석
+            </p>
+          </div>
+
           <input
             type="file"
             multiple
@@ -195,25 +286,39 @@ export default function ImageUpload({
             ref={fileInputRef}
             onChange={handleImgChange}
           />
-          <FiUploadCloud
-            size={180}
+          <div
             onClick={handleInput}
-            className="text-gray-300 my-4"
-          />
-          <p className="text-lg">스크린샷을 업로드하세요</p>
-        </div>
-        <div className="w-5/12 h-4/6 flex flex-col justify-between">
-          <ImageList imgList={imgList} deleteImg={deleteImg} />
-          <ClasBtn
-            onClick={() => {
-              setUploading(true);
-              uploadImages();
+            className="flex items-center justify-center h-10 px-4 gap-1 rounded cursor-pointer"
+            style={{
+              background:
+                "linear-gradient(144deg, #FFDF6D 26.86%, #FFC591 66.47%, #FFB7BF 100%)",
             }}
           >
-            자동
-          </ClasBtn>
+            <AiOutlineUpload
+              className="text-base leading-none"
+              style={{
+                color: "var(--white, #FFF)",
+                fontSize: "1rem",
+                fontFamily: "xeicon",
+                lineHeight: "100%",
+              }}
+            />
+            <p
+              className="text-xl font-semibold leading-none tracking-tight"
+              style={{
+                color: "var(--white, #FFF)",
+                fontSize: "1.125rem",
+                fontFamily: "Kanit",
+                fontWeight: 600,
+                lineHeight: "100%",
+                letterSpacing: "0.0225rem",
+              }}
+            >
+              업로드
+            </p>
+          </div>
         </div>
-      </Wrapper>
+      </div>
     </div>
   );
 }
