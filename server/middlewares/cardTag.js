@@ -3,6 +3,8 @@ import { db } from '../connect.js';
 import { tagCardsQuery } from '../db/tagQueries.js';
 import { cardTagsQuery } from '../db/tagQueries.js';
 
+import { logger } from '../winston/logger.js';
+
 
 export const getTagInfos = async (req, res) => {
   const tagname = req.query.tagname;
