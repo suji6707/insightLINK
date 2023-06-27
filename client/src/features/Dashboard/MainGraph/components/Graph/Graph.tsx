@@ -91,12 +91,7 @@ function Graph({ data: graph, editMode }: MainGraphProps) {
     }
   }, [nodeName, openCard]);
 
-  return (
-    <div
-      className={openCard ? "w-2/3 h-screen flex" : "w-full h-screen flex"}
-      ref={chartRef}
-    ></div>
-  );
+  return <div className="w-full h-screen flex" ref={chartRef}></div>;
 }
 
 export default Graph;
