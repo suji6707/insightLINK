@@ -22,6 +22,7 @@ import searchRouter from './routes/search.js';
 import mypageRouter from './routes/mypage.js';
 import otherRouter from './routes/other.js';
 import dummyRouter from './routes/z_dummy.js';
+import dummyRouter2 from './routes/z_dummy_category.js';
 
 
 import { authMiddleware } from './middlewares/auth-middleware.js';
@@ -50,9 +51,11 @@ app.use('/dashboard', searchRouter);
 app.use('/api/myinfo', authMiddleware, mypageRouter);
 
 app.use('/api/tag', authMiddleware, tagRouter);
-app.use('/api/dummy', dummyRouter);
 app.use('/api/notification',authMiddleware,notificationRouter);
 app.use('/api/other',authMiddleware,otherRouter);
+
+app.use('/api/dummy', dummyRouter);
+app.use('/api/dummy2', dummyRouter2);
 
 
 /* NGINX test */

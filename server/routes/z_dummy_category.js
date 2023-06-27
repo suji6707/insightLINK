@@ -38,7 +38,7 @@ const categoryTags =
 
 const allTags = Object.values(categoryTags).flat();
 const tagArray = [];
-let index = 0;
+let index = 1;          // 프론트에서 그래프 그릴 때 tag_index를 1부터 씀. 
 
 // dummy 함수 밖에 있어서 한 번만 실행됨.
 allTags.forEach((tag) => {
