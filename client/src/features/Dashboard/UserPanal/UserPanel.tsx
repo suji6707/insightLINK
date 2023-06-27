@@ -22,7 +22,6 @@ export default function UserPanel() {
           ) : (
             <p onClick={() => setEditMode(true)}>그래프 수정</p>
           )}
-          <BsCamera size={30} onClick={() => setShowImgModal(true)} />
           <SearchBar />
         </div>
       </div>

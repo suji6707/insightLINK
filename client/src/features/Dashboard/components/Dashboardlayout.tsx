@@ -1,8 +1,9 @@
 import React from "react";
 // recoil
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import {
   DashBoardCardAtom,
+  ImgModalAtom,
   ShowImgModalAtom,
 } from "@/recoil/atoms/MainGraphAtom";
 // Component
@@ -14,7 +15,7 @@ import { Wrapper } from "@/styles/wrapper";
 
 export default function DashboardLayout({ children }: React.JSX.Element) {
   const openCard = useRecoilValue(DashBoardCardAtom);
-  const showImgModal = useRecoilValue(ShowImgModalAtom);
+  const [showImgModal, setShowImgModal] = useRecoilState(ImgModalAtom);
 
   return (
     <>
