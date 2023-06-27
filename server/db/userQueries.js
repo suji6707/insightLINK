@@ -1,5 +1,5 @@
 export const cardCntQuery = (userId) => {
-  return `SELECT COUNT(*) AS rowCount
+  return `SELECT COUNT(distinct content) AS rowCount
     FROM File
     WHERE user_id = ${userId};`
 }
