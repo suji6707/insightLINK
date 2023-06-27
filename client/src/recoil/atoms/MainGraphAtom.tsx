@@ -42,6 +42,11 @@ export const ClickedCardDetailAtom = atom<number | null>({
   default: null,
 });
 
+export const ImgModalAtom = atom({
+  key: "ImgModalAtom",
+  default: false,
+});
+
 export const UploadedImgAtom = atom({
   key: "UploadedImgAtom",
   default: [""],

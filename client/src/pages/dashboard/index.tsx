@@ -1,7 +1,6 @@
-import React from "react";
-// recoil
-import { useRecoilValue } from "recoil";
-import { UploadingAtom } from "@/recoil/atoms/MainGraphAtom";
+import React, { useState } from "react";
+import { useRecoilState } from "recoil";
+import { DashBoardCardAtom, ImgModalAtom } from "@/recoil/atoms/MainGraphAtom";
 // Component
 import MainGraph from "@/features/Dashboard/MainGraph/components/MainGraph/MainGraph";
 import UploadLoading from "@/features/Dashboard/MainGraph/components/Loading/UploadLoading";
@@ -11,7 +10,10 @@ import GraphLoading from "@/features/Dashboard/MainGraph/components/Loading/Grap
 import useGraph from "@/features/Dashboard/MainGraph/hooks/useGraph";
 
 export default function Dashboard() {
-  const uploading = useRecoilValue(UploadingAtom);
+  const [openCard, setOpenCard] = useRecoilState(DashBoardCardAtom);
+  const [uploading, setUploading] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [showImgModal, setShowImgModal] = useRecoilState(ImgModalAtom);
 
   const graphData = useGraph();
 
