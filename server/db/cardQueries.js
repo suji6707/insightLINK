@@ -26,10 +26,16 @@ export const updatedCardQuery =
     ORDER BY created_at DESC
     LIMIT 10`;
 
-
 export const selectCardToClone = 
-  `SELECT a.tag_id, a.file_id as cardId
+  `SELECT a.tag_id as tagId
     FROM Tag a
     JOIN File b
     ON a.file_id = b.file_id
     WHERE a.File_id = ?`; 
+
+
+export const cardCloneQuery = 
+  `INSERT INTO Tag (file_id, tag, tag_index) 
+  SELECT ?, tag, tag_index
+  FROM Tag
+  WHERE tag_id = ?`; 

@@ -3,13 +3,14 @@ import { db } from '../connect.js';
 import { selectCardToClone } from '../db/cardQueries.js';
 import { copyQuery1 } from '../db/cardQueries.js';
 import { copyQuery2 } from '../db/cardQueries.js';
+import { cardCloneQuery } from '../db/cardQueries.js'
 
 import { logger } from '../winston/logger.js';
 
 
 export const cloneCard =  async (req, res) => {
   /* 가져오려는 카드 */
-  const cardId = req.query.cardId;
+  const cardId = req.body.cardId;
   console.log('cardId :', cardId);
   /* 로그인 유저 */
   const { user } = res.locals;    
@@ -36,19 +37,26 @@ const cloneCards = async (userId, cardId) => {
   try {
     connection = await db.getConnection();
     const [selectResults] = await connection.query(selectCardToClone, [cardId]);
-    for (let selectResult of selectResults) {
-      logger.info(`/routes/social/cloneCard 폴더 cloneCards함수, selectResult : ${selectResult}`);
-      const [insertResult] = await connection.query(copyQuery1, [userId, selectResult.cardId]);
-      const newFileId = insertResult.insertId;
-      await connection.query(copyQuery2, [newFileId, newFileId]);
-      logger.info(`/routes/social/cloneCard 폴더 cloneCard함수, post 성공 !`);
+    const newFileId = {fileId: -1};
+    for (let i = 0;  i < selectResults.length; i++) {
+      
+      logger.info(`/routes/social/cloneCard 폴더 cloneCards함수, selectResult : ${selectResults[i]}`); 
+      const tagId = selectResults[i].tagId;
+      const [copyResult1] = await connection.query(copyQuery1, [userId, cardId]);
+      if (i == 0) {
+        newFileId.fileId = copyResult1.insertId
+      }
+
+      logger.info(`/routes/social/cloneCard 폴더 cloneCards함수, copyResult1 : ${copyResult1}`);
+      const copyResult2 = await connection.query(cardCloneQuery, [newFileId.fileId, tagId]);
+      logger.info(`/routes/social/cloneCard 폴더 cloneCards함수, copyResult2 : ${copyResult2}`);
+    } 
+
+      logger.info(`/routes/social/cloneCard 폴더 cloneCards함수, newFileId : ${newFileId.fileId}`);
 
       logger.info(`/routes/social/cloneCard 폴더 cloneCards함수, Copying card ${cardId} to user ${userId} successed!`);
-    }
+    
     connection.release();
-    /* 기존 cardId가 아니라 새로 생성된 cardId를 넣어야 함 */
-    // await conn/ection.query(copyQuery2, [newFileId, newFileId]);
-    // console.log(`Copying card ${cardId} to user ${userId} successed!`);
   } catch (err) {
     connection?.release();
     logger.error("/routes/social/cloneCard 폴더 cloneCards함수, post, err : ", err);
