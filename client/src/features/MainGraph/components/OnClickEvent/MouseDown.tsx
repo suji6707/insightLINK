@@ -29,28 +29,31 @@ const handleNodeLongClick = (
         const prevNode = nodesOption.find(
           (node) => node.id === longPressNode.current
         );
-        let success = 0;
+        const confirmed = window.confirm("태그를 병합하시겠습니까?");
+        if (confirmed) {
+          let success = 0;
 
-        success = combineNodes({
-          chart,
-          nodes: nodesOption,
-          links: (chart.getOption() as any).series[0].links as any[],
-          node1: prevNode!,
-          node2: currentNode!,
-        });
+          success = combineNodes({
+            chart,
+            nodes: nodesOption,
+            links: (chart.getOption() as any).series[0].links as any[],
+            node1: prevNode!,
+            node2: currentNode!,
+          });
 
-        const POSTMerge = async () => {
-          const token = getToken();
-          const result = await POST(
-            "tag/merge",
-            { tagId1: currentNode.id, tagId2: prevNode.id },
-            token
-          );
-          console.log(result);
-        };
+          const POSTMerge = async () => {
+            const token = getToken();
+            const result = await POST(
+              "tag/merge",
+              { tagId1: currentNode.id, tagId2: prevNode.id },
+              token
+            );
+            console.log(result);
+          };
 
-        if (success) {
-          POSTMerge();
+          if (success) {
+            POSTMerge();
+          }
         }
 
         longPressNode.current = null; // 롱클릭된 노드 리셋
@@ -63,7 +66,7 @@ const handleNodeLongClick = (
         };
         chart.setOption({ series: [{ data: nodesOption }] });
       }
-    }, 2000); // 롱클릭의 기준: 2초
+    }, 1000); // 롱클릭의 기준: 1초
   }
 };
 

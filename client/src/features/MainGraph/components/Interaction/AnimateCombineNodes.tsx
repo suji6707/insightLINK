@@ -39,6 +39,17 @@ const animateCombineNodes = (
       );
       nodes.push(newNode);
 
+      // 노드 병합에 따른 링크 수정
+      links = links.map((link) => {
+        if (link.source === node1.id || link.source === node2.id) {
+          return { ...link, source: newNode.id };
+        }
+        if (link.target === node1.id || link.target === node2.id) {
+          return { ...link, target: newNode.id };
+        }
+        return link;
+      });
+
       chart.setOption({ series: [{ data: nodes, links }] });
     }
   };
