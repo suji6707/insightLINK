@@ -8,21 +8,20 @@ import getToken from "@/axios/getToken";
 // Components
 import UserModal from "@/features/User/UserModal";
 // Assets
-import { AiTwotoneBell } from "react-icons/ai";
+import { AiOutlineUpload, AiTwotoneBell } from "react-icons/ai";
 import { BiUser } from "react-icons/bi";
-import { BsShare, BsSunFill, BsFillMoonFill } from "react-icons/bs";
+import { BsSunFill, BsFillMoonFill, BsShareFill } from "react-icons/bs";
 
 import html2canvas from "html2canvas";
-
-const NavBarContainer = tw.div`
-  flex flex-row items-center justify-between p-7 fixed top-0 w-full z-50
-`;
+import { useRecoilState } from "recoil";
+import { ImgModalAtom } from "@/recoil/atoms/MainGraphAtom";
 
 export default function NavBar() {
   const { systemTheme, theme, setTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
   const [userProfile, setUserProfile] = useState("");
   const [isUserModalOpen, setUserModalOpen] = useState(false);
+  const [showImgModal, setShowImgModal] = useRecoilState(ImgModalAtom);
 
   const getProfileImg = async () => {
     const token = getToken();
@@ -61,9 +60,8 @@ export default function NavBar() {
             // Use Kakao.Link.sendDefault to send the image URL to KakaoTalk
             if (window.Kakao) {
               window.Kakao.Link.sendDefault({
-                objectType: 'text',
-                text:
-                  '나의 그래프를 확인해봐요.',
+                objectType: "text",
+                text: "나의 그래프를 확인해봐요.",
                 link: {
                   mobileWebUrl: 'http://3.35.239.116:3000/dashboard/'+21,
                   webUrl: 'http://3.35.239.116:3000/dashboard/'+21,
@@ -79,20 +77,28 @@ export default function NavBar() {
     });
   };
 
-
   return (
-    <NavBarContainer>
+    <div className="flex items-center justify-between h-20 flex-shrink-0 self-stretch py-0 px-10">
       <Link href="/dashboard">
         <p className="text-3xl font-extrabold">insightLINK</p>
       </Link>
-      <div className="flex flex-row justify-start w-2/3 ml-4">
+      <div>
         <Link href="/social">
           <CategoryLink>소셜</CategoryLink>
         </Link>
       </div>
-      <div className="flex flex-row items-center justify-between w-1/6">
-        <BsShare size={30} onClick={handleShareIconClick} />
-        <AiTwotoneBell size={30} />
+      <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 self-stretch">
+          <div className="flex w-7 h-7 flex-col justify-center items-center">
+            <BsShareFill
+              className="text-gray-800 text-1xl font-xeicon leading-normal"
+              onClick={handleShareIconClick}
+            />
+          </div>
+          <div className="flex w-7 h-7 flex-col justify-center items-center">
+            <AiTwotoneBell className="text-gray-800 text-[1rem] font-xeicon leading-normal" />
+          </div>
+        </div>
         {userProfile ? (
           <img
             src={userProfile}
@@ -100,15 +106,27 @@ export default function NavBar() {
             onClick={handleUserIconClick}
           />
         ) : (
-          <BiUser size={30} onClick={handleUserIconClick} />
+          <BiUser
+            onClick={handleUserIconClick}
+            className="text-gray-800 text-[1rem] font-xeicon leading-normal"
+          />
         )}
-        {currentTheme === "dark" ? (
+        {/* {currentTheme === "dark" ? (
           <BsSunFill size={30} onClick={() => setTheme("light")} />
         ) : (
           <BsFillMoonFill size={30} onClick={() => setTheme("dark")} />
-        )}
+        )} */}
+        <div
+          onClick={() => setShowImgModal(true)}
+          className="flex items-center justify-center h-10 px-4 gap-1 rounded bg-gray-900 cursor-pointer"
+        >
+          <AiOutlineUpload className="text-white text-[1rem] font-xeicon leading-normal" />
+          <p className="text-white text-[1.125rem] font-kanit font-semibold leading-normal tracking-tighter">
+            업로드
+          </p>
+        </div>
       </div>
       {isUserModalOpen && <UserModal closeModal={closeModal} />}
-    </NavBarContainer>
+    </div>
   );
 }

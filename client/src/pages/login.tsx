@@ -20,7 +20,7 @@ export default function Home() {
   const setLoginId = useSetRecoilState(LoginStateAtom);
 
   const handleLogin = async (res: any) => {
-    const response = await axios.post(`${serverPath}/api/login/generic`, {
+    const response = await axios.post(`/api/login/generic`, {
       email: userEmail,
       password: password,
     });
@@ -39,6 +39,7 @@ export default function Home() {
 
       // Store the token in local storage
       localStorage.setItem("token", token);
+      localStorage.setItem("userId", userId);
 
       router.push("/dashboard");
     } else {

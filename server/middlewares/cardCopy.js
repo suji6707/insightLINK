@@ -3,6 +3,9 @@ import { db } from '../connect.js';
 import { copyQuery1 } from '../db/cardQueries.js';
 import { copyQuery2 } from '../db/cardQueries.js';
 
+/* log */
+import { logger } from '../winston/logger.js';
+
 
 export const getCards =  async (req, res) => {
   /* 가져오려는 카드 */
@@ -14,9 +17,10 @@ export const getCards =  async (req, res) => {
 
   try {
     await getCard(userId, cardId); // userId ='me'
+    logger.info(`/routes/cards/cardCopy 폴더 getCards함수, post, cardId : ${cardId} 카드 조회!`);
     res.status(200).send('SUCCESS');
   } catch (err) {
-    console.log(err);
+    logger.error('/routes/cards/cardCopy 폴더 getCards함수, post, err : ', err);
     res.status(500).send('Internal Server Error'); // Send error response
   }
 };
@@ -29,13 +33,13 @@ const getCard = async (userId, cardId) => {
     connection = await db.getConnection();
     const [result] = await connection.query(copyQuery1, [userId, cardId]);
     const newFileId = result.insertId;
+    /* Tag를 찾을 때는 기존 cardId, 새로 생성하는 건 new cardId를 넣어야 함 */
+    await connection.query(copyQuery2, [newFileId, cardId]);
     connection.release();
-    /* 기존 cardId가 아니라 새로 생성된 cardId를 넣어야 함 */
-    await connection.query(copyQuery2, [newFileId, newFileId]);
-    console.log(`Copying card ${cardId} to user ${userId} successed!`);
+    logger.info(`/routes/cards/cardCopy 폴더 getCard함수, post, Copying card ${cardId} to user ${userId} successed!`);
   } catch (err) {
     connection?.release();
-    console.log(err);
+    logger.error('/routes/cards/cardCopy 폴더 getCard함수, post, err : ', err);
     throw new Error('Internal Server Error');   // Send error response
   }
 };

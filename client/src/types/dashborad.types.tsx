@@ -5,11 +5,12 @@ export interface UserInfo {
   userName: string;
 }
 
-interface GraphNode {
+export interface GraphNode {
   id: number;
   name: string;
   symbolSize: number;
   category: number;
+  label: any;
 }
 
 interface GraphLink {
@@ -27,7 +28,7 @@ export interface CardData {
   cardId: number;
   cardTag: string[];
   cardContent: string;
-  cardImage: string;
+  cardImg: string;
 }
 
 export interface CardDataDetail {

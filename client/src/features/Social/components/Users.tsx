@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import Image from "next/image";
 
 import getToken from "@/axios/getToken";
 import { GET } from "@/axios/GET";
@@ -9,7 +11,7 @@ import { AiFillCheckCircle, AiOutlinePlusCircle } from "react-icons/ai";
 
 const Users = () => {
   const [users, setUsers] = useState<any[]>([]);
-
+  const router = useRouter();
   // 추천 친구 조회
   const getUsers = async () => {
     const token = getToken();
@@ -37,8 +39,12 @@ const Users = () => {
     getUsers();
   };
 
+  const handleClick = (userid: number) => {
+    router.push(`/dashboard/${userid}`);
+  };
+
   return (
-    <div className="fixed top-96 left-3/4 ml-10">
+    <div className="fixed ml-10 top-96 left-3/4">
       <ul>
         {users &&
           users.map((u) => (
@@ -50,8 +56,18 @@ const Users = () => {
                 src={u.img}
                 className="w-10 h-10 rounded-full cursor-pointer"
                 alt="profile"
+                onClick={() => {
+                  handleClick(u.userId);
+                }}
               />
-              <p className="text-lg font-semibold">{u.userName}</p>
+              <p
+                className="text-lg font-semibold"
+                onClick={() => {
+                  handleClick(u.userId);
+                }}
+              >
+                {u.userName}
+              </p>
               <ul>
                 {u.tags.map((t: string, index: number) => (
                   <li key={index} className="flex flex-row">

@@ -41,3 +41,43 @@ export const ClickedCardDetailAtom = atom<number | null>({
   key: "ClickedCardDetailAtom",
   default: null,
 });
+
+export const ImgModalAtom = atom({
+  key: "ImgModalAtom",
+  default: false,
+});
+
+export const UploadedImgAtom = atom({
+  key: "UploadedImgAtom",
+  default: [""],
+});
+
+export const UploadedImgNumAtom = atom({
+  key: "UploadedImgNumAtom",
+  default: 0,
+});
+
+export const ExportedTagsAtom = atom({
+  key: "ExportedTagsAtom",
+  default: [""],
+});
+
+export const ShowImgModalAtom = atom({
+  key: "ShowImgModalAtom",
+  default: false,
+});
+
+export const EditModeAtom = atom({
+  key: "EditModeAtom",
+  default: false,
+});
+
+export const UploadingAtom = atom({
+  key: "UploadingAtom",
+  default: false,
+});
+
+export const GraphDataAtom = atom({
+  key: "GraphDataAtom",
+  default: undefined,
+});

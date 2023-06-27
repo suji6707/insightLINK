@@ -4,26 +4,48 @@ import { recomUserQuery } from '../db/socialQueries.js';
 import { tagQuery } from '../db/socialQueries.js';
 import { profileQuery } from '../db/socialQueries.js';
 import { followCheckQuery } from '../db/followQueries.js';
-// import Redis from 'ioredis';
-// const redis = new Redis();
 
+import { logger } from '../winston/logger.js';
+
+
+/* recomUserQuery(userId, limit) 함수로 분리*/
+export const recomUsersFunc = async (req, res, next) => {
+  const { user } = res.locals;
+  const userId = user.user_id;
+  let connection = null;
+  try {
+    connection = await db.getConnection();
+    const [recommendList] = await connection.query(recomUserQuery(userId, 10));
+    req.recommendList = recommendList;  // attach to req
+    connection.release();
+    next(); // move on to next middleware
+  } catch (err) {
+    connection?.release();
+    logger.error('/routes/social/recomUser 폴더, get, err : ', err);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
+
+/* 전역변수로 값 저장해서 불러오는 방법
+- 같은 파일에(recommend.js) recomUser, recomCards를 둔다.
+- recomUserFunc의 실행 값 (limit은 10으로)
+- 값으로 가져와서 
+  1) recomUsers의 인자, (여기선 상위 5개만.)
+  2) recommendSimilarQuery의 인자로 넣자. 
+*/
+// const recommendList = 
 
 export const recomUsers = async (req, res) => {
   const { user } = res.locals;
   const userId = user.user_id;
 
-  /* Check cache */
-  // const cacheData = await redis.get(`recomUser:${userId}`);
-  // if (cacheData) {
-  //   return res.status(200).send(JSON.parse(cacheData));
-  // }
+  const recommendList = await req.recommendList;
 
   let connection = null;
   try {
     connection = await db.getConnection();
-    const [recommendList] = await connection.query(recomUserQuery, [userId, userId, userId]);
-    // console.log(recommendList);
-
+    
     /* 최종 리턴 */
     let data =[];
 
@@ -52,14 +74,13 @@ export const recomUsers = async (req, res) => {
 
       data.push(userProfile);
     }
-    /* Save to cache */
-    // redis.set(`recomUser:${userId}`, JSON.stringify(data), 'EX', 3600);
 
     connection.release();
+    logger.info('/routes/social/recomUser 폴더, get 성공 !');
     res.status(200).send(data);  
   } catch (err) {
     connection?.release();
-    console.log(err);
+    logger.error('/routes/social/recomUser 폴더, get, err : ', err);
     res.status(500).send('Internal Server Error');
   }
 };

@@ -2,8 +2,8 @@ import express from 'express';
 import '../dotenv.js';
 import { db } from '../connect.js';
 import { graphCountQuery, graphDirectionQuery } from '../db/graphQueries.js';
-// import Redis from 'ioredis';
-// const redis = new Redis();
+/* log */
+import { logger } from '../winston/logger.js';
 
 function cycleCount(connections, nodes) {
   let count = 0;
@@ -46,19 +46,22 @@ router.get('/', async (req, res) => {
   const userId = user.user_id;
   /* 다른 유저 */
   const otherUserId = req.query.userId;
-  console.log(otherUserId);
+
+  logger.info(`/routes/graphs 폴더, get, otherUserId : ${otherUserId}`);
 
   try {
     /* 다른 유저 그래프 조회 */
     if (otherUserId) {
       const graphData = await getGraphData(otherUserId);
+      logger.info(`/routes/graphs 폴더, get, 다른 유저 ${otherUserId} 그래프 조회 !`);
       return res.send(graphData);
     }
     /* 기본 내 그래프 조회 */
     const graphData = await getGraphData(userId);
+    logger.info(`/routes/graphs 폴더, get, 내 ${userId} 그래프 조회 !`);
     res.send(graphData);
   } catch (err) {
-    console.log(err);
+    logger.error('/routes/graphs 폴더, get, err : ', err);
     res.status(500).send('Internal Server Error'); // Send error response
   }
 });
@@ -66,18 +69,24 @@ router.get('/', async (req, res) => {
 
 const getGraphData = async (userId) => {
 
-  /* Check cache */
-  // const cacheData = await redis.get(`graphUser:${userId}`);
-  // if (cacheData) {
-  //   return JSON.parse(cacheData);
-  // }
-
   let connection = null;
   try {
     connection = await db.getConnection();
-    console.log(`userId : ${userId} has been logged in!`);
+    logger.info(`/routes/graphs 폴더, get, userId : ${userId} has been logged in!`);
 
     const [ graphCountResult ] = await connection.query(graphCountQuery(userId));
+
+    let maxSymbolSize = 0;
+    for (let i=0; i<graphCountResult.length; i++) {
+      const symbolSize = graphCountResult[i].symbolSize;
+      maxSymbolSize = symbolSize > maxSymbolSize ? symbolSize : maxSymbolSize;
+    }
+    for (let i=0; i<graphCountResult.length; i++) {
+      const symbolSize = graphCountResult[i].symbolSize;
+      const newSymbolSize = symbolSize / maxSymbolSize * 100;
+      graphCountResult[i].symbolSize = newSymbolSize;
+    }
+    
     const [ graphDirectionResult ] = await connection.query(graphDirectionQuery(userId));
     
     let graph = {
@@ -112,12 +121,10 @@ const getGraphData = async (userId) => {
     }
     graph.cnt = maxCategory;
 
-    // redis.set(`graphUser:${userId}`, JSON.stringify(graph), 'EX', 3600);
-
     return graph;  
   } catch (err) {
     connection?.release();
-    console.log(err);
+    logger.error('/routes/graphs 폴더, get, err : ', err);
     throw new Error('Internal Server Error');
   }
 };

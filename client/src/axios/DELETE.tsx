@@ -7,9 +7,9 @@ export const DELETE = async (
   try {
     let res: AxiosResponse;
     if (headers) {
-      res = await axios.delete(`http://3.35.239.116:8800/api/${uri}`, headers);
+      res = await axios.delete(`/api/${uri}`, headers);
     } else {
-      res = await axios.delete(`http://3.35.239.116:8800/api/${uri}`);
+      res = await axios.delete(`/api/${uri}`);
     }
     console.log("DELETE 성공");
     return res.data;

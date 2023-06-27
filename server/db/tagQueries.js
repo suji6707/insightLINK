@@ -1,7 +1,7 @@
 /* 태그명에 해당하는 file_id, content 
                 -> cardId, cardContent */
 export const tagCardsQuery = 
-  `SELECT File.file_id, File.content
+  `SELECT File.file_id, File.content, File.img_url
     FROM File
     JOIN Tag ON File.file_id = Tag.file_id
     WHERE File.user_id = ? AND Tag.tag = ?`;
