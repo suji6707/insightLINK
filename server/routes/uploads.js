@@ -53,20 +53,20 @@ const isImage = (ocrResult) => {
 };
 
 /* Multer */
-router.get('/', (req, res) => {
-  res.sendFile(path.join(path.resolve(), './multipart.html'));
-});
+// router.get('/', (req, res) => {
+//   res.sendFile(path.join(path.resolve(), './multipart.html'));
+// });
 
 const extractTagFromImage = async (imgUrl, req, res) => {
   const sumText = await processOCR(imgUrl);
-  // res.write(`${imgUrl} process OCR FINISEHD\n`);
+  res.write(JSON.stringify({imgUrl: imgUrl, status: 'process OCR FINISEHD'}));
   let tagJSON = '<Image>';  
   if (!isImage(sumText)) {
     const tag = await generate(req, res, sumText); 
     tagJSON = extractJson(tag);
     console.log(tagJSON);
     /* 실시간 통신 */
-    res.write(`${imgUrl} extract JSON FINISHED ${tagJSON}\n`);
+    res.write(JSON.stringify({imgUrl: imgUrl, status: 'extract JSON FINISHED', data: tagJSON}));
   }
   return {
     imgUrl,
@@ -94,7 +94,7 @@ router.post('/', upload.array('photos'),
       for (const imgUrl of imgUrlList) {
         promises.push(extractTagFromImage(imgUrl, req, res));
       }
-      const tagList = await Promise.all(promises);  // promise 배열을 한번에 풀어줌. 푸는 순서를 보장하지 않지만 n개를 동시에 풀어줌. 첫번째가 첫번째에 담기는건 똑같으나(배열 위치는)
+      const tagList = await Promise.all(promises);  // promise 배열을 한번에 풀어줌. 푸는 순서를 보장하지 않지만 n개를 동시에 풀어줌.
       
       for (const { tagJSON, sumText, imgUrl } of tagList) {
         if (tagJSON === '<Image>') continue;
@@ -102,7 +102,6 @@ router.post('/', upload.array('photos'),
         const tag1 = tagJSON.tags[0];   // tag english string
         const tag2 = tagJSON.tags[1];
         // tag[0]
-
         const tagRow1 = combinedList.find(item => item.englishKeyword === tag1);
         if (!tagRow1) {
           logger.info(`/routes/uploads 폴더, post, No matching element found for ${tag1}.`);
