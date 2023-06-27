@@ -1,4 +1,7 @@
 import React, { useRef, useState } from "react";
+// recoil
+import { useSetRecoilState } from "recoil";
+import { ShowImgModalAtom } from "@/recoil/atoms/MainGraphAtom";
 import AWS from "aws-sdk";
 
 import getToken from "@/axios/getToken";
@@ -26,17 +29,14 @@ type ImgInfo = {
   type: string;
 };
 
-export default function ImageUpload({
-  setShowImgModal,
-  setUploading,
-  uploading,
-}: any) {
+export default function ImageUpload({ setUploading, uploading }: any) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
   const [imgList, setImgList] = useState<ImgInfo[]>([]);
   const [tags, setTags] = useRecoilState(ExportedTagsAtom);
   const [imageUrl, setImageUrl] = useRecoilState(UploadedImgAtom);
   const [imgNum, setImgNum] = useRecoilState(UploadedImgNumAtom);
+  const setShowImgModal = useSetRecoilState(ShowImgModalAtom);
 
   const handleInput = () => {
     fileInputRef.current?.click();
@@ -190,11 +190,11 @@ export default function ImageUpload({
 
   return (
     <div
-      className="flex flex-col items-start p-3 rounded-xl border border-gray-300 bg-white shadow-md fixed bottom-2 right-2"
+      className="fixed flex flex-col items-start p-3 bg-white border border-gray-300 shadow-md rounded-xl bottom-2 right-2"
       style={{ width: "22.5rem", height: "30rem" }}
     >
       <div
-        className="flex justify-between items-center flex-shrink-0 self-stretch"
+        className="flex items-center self-stretch justify-between flex-shrink-0"
         style={{
           height: "3.75rem",
           background: "#FFF",
@@ -246,7 +246,7 @@ export default function ImageUpload({
       </div>
       <ImageList imgList={imgList} deleteImg={deleteImg} />
       <div
-        className="flex items-center justify-end flex-shrink-0 self-stretch bg-white"
+        className="flex items-center self-stretch justify-end flex-shrink-0 bg-white"
         style={{
           height: "3.75rem",
           borderTop: "1px solid #DADADA",
@@ -259,7 +259,7 @@ export default function ImageUpload({
               setUploading(true);
               uploadImages();
             }}
-            className="flex items-center justify-center h-10 px-4 gap-1 rounded border-2 bg-white cursor-pointer"
+            className="flex items-center justify-center h-10 gap-1 px-4 bg-white border-2 rounded cursor-pointer"
             style={{
               borderColor: "#FFDF6D",
               background: "#FFF",
@@ -295,7 +295,7 @@ export default function ImageUpload({
           />
           <div
             onClick={handleInput}
-            className="flex items-center justify-center h-10 px-4 gap-1 rounded cursor-pointer"
+            className="flex items-center justify-center h-10 gap-1 px-4 rounded cursor-pointer"
             style={{
               background:
                 "linear-gradient(144deg, #FFDF6D 26.86%, #FFC591 66.47%, #FFB7BF 100%)",
@@ -304,7 +304,7 @@ export default function ImageUpload({
             <AiOutlineUpload
               className="text-base leading-none"
               style={{
-                color: "var(--white, #FFF)",
+                color: "var(—white, #FFF)",
                 fontSize: "1rem",
                 fontFamily: "xeicon",
                 lineHeight: "100%",
@@ -313,7 +313,7 @@ export default function ImageUpload({
             <p
               className="text-xl font-semibold leading-none tracking-tight"
               style={{
-                color: "var(--white, #FFF)",
+                color: "var(—white, #FFF)",
                 fontSize: "1.125rem",
                 fontFamily: "Kanit",
                 fontWeight: 600,

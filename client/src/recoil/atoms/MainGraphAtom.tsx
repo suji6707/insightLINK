@@ -56,3 +56,23 @@ export const ExportedTagsAtom = atom({
   key: "ExportedTagsAtom",
   default: [""],
 });
+
+export const ShowImgModalAtom = atom({
+  key: "ShowImgModalAtom",
+  default: false,
+});
+
+export const EditModeAtom = atom({
+  key: "EditModeAtom",
+  default: false,
+});
+
+export const UploadingAtom = atom({
+  key: "UploadingAtom",
+  default: false,
+});
+
+export const GraphDataAtom = atom({
+  key: "GraphDataAtom",
+  default: undefined,
+});

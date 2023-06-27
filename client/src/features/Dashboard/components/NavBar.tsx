@@ -61,12 +61,11 @@ export default function NavBar() {
             // Use Kakao.Link.sendDefault to send the image URL to KakaoTalk
             if (window.Kakao) {
               window.Kakao.Link.sendDefault({
-                objectType: 'text',
-                text:
-                  '나의 그래프를 확인해봐요.',
+                objectType: "text",
+                text: "나의 그래프를 확인해봐요.",
                 link: {
-                  mobileWebUrl: 'http://localhost:3000/dashboard/'+21,
-                  webUrl: 'http://localhost:3000/dashboard/'+21,
+                  mobileWebUrl: "http://localhost:3000/dashboard/" + 21,
+                  webUrl: "http://localhost:3000/dashboard/" + 21,
                 },
               });
             }
@@ -78,7 +77,6 @@ export default function NavBar() {
       });
     });
   };
-
 
   return (
     <NavBarContainer>

@@ -5,11 +5,12 @@ export interface UserInfo {
   userName: string;
 }
 
-interface GraphNode {
+export interface GraphNode {
   id: number;
   name: string;
   symbolSize: number;
   category: number;
+  label: any;
 }
 
 interface GraphLink {

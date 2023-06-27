@@ -39,6 +39,7 @@ export default function Home() {
 
       // Store the token in local storage
       localStorage.setItem("token", token);
+      localStorage.setItem("userId", userId);
 
       router.push("/dashboard");
     } else {

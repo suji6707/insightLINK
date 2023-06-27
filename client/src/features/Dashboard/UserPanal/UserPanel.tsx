@@ -1,14 +1,17 @@
-import React, { useState } from "react";
-import UserInfo from "./UserInfo";
-import SearchBar from "./SearchBar";
+import React from "react";
+// recoil
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { ShowImgModalAtom, EditModeAtom } from "@/recoil/atoms/MainGraphAtom";
+
+import UserInfo from "@/features/Dashboard/UserPanal/components/UserInfo";
+import SearchBar from "@/features/Dashboard/components/SearchBar";
 // Assets
 import { BsCamera } from "react-icons/bs";
 
-export default function UserPanel({
-  setShowImgModal,
-  editMode,
-  setEditMode,
-}: any) {
+export default function UserPanel() {
+  const setShowImgModal = useSetRecoilState(ShowImgModalAtom);
+  const [editMode, setEditMode] = useRecoilState(EditModeAtom);
+
   return (
     <>
       <div className="flex justify-between w-full">

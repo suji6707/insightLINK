@@ -4,20 +4,13 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { CardDetailOpenAtom } from "@/recoil/atoms/MainGraphAtom";
 import { LoginStateAtom } from "@/recoil/atoms/LoginStateAtom";
 // library
-import { BiUndo } from "react-icons/bi";
+import { BsXLg, BsTrashFill, BsPencilFill } from "react-icons/bs";
 // custom hook
-import useDetail from "@/features/MainCard/hook/useDetail";
+import useDetail from "@/features/Dashboard/MainCard/hook/useDetail";
 // types
 import { CardDataDetail } from "@/types/dashborad.types";
 // API
 import { Card_Edit_Api, Card_Delete_Api } from "@/axios/dashBoardApi";
-
-import {
-  AiFillEdit,
-  AiOutlineExpandAlt,
-  AiOutlineDeliveredProcedure,
-  AiOutlineClose,
-} from "react-icons/ai";
 
 function CardDetail() {
   const [cardDetailData, setCardDetailData] = useState<Partial<CardDataDetail>>(
@@ -75,19 +68,33 @@ function CardDetail() {
 
   return (
     <>
-      <div className="w-full h-full bg-red-200">
-        <div className="flex ml-auto">
-          <button onClick={handleDetailOpen}>
-            <BiUndo />
+      <div className="relative w-full h-full px-8 pb-8 overflow-auto border rounded-lg shadow-md">
+        <div className="sticky top-0 flex justify-between pt-6 pb-4 bg-white">
+          {cardDetailData?.cardTag ? (
+            cardDetailData?.cardTag.map((data: string, index: number) => {
+              return (
+                <div
+                  className="px-4 font-semibold leading-6 text-white bg-blue-600 rounded"
+                  key={index}
+                >
+                  # {data}
+                </div>
+              );
+            })
+          ) : (
+            <></>
+          )}
+          <button onClick={handleDetailOpen} className="svg-button-nomal">
+            <BsXLg />
           </button>
         </div>
 
-        <div>Tag: {cardDetailData?.cardTag}</div>
+        <img src={cardDetailData?.cardImage} className="mb-6" />
 
-        {isLogin ? (
+        {/* {isLogin ? ( */}
+        {true ? (
           <>
-            <AiOutlineClose onClick={handleCardDelete} />
-            <div>
+            <div className="">
               {isEditingContent ? (
                 <>
                   <textarea
@@ -96,12 +103,26 @@ function CardDetail() {
                     rows={editedContent?.length / 15}
                     style={{ width: "100%" }}
                   />
-                  <AiOutlineDeliveredProcedure onClick={handleContentSave} />
+                  <div className="absolute flex flex-row right-9 bottom-3 ">
+                    <button className="svg-button-nomal">
+                      <BsXLg />
+                    </button>
+                    <button className="svg-button-nomal">
+                      <BsPencilFill onClick={handleContentSave} />
+                    </button>
+                  </div>
                 </>
               ) : (
                 <>
-                  <AiFillEdit onClick={handleContentEdit} />{" "}
                   {editedContent || cardDetailData?.content}
+                  <div className="absolute flex flex-row bottom-3 right-9 ">
+                    <button className="svg-button-nomal">
+                      <BsTrashFill onClick={handleCardDelete} />
+                    </button>
+                    <button className="svg-button-nomal">
+                      <BsPencilFill onClick={handleContentEdit} />
+                    </button>
+                  </div>
                 </>
               )}
             </div>
@@ -111,10 +132,6 @@ function CardDetail() {
             <div>{cardDetailData?.content}</div>
           </>
         )}
-
-        <div>Content: {cardDetailData?.content}</div>
-
-        <div>Image: {cardDetailData?.cardImage}</div>
       </div>
     </>
   );
