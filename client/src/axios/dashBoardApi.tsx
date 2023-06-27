@@ -33,7 +33,7 @@ export const Main_graph_Api = async (
 };
 
 export const User_Info_Api = async (userid?: string): Promise<UserInfo> => {
-  let url = `/api/user${userid ? `/${userid}` : ""}`;
+  let url = `/api/${userid ? `other/${userid}` : `user`}`;
 
   try {
     const response = await axiosInstance.get(url);

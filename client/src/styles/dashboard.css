@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .svg-button-nomal {
+    @apply flex items-center justify-center bg-white rounded cursor-pointer hover:bg-gray-50 w-7 h-7;
+  }
+}

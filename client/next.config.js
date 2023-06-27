@@ -7,12 +7,14 @@ const nextConfig = {
   },
   reactStrictMode: true,
   async rewrites() {
-    console.log("Rewrites called");
     return [
       {
         source: "/api/:path*",
-        // destination: "https://insightlinkapi.jisuheo.shop/api/:path*", // Proxy to Backend
-        destination: "http://localhost:8800/api/:path*", // Proxy to Backend
+        destination: "http://localhost:8800/api/:path*",
+      },
+      {
+        source: "/api/auth/:path*",
+        destination: "http://localhost:8800/api/auth/:path*",
       },
     ];
   },
