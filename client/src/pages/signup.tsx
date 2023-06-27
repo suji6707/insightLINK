@@ -34,15 +34,15 @@ export default function Home() {
     }
 
     // Validate password format
-    if (!passwordRegex.test(password)) {
-      setPasswordError(true);
-      setEmailFormatError(false);
-      setPasswordMatchError(false);
-      setCheckUserEmail(false); // Reset checkUserEmail state
-      return;
-    } else {
-      setPasswordError(false);
-    }
+    // if (!passwordRegex.test(password)) {
+    //   setPasswordError(true);
+    //   setEmailFormatError(false);
+    //   setPasswordMatchError(false);
+    //   setCheckUserEmail(false); // Reset checkUserEmail state
+    //   return;
+    // } else {
+    //   setPasswordError(false);
+    // }
 
     // Validate password match
     if (password !== confirmPassword) {
