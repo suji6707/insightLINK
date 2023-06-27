@@ -41,3 +41,18 @@ export const ClickedCardDetailAtom = atom<number | null>({
   key: "ClickedCardDetailAtom",
   default: null,
 });
+
+export const UploadedImgAtom = atom({
+  key: "UploadedImgAtom",
+  default: [""],
+});
+
+export const UploadedImgNumAtom = atom({
+  key: "UploadedImgNumAtom",
+  default: 0,
+});
+
+export const ExportedTagsAtom = atom({
+  key: "ExportedTagsAtom",
+  default: [""],
+});

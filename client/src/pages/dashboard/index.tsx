@@ -17,7 +17,6 @@ export default function Dashboard() {
   const [showImgModal, setShowImgModal] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [imgNum, setImgNum] = useState(0);
 
   const graphData = useGraph();
 
@@ -25,7 +24,7 @@ export default function Dashboard() {
     <>
       {graphData ? (
         uploading ? (
-          <UploadLoading imgNum={imgNum} />
+          <UploadLoading />
         ) : (
           <>
             <NavBar />
@@ -46,8 +45,6 @@ export default function Dashboard() {
                 <ImageUpload
                   setShowImgModal={setShowImgModal}
                   setUploading={setUploading}
-                  imgNum={imgNum}
-                  setImgNum={setImgNum}
                 />
               )}
             </Wrapper>
