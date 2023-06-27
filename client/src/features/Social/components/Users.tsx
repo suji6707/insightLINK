@@ -39,7 +39,7 @@ const Users = () => {
     getUsers();
   };
 
-  const handleClick = (userid) => {
+  const handleClick = (userid: number) => {
     router.push(`/dashboard/${userid}`);
   };
 
