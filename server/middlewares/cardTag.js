@@ -26,7 +26,7 @@ export const getTagInfos = async (req, res) => {
     logger.info(`/routes/cards/cardTag 폴더 getTagInfos함수, get, userId : ${userId} 내 태그 조회!`);
     res.status(200).send(data);
   } catch (err) {
-    logger.error("/routes/cards/cardTag 폴더 getTagInfos함수, get, err : ", err);
+    logger.error('/routes/cards/cardTag 폴더 getTagInfos함수, get, err : ', err);
     res.status(500).send('Internal Server Error'); // Send error response
   }
 };
@@ -49,17 +49,19 @@ const getTagInfo = async (userId, tagname) => {
       let obj = {
         'cardId' : result1[i].file_id,
         'cardTag' : cardTag,
+        'cardImg' : result1[i].img_url,
         'cardContent' : result1[i].content,
       };
       data.push(obj);
+      console.log(JSON.stringify(obj));
     }    
     connection.release();
-    logger.info(`/routes/cards/cardTag 폴더 getTagInfo함수, get, data : ${data}`);
+    // logger.info(`/routes/cards/cardTag 폴더 getTagInfo함수, get, data : ${data}`);
     return data;
 
   } catch (err) {
     connection?.release();
-    logger.error("/routes/cards/cardTag 폴더 getTagInfo함수, get, err : ", err);
+    logger.error('/routes/cards/cardTag 폴더 getTagInfo함수, get, err : ', err);
     throw new Error('Internal Server Error'); // Send error response
   }
 };
