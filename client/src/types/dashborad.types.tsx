@@ -28,7 +28,7 @@ export interface CardData {
   cardId: number;
   cardTag: string[];
   cardContent: string;
-  cardImage: string;
+  cardImg: string;
 }
 
 export interface CardDataDetail {
