@@ -1,10 +1,17 @@
 import React, { useRef, useState } from "react";
 import AWS from "aws-sdk";
 
-import { POST } from "@/axios/POST";
-// Assets
-import ImageList from "@/features/ImageUpload/ImgList";
 import getToken from "@/axios/getToken";
+import { POST } from "@/axios/POST";
+import ImageList from "@/features/ImageUpload/ImgList";
+// Recoil
+import { useRecoilState } from "recoil";
+import {
+  ExportedTagsAtom,
+  UploadedImgAtom,
+  UploadedImgNumAtom,
+} from "@/recoil/atoms/MainGraphAtom";
+// Assets
 import { BiLoader } from "react-icons/bi";
 import {
   AiOutlineCheck,
@@ -23,13 +30,13 @@ export default function ImageUpload({
   setShowImgModal,
   setUploading,
   uploading,
-  imgNum,
-  setImgNum,
 }: any) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
   const [imgList, setImgList] = useState<ImgInfo[]>([]);
-  const [imageUrl, setImageUrl] = useState<string[]>();
+  const [tags, setTags] = useRecoilState(ExportedTagsAtom);
+  const [imageUrl, setImageUrl] = useRecoilState(UploadedImgAtom);
+  const [imgNum, setImgNum] = useRecoilState(UploadedImgNumAtom);
 
   const handleInput = () => {
     fileInputRef.current?.click();

@@ -1,12 +1,21 @@
+// Recoil
+import { useRecoilState } from "recoil";
+import {
+  ExportedTagsAtom,
+  UploadedImgAtom,
+  UploadedImgNumAtom,
+} from "@/recoil/atoms/MainGraphAtom";
+// Components
 import NavBar from "@/features/Dashboard/components/NavBar";
 import { Wrapper } from "@/styles/wrapper";
+// Assets
 import { BiLoader } from "react-icons/bi";
 
-interface UploadLoadingProps {
-  imgNum: number;
-}
+const UploadLoading = () => {
+  const [imageUrl, setImageUrl] = useRecoilState(UploadedImgAtom);
+  const [tags, setTags] = useRecoilState(ExportedTagsAtom);
+  const [imgNum, setImgNum] = useRecoilState(UploadedImgNumAtom);
 
-const UploadLoading = ({ imgNum }: UploadLoadingProps) => {
   return (
     <div className="bg-gray-100 h-screen">
       <NavBar />
