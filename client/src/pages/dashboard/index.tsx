@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useRecoilState } from "recoil";
-import { DashBoardCardAtom } from "@/recoil/atoms/MainGraphAtom";
+import { DashBoardCardAtom, ImgModalAtom } from "@/recoil/atoms/MainGraphAtom";
 // Component
 import NavBar from "@/features/Dashboard/components/NavBar";
 import UserPanel from "@/features/Dashboard/components/UserPanel";
@@ -14,9 +14,9 @@ import UploadLoading from "@/features/MainGraph/components/Loading/UploadLoading
 
 export default function Dashboard() {
   const [openCard, setOpenCard] = useRecoilState(DashBoardCardAtom);
-  const [showImgModal, setShowImgModal] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [showImgModal, setShowImgModal] = useRecoilState(ImgModalAtom);
 
   const graphData = useGraph();
 
@@ -30,23 +30,13 @@ export default function Dashboard() {
             <NavBar />
             <Wrapper className="w-full px-10">
               <div className="flex flex-col justify-between w-full">
-                <UserPanel
-                  showImgModal={showImgModal}
-                  setShowImgModal={setShowImgModal}
-                  editMode={editMode}
-                  setEditMode={setEditMode}
-                />
+                <UserPanel editMode={editMode} setEditMode={setEditMode} />
                 <div className="flex flex-row justify-between w-full">
                   <MainGraph data={graphData} editMode={editMode} />
                   {openCard ? <CardPanel /> : <></>}
                 </div>
               </div>
-              {showImgModal && (
-                <ImageUpload
-                  setShowImgModal={setShowImgModal}
-                  setUploading={setUploading}
-                />
-              )}
+              {showImgModal && <ImageUpload setUploading={setUploading} />}
             </Wrapper>
           </>
         )
