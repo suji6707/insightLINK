@@ -37,14 +37,14 @@ const cloneCards = async (userId, cardId) => {
   try {
     connection = await db.getConnection();
     const [selectResults] = await connection.query(selectCardToClone, [cardId]);
-    const newFileId = {fileId: -1};
+    let newFileId = -1;
     for (let i = 0;  i < selectResults.length; i++) {
       
       logger.info(`/routes/social/cloneCard 폴더 cloneCards함수, selectResult : ${selectResults[i]}`); 
       const tagId = selectResults[i].tagId;
       const [copyResult1] = await connection.query(copyQuery1, [userId, cardId]);
       if (i == 0) {
-        newFileId.fileId = copyResult1.insertId
+        newFileId = copyResult1.insertId
       }
 
       logger.info(`/routes/social/cloneCard 폴더 cloneCards함수, copyResult1 : ${copyResult1}`);
