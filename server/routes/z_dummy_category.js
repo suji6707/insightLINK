@@ -46,6 +46,16 @@ allTags.forEach((tag) => {
   index++;
 });
 
+/* Helper function to randomly select three unique categories */
+function getRandomCategories(categories) {
+  const randomCategories = categories;  // clone the array so we don't modify the original
+  for (let i = randomCategories.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [randomCategories[i], randomCategories[j]] = [randomCategories[j], randomCategories[i]]; // Swap elements
+  }
+  return randomCategories.slice(0, 3);  // Return the first three elements of the shuffled array
+}
+
 
 // router.get('/dummy', async (req, res) => {
 //   console.log('dummy');
@@ -75,8 +85,8 @@ router.post('/', async (req, res) => {
 
 
 const user_select = 'SELECT user_id FROM User WHERE user_id < 3000';
-const q1 = 'INSERT INTO File_test (user_id, img_url, content) VALUES (?, ?, ?)';   // SQL - File
-const q2 = 'INSERT INTO Tag_test (file_id, tag, tag_index) VALUES (?, ?, ?)';      // SQL - Tag 
+const q1 = 'INSERT INTO File (user_id, img_url, content) VALUES (?, ?, ?)';   // SQL - File
+const q2 = 'INSERT INTO Tag (file_id, tag, tag_index) VALUES (?, ?, ?)';      // SQL - Tag 
 
 
 const dummy = async () => {
@@ -89,11 +99,13 @@ const dummy = async () => {
       /* loop1: category 랜덤
        * loop2: tag 랜덤 (1, 2) 
        */
-      let loop1 = Math.floor(Math.random() * (60 - 1)) + 1;         //  반복수 1
-      for (let i = 0; i < loop1; i++){
-        const categoryIndex = Math.floor(Math.random() * categories.length);    // 카테고리 개수내 랜덤 인덱스
-        const category = categories[categoryIndex];                             // 해당 인덱스의 카테고리
-
+      // let loop1 = Math.floor(Math.random() * (60 - 1)) + 1;         //  반복수 1
+      // for (let i = 0; i < loop1; i++){
+      //   const categoryIndex = Math.floor(Math.random() * categories.length);    // 카테고리 개수내 랜덤 인덱스
+      //   const category = categories[categoryIndex];                             // 해당 인덱스의 카테고리
+      
+      const chosenCatetories = getRandomCategories(categories);
+      for (const category of chosenCatetories) {
         let loop2 = Math.floor(Math.random() * (60 - 1)) + 1;
         for (let j = 0; j < loop2; j++){
           const tags = categoryTags[category];                        // 해당 카테고리내 태그들(list)
@@ -132,27 +144,27 @@ const dummy = async () => {
 // dummy();   /* 주석해제 유의 */
 
 
-const followDummy = async () => {
-  let connection = null;
-  try {
-    connection = await db.getConnection(); 
+// const followDummy = async () => {
+//   let connection = null;
+//   try {
+//     connection = await db.getConnection(); 
 
-    for (let i = 1; i <= 100; i++) {
-      // Generate a random following_id from 1 to 100
-      let following_id = Math.floor(Math.random() * 100) + 1;
-      let q = 
-      'INSERT INTO `Follow` (`user_id`, `following_id`, `created_at`, `updated_at`, `deleted_at`)\
-        VALUES (?, ?, NOW(), NOW(), NULL)';
-      connection.query(q, [i, following_id]);
-      console.log(`User ${i} Follow loop done`);
-    }
-    console.log('All users follow loop done');
-    connection.release();
-  } catch (err) {
-    connection?.release();
-    console.log(err);
-  }
-};
+//     for (let i = 1; i <= 100; i++) {
+//       // Generate a random following_id from 1 to 100
+//       let following_id = Math.floor(Math.random() * 100) + 1;
+//       let q = 
+//       'INSERT INTO `Follow` (`user_id`, `following_id`, `created_at`, `updated_at`, `deleted_at`)\
+//         VALUES (?, ?, NOW(), NOW(), NULL)';
+//       connection.query(q, [i, following_id]);
+//       console.log(`User ${i} Follow loop done`);
+//     }
+//     console.log('All users follow loop done');
+//     connection.release();
+//   } catch (err) {
+//     connection?.release();
+//     console.log(err);
+//   }
+// };
 
 // followDummy();   /* 주석해제 유의 */
 
