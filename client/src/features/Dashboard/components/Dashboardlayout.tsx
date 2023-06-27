@@ -1,11 +1,7 @@
-import React from "react";
+import React, { ReactNode } from "react";
 // recoil
 import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  DashBoardCardAtom,
-  ImgModalAtom,
-  ShowImgModalAtom,
-} from "@/recoil/atoms/MainGraphAtom";
+import { DashBoardCardAtom, ImgModalAtom } from "@/recoil/atoms/MainGraphAtom";
 // Component
 import NavBar from "@/features/Dashboard/components/NavBar";
 import UserPanel from "@/features/Dashboard/UserPanal/UserPanel";
@@ -13,7 +9,11 @@ import CardPanel from "@/features/Dashboard/MainCard/components/CardPanel";
 import ImageUpload from "@/features/ImageUpload/ImageUpload";
 import { Wrapper } from "@/styles/wrapper";
 
-export default function DashboardLayout({ children }: React.JSX.Element) {
+interface DashboardLayoutProps {
+  children: ReactNode;
+}
+
+export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const openCard = useRecoilValue(DashBoardCardAtom);
   const [showImgModal, setShowImgModal] = useRecoilState(ImgModalAtom);
 

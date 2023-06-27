@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 // recoil
-import { useSetRecoilState } from "recoil";
-import { ShowImgModalAtom, UploadingAtom } from "@/recoil/atoms/MainGraphAtom";
+import { UploadingAtom } from "@/recoil/atoms/MainGraphAtom";
 import AWS from "aws-sdk";
 
 import getToken from "@/axios/getToken";
@@ -32,7 +31,7 @@ type ImgInfo = {
 
 export default function ImageUpload() {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const modalRef = useRef<HTMLDivElement>(null);
+  // const modalRef = useRef<HTMLDivElement>(null);
   const [imgList, setImgList] = useState<ImgInfo[]>([]);
   const [tags, setTags] = useRecoilState(ExportedTagsAtom);
   const [imageUrl, setImageUrl] = useRecoilState(UploadedImgAtom);
