@@ -1,3 +1,10 @@
+export const tagList = (userId, keyword) => {
+  return `SELECT DISTINCT t.tag
+          FROM Tag t
+          JOIN File f ON t.file_id = f.file_id
+          WHERE f.user_id = ${userId} AND f.content LIKE '%${keyword}%' OR t.tag LIKE '%$${keyword}%';`
+}
+
 export const searchContent = (keyword) => { 
   return `SELECT f.file_id, f.content, t.tag  
             FROM File f

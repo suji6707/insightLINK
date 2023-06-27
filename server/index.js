@@ -47,7 +47,7 @@ app.use('/api/user', userRouter);
 app.use('/api/graph', authMiddleware, graphRouter);
 app.use('/api/cards', cardRouter);
 app.use('/api/social', socialRouter);
-app.use('/dashboard', searchRouter);
+app.use('/api/search', authMiddleware, searchRouter);
 app.use('/api/myinfo', authMiddleware, mypageRouter);
 
 app.use('/api/tag', authMiddleware, tagRouter);
