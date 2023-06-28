@@ -33,3 +33,7 @@ export const tagCntQuery = (userId) => {
       WHERE user_id = ${userId}
   );`
 }
+
+export const isFollowQuery = (userId,otherId) => {
+  return `select COUNT(*) AS cnt from Follow where user_id = ${otherId} and following_id = ${userId};`
+}
