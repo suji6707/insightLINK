@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
+// recoil
+import { useRecoilValue } from "recoil";
+import { EditModeAtom, ImgUpLoadAtom } from "@/recoil/atoms/MainGraphAtom";
+
 import { useRouter } from "next/router";
 import { Main_graph_Api } from "@/axios/dashBoardApi";
 import { Main_graph_Api_DTO } from "@/types/dashborad.types";
 
 function useGraph() {
+  const editMode = useRecoilValue(EditModeAtom);
+  const imgUpLoad = useRecoilValue(ImgUpLoadAtom);
+
   const [data, setData] = useState<Main_graph_Api_DTO | undefined>(undefined);
   const router = useRouter();
 
@@ -19,7 +26,7 @@ function useGraph() {
     };
     getGraphData();
     console.log(data);
-  }, [router.isReady, router.query.userid]); // add dependencies
+  }, [router.isReady, router.query.userid, editMode, imgUpLoad]); // add dependencies
 
   return data;
 }

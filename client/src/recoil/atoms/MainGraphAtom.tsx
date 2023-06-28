@@ -82,3 +82,7 @@ export const GraphDataAtom = atom({
   default: undefined,
 });
 
+export const ImgUpLoadAtom = atom({
+  key: "imgUpLoadAtom",
+  default: false,
+});

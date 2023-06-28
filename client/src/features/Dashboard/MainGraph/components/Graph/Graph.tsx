@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 // recoil
-import { useRecoilState} from "recoil";
+import { useRecoilState } from "recoil";
 import { DashBoardCardAtom, NodeNameAtom } from "@/recoil/atoms/MainGraphAtom";
 // library
 import * as echarts from "echarts";
@@ -26,7 +26,6 @@ function Graph({ data: graph, editMode }: MainGraphProps) {
   const longPressNode = useRef<string | null>(null);
   const [options, setOptions] = useState<any>(ChartDefaultOptions(graph));
 
-
   const handleNodeClick = useCallback(
     (nodeName: string) => {
       if (!editMode) {
@@ -44,6 +43,9 @@ function Graph({ data: graph, editMode }: MainGraphProps) {
     },
     [editMode, lastClickedNode, openCard]
   );
+  useEffect(() => {
+    setOptions(ChartDefaultOptions(graph));
+  }, [graph]);
 
   useEffect(() => {
     if (chartRef.current) {
@@ -80,7 +82,7 @@ function Graph({ data: graph, editMode }: MainGraphProps) {
         chart.getZr().off("mousedown", handleMouseDown);
       };
     }
-  }, [editMode, handleNodeClick]);
+  }, [editMode, handleNodeClick, options]);
 
   // Add a new useEffect for resizing
   useEffect(() => {
