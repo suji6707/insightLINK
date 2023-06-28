@@ -53,7 +53,7 @@ const getTagInfo = async (userId, tagname) => {
         'cardContent' : result1[i].content,
       };
       data.push(obj);
-      console.log(JSON.stringify(obj));
+      // console.log(JSON.stringify(obj));
     }    
     connection.release();
     // logger.info(`/routes/cards/cardTag 폴더 getTagInfo함수, get, data : ${data}`);

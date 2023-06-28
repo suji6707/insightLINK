@@ -66,11 +66,11 @@ export const screenshotSubjects_en = [
   'Concerts',
   'Festivals',
   
-  'Investment & Wealth Management',
+  'Finance',
   'Stocks',
   'Real Estate',
   'Investment Information',
-  'tax',
+  'Tax',
   'Pension',
 ];
   
@@ -142,7 +142,7 @@ export const screenshotSubjects_kr = [
   '콘서트',
   '페스티벌',
   
-  '투자 재태크',
+  '금융',
   '주식',
   '부동산',
   '투자 정보',
