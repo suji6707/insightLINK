@@ -5,7 +5,6 @@ const setCategories = (cnt: number): Array<{ name: string }> => {
     const obj = { name: `${i}` };
     categories.push(obj);
   }
-  console.log(categories);
   return categories;
 };
 

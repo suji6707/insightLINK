@@ -60,7 +60,7 @@ router.get('/', async (req, res) => {
     /* 기본 내 그래프 조회 */
     const graphData = await getGraphData(userId)
     logger.info(`/routes/graphs 폴더, get, 내 ${userId} 그래프 조회 !`)
-    res.send(graphData)
+    res.status(200).send('Success') // Send error response
   } catch (err) {
     logger.error('/routes/graphs 폴더, get, err : ', err)
     res.status(500).send('Internal Server Error') // Send error response

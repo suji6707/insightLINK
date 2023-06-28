@@ -168,17 +168,16 @@ export default function ImageUpload() {
 
       const POSTImgLink = async () => {
         const token = getToken();
-        const result = await POST("upload", uploadedImageUrls, token);
+        const data = await POST("upload", uploadedImageUrls, token);
 
         const endTime = performance.now();
         const executionTime = endTime - startTime;
         console.log("Execution time:", executionTime, "ms");
 
-        if (result) {
+        if (data.status === 200) {
           setUploading(false);
           setImgUpLoad(!imgUpLoad);
         }
-        return result;
       };
 
       POSTImgLink();
@@ -264,11 +263,7 @@ export default function ImageUpload() {
               setUploading(true);
               uploadImages();
             }}
-            className="flex items-center justify-center h-10 gap-1 px-4 bg-white border-2 rounded cursor-pointer"
-            style={{
-              borderColor: "#FFDF6D",
-              background: "#FFF",
-            }}
+            className="flex items-center justify-center h-10 gap-1 px-4 bg-white border-2 rounded cursor-pointer border-colorBlue"
           >
             <AiOutlineCheck
               style={{
@@ -300,25 +295,19 @@ export default function ImageUpload() {
           />
           <div
             onClick={handleInput}
-            className="flex items-center justify-center h-10 gap-1 px-4 rounded cursor-pointer"
-            style={{
-              background:
-                "linear-gradient(144deg, #FFDF6D 26.86%, #FFC591 66.47%, #FFB7BF 100%)",
-            }}
+            className="flex items-center justify-center h-10 gap-1 px-4 rounded cursor-pointer bg-colorBlue"
           >
             <AiOutlineUpload
-              className="text-base leading-none"
+              className="text-base leading-none text-white"
               style={{
-                color: "var(—white, #FFF)",
                 fontSize: "1rem",
                 fontFamily: "xeicon",
                 lineHeight: "100%",
               }}
             />
             <p
-              className="text-xl font-semibold leading-none tracking-tight"
+              className="text-xl font-semibold leading-none tracking-tight text-white"
               style={{
-                color: "var(—white, #FFF)",
                 fontSize: "1.125rem",
                 fontFamily: "Kanit",
                 fontWeight: 600,

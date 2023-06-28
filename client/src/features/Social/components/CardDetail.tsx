@@ -32,11 +32,10 @@ const CardDetail = ({
   const cloneCard = async () => {
     const token = getToken();
     const data = await POST(`social/clone`, { cardId: cardId }, token);
-    // 임시 => 카드 리스트 리렌더링 필요 🚨
-    // if (data.data === 200) {
-    setIsPlus(true);
-    setShowModal(false);
-    // }
+    if (data.status === 200) {
+      setIsPlus(true);
+      setShowModal(false);
+    }
   };
 
   useEffect(() => {
