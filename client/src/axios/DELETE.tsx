@@ -7,7 +7,7 @@ export const DELETE = async (
   try {
     let res: AxiosResponse;
     if (headers) {
-      res = await axios.delete(`http://localhost:8800/api/${uri}`, headers);
+      res = await axios.delete(`${process.env.SOURCE_PATH}/api/${uri}`, headers);
     } else {
       res = await axios.delete(`/api/${uri}`);
     }

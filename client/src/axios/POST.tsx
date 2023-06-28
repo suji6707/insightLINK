@@ -3,7 +3,7 @@ import axios from "axios";
 export const POST = async (uri: string, data: any, headers: any) => {
   try {
     const res = await axios.post(
-      `http://localhost:8800/api/${uri}`,
+      `${process.env.SOURCE_PATH}/api/${uri}`,
       data,
       headers
     );
