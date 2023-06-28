@@ -1,4 +1,8 @@
 import React, { useEffect, useState } from "react";
+//recoil
+import { useRecoilState } from "recoil";
+import { ImgModalAtom, AlarmCntAtom } from "@/recoil/atoms/MainGraphAtom";
+
 import tw from "tailwind-styled-components";
 import { useTheme } from "next-themes";
 import Link from "next/link";
@@ -13,8 +17,8 @@ import { BiUser } from "react-icons/bi";
 import { BsSunFill, BsFillMoonFill, BsShareFill } from "react-icons/bs";
 
 import html2canvas from "html2canvas";
-import { useRecoilState } from "recoil";
-import { ImgModalAtom } from "@/recoil/atoms/MainGraphAtom";
+
+import AlarmModal from "@/features/Dashboard/components/AlarmModal";
 
 export default function NavBar() {
   const { systemTheme, theme, setTheme } = useTheme();
@@ -22,6 +26,9 @@ export default function NavBar() {
   const [userProfile, setUserProfile] = useState("");
   const [isUserModalOpen, setUserModalOpen] = useState(false);
   const [showImgModal, setShowImgModal] = useRecoilState(ImgModalAtom);
+
+  const [openAlarm, setOpenAlarm] = useState(false);
+  const [alarmCnt, setAlarmCnt] = useRecoilState(AlarmCntAtom);
 
   const getProfileImg = async () => {
     const token = getToken();
@@ -76,6 +83,12 @@ export default function NavBar() {
     });
   };
 
+  const handleOpenAlarm = () => {
+    setOpenAlarm(!openAlarm);
+    setAlarmCnt(false);
+    console.log("알람 모달 상태", openAlarm);
+  };
+
   return (
     <div className="flex items-center self-stretch justify-between flex-shrink-0 h-20 py-0 ">
       <Link href="/dashboard">
@@ -94,9 +107,18 @@ export default function NavBar() {
               onClick={handleShareIconClick}
             />
           </div>
-          <div className="flex flex-col items-center justify-center w-7 h-7">
+          <button
+            className="relative flex flex-col items-center justify-center w-7 h-7"
+            onClick={handleOpenAlarm}
+          >
             <AiTwotoneBell className="text-gray-800 text-[1rem] font-xeicon leading-normal" />
-          </div>
+            {alarmCnt && (
+              <div className="absolute flex items-center justify-center w-4 h-4 text-xs text-white bg-red-500 rounded-full -right-1 -top-1 z-1">
+                1
+              </div>
+            )}
+            {openAlarm && <AlarmModal />}
+          </button>
         </div>
         {userProfile ? (
           <img
