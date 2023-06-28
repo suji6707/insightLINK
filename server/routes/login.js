@@ -37,19 +37,20 @@ router.post('/', async (req, res) => {
       const findUserSql = 'SELECT * FROM User WHERE email = ? AND profile_img = ?';
       const [newResult] = await connection.query(findUserSql, [email, imageUrl]);
       const token = jwt.sign({ userId: newResult[0].user_id }, 'customized-secret-key');
-      const userId = newResult[0].user_id
+      const userId = newResult[0].user_id;
       logger.info(`/routes/login 폴더, post, ${userId} 회원가입 후, 구글 로그인 성공 !`);
       res.send({ success: true, token, userId }); // Send success response
     }
   } catch (err) {
     connection?.release();
-    logger.error("/routes/login 폴더, post, err : ", err);
+    logger.error('/routes/login 폴더, post, err : ', err);
     res.status(500).send('Internal Server Error'); // Send error response
   }
 });
 
 router.post('/generic', async(req, res) => {
   const { email, password } = req.body;
+  console.log(req.body);
 
   let connection = null;
 
@@ -65,16 +66,16 @@ router.post('/generic', async(req, res) => {
       logger.info(`/routes/login/generic 폴더, post, ${userId} 회원가입 후, 로그인 성공 !`);
       res.send({ success: true, token, userId });  
     } else {
-      logger.info(`/routes/login/generic 폴더, post 로그인 실패`);
+      logger.info('/routes/login/generic 폴더, post 로그인 실패');
       res.send({ success: false  });
     }
   } catch (err) {
     connection?.release();
-    logger.error("/routes/login/generic 폴더, post, err : ", err);
+    logger.error('/routes/login/generic 폴더, post, err : ', err);
     res.status(500).send('Internal Server Error'); // Send error response
   }
 
-})
+});
 
 
 
