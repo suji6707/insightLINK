@@ -115,7 +115,7 @@ export const recommendSimilarQuery = (userId) => {
   LIMIT 20;`;
 };
 
-/* 2. 친구 아닌 사람의 추천카드 */
+/* 2. 친구 아닌 사람 추천카드 */
 export const recommendDiscoverQuery = (userId, recommendList) => {
   const listform = recommendList.map((user) => user.user_id).join(', ');
   return `SELECT *
