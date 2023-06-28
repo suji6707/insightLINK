@@ -47,7 +47,7 @@ export default function UserInfo() {
           {isLogin ? (
             <GraphEditBtn />
           ) : (
-            <FollowBtn isFollow={userInfo?.isFollow} />
+            <FollowBtn follow={userInfo?.isFollow} />
           )}
         </div>
 
