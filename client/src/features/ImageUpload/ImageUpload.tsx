@@ -13,6 +13,7 @@ import {
   ImgModalAtom,
   UploadedImgAtom,
   UploadedImgNumAtom,
+  ImgUpLoadAtom,
 } from "@/recoil/atoms/MainGraphAtom";
 // Assets
 import { BiLoader } from "react-icons/bi";
@@ -38,6 +39,8 @@ export default function ImageUpload() {
   const [imgNum, setImgNum] = useRecoilState(UploadedImgNumAtom);
   const [showImgModal, setShowImgModal] = useRecoilState(ImgModalAtom);
   const [uploading, setUploading] = useRecoilState(UploadingAtom);
+
+  const [imgUpLoad, setImgUpLoad] = useRecoilState(ImgUpLoadAtom);
 
   const handleInput = () => {
     fileInputRef.current?.click();
@@ -173,6 +176,7 @@ export default function ImageUpload() {
 
         if (result) {
           setUploading(false);
+          setImgUpLoad(!imgUpLoad);
         }
         return result;
       };

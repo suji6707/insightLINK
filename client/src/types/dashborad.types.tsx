@@ -3,6 +3,7 @@ export interface UserInfo_DTO {
   cardCnt: number;
   followCnt: number;
   userName: string;
+  isFollow: boolean;
 }
 
 export interface GraphNode {

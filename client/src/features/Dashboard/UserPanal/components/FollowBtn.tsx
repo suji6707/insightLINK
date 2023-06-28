@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { Add_Follow_API, Cancel_Follow_API } from "@/axios/dashBoardApi";
 
-export default function FollowBtn() {
-  const [isFollow, setIsFollow] = useState(false);
+interface FollowBtnProps {
+  follow: boolean | undefined;
+}
+
+export default function FollowBtn({ follow }: FollowBtnProps) {
+  const [isFollow, setIsFollow] = useState(follow);
   const router = useRouter();
 
   const handleAddFollow = async () => {

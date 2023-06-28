@@ -61,27 +61,24 @@ export default function Home() {
   };
 
   return (
-    <div>
-      <Wrapper>
-        <NavBar />
-        <div className="flex justify-center mt-20">
-          <div className="text-center">
-            <p className="mt-20 text-2xl">
-              갤러리 속 숨겨진 인사이트를 이어주는 아카이브
-            </p>
-            <p className="mt-10 mb-32 font-bold text-8xl">insightLINK</p>
-            <div className="flex justify-between h-11">
-              {!sessionData?.user && !token ? <SignupButton /> : null}
-              {!sessionData?.user && !token ? <LoginBtn /> : null}
-              {sessionData?.user === undefined && !token ? (
-                <GoogleLoginBtn />
-              ) : token ? null : (
-                <GoogleLogoutBtn />
-              )}
-            </div>
+    <div className="max-w-[75rem] mx-auto">
+      <div className="flex justify-center mt-20">
+        <div className="text-center">
+          <p className="mt-20 text-2xl">
+            갤러리 속 숨겨진 인사이트를 이어주는 아카이브
+          </p>
+          <p className="mt-10 mb-32 font-bold text-8xl">insightLINK</p>
+          <div className="flex justify-between h-11">
+            {!sessionData?.user && !token ? <SignupButton /> : null}
+            {!sessionData?.user && !token ? <LoginBtn /> : null}
+            {sessionData?.user === undefined && !token ? (
+              <GoogleLoginBtn />
+            ) : token ? null : (
+              <GoogleLogoutBtn />
+            )}
           </div>
         </div>
-      </Wrapper>
+      </div>
     </div>
   );
 }
