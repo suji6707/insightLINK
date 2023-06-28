@@ -1,6 +1,6 @@
 import axios from "axios";
 import {
-  UserInfo,
+  UserInfo_DTO,
   Main_graph_Api_DTO,
   CardData,
   CardDataDetail,
@@ -32,7 +32,7 @@ export const Main_graph_Api = async (
   }
 };
 
-export const User_Info_Api = async (userid?: string): Promise<UserInfo> => {
+export const User_Info_Api = async (userid?: string): Promise<UserInfo_DTO> => {
   let url = `/api/${userid ? `other/${userid}` : `user`}`;
 
   try {
@@ -115,9 +115,11 @@ export const Add_Follow_API = async (followId?: string | undefined) => {
   }
 };
 
-export const Cancel_Follow_API = async (params?: string | undefined) => {
+export const Cancel_Follow_API = async (followId?: string | undefined) => {
   try {
-    const response = await axiosInstance.delete(`/api/social/follow/${params}`);
+    const response = await axiosInstance.delete(
+      `/api/social/follow/${followId ? `?followId=${followId}` : ""}`
+    );
     return response;
   } catch (err) {
     console.error(err);
