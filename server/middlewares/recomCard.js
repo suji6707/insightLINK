@@ -19,6 +19,11 @@ export const recomCards = async (req, res) => {
     /* 중복연산 제거 */
     const recommendList = await req.recommendList;
 
+    if (recommendList.length === 0) {
+      res.status(400).send({ errorMessage: 'recommendList is empty' });
+      return;
+    }
+
     /* 유사 카드 추천 */
     // const [friendCardList] = await connection.query(recommendSimilarQuery(userId, recommendList));
     const [friendCardList] = await connection.query(
@@ -45,10 +50,6 @@ export const recomCards = async (req, res) => {
       cardList.push(obj);
     }
 
-    if (recommendList.length === 0) {
-      res.status(400).send({ errorMessage: '' });
-      return;
-    }
     /* 새로운 관심사 추천 */
     const [discoveryCardList] = await connection.query(
       recommendDiscoverQuery(userId, recommendList),
@@ -76,7 +77,7 @@ export const recomCards = async (req, res) => {
 
     // console.log(cardList);
     shuffleArray(cardList);
-    console.log(cardList);
+    // console.log(cardList);
 
     connection.release();
     logger.info('/routes/social/recomCard 폴더 recomCards함수, get 성공 !');

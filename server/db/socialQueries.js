@@ -20,6 +20,30 @@ export const recomUserQuery = (userId, limit) => {
   LIMIT ${limit};`;
 };
 
+
+export const coldStartRecomQuery = 
+`SELECT
+  f.file_id,
+  f.user_id,
+  f.img_url
+  FROM (
+  SELECT
+    File.file_id,
+    File.user_id,
+    ROW_NUMBER() OVER (PARTITION BY File.file_id ORDER BY File.created_at DESC) AS rn
+  FROM File
+  INNER JOIN (
+    SELECT user_id, MAX(created_at) AS max_created_at
+    FROM File
+    GROUP BY user_id
+  ) AS recent_files ON File.user_id = recent_files.user_id AND File.created_at = recent_files.max_created_at
+  ) AS recent_files
+  JOIN File AS f ON recent_files.file_id = f.file_id
+  WHERE recent_files.rn = 1
+  LIMIT 10;`;
+
+
+
 /* 가장 많은 카드 수가 달린 태그 상위 ?개 추출 */
 export const tagQuery = `SELECT t.tag, COUNT(*) as tag_count
   FROM Tag AS t
