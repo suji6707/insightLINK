@@ -15,6 +15,16 @@ const nextConfig = {
       },
     ];
   },
+
+  reactStrictMode: true,
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "https://insightlinkapi.jisuheo.shop/api/:path*",
+      }
+    ];
+  },
 };
 
 module.exports = nextConfig;
