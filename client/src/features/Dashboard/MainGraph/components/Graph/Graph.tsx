@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 // recoil
-import { useRecoilState } from "recoil";
+import { useRecoilState} from "recoil";
 import { DashBoardCardAtom, NodeNameAtom } from "@/recoil/atoms/MainGraphAtom";
 // library
 import * as echarts from "echarts";
@@ -25,6 +25,7 @@ function Graph({ data: graph, editMode }: MainGraphProps) {
   const pressTimer = useRef<any>(null);
   const longPressNode = useRef<string | null>(null);
   const [options, setOptions] = useState<any>(ChartDefaultOptions(graph));
+
 
   const handleNodeClick = useCallback(
     (nodeName: string) => {
@@ -91,7 +92,7 @@ function Graph({ data: graph, editMode }: MainGraphProps) {
     }
   }, [nodeName, openCard]);
 
-  return <div className="w-full h-screen flex" ref={chartRef}></div>;
+  return <div className="w-full h-[65vh]" ref={chartRef}></div>;
 }
 
 export default Graph;

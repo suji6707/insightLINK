@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 // recoil
 import { useRecoilValue } from "recoil";
-import { CardDetailOpenAtom } from "@/recoil/atoms/MainGraphAtom";
+import { CardDetailOpenAtom, NodeNameAtom } from "@/recoil/atoms/MainGraphAtom";
 // components
 import Card from "@/features/Dashboard/MainCard/components/Card";
 import CardDetail from "@/features/Dashboard/MainCard/components/CardDetail";
@@ -13,6 +13,7 @@ import { CardData } from "@/types/dashborad.types";
 function CardPanel() {
   const [cardData, setCardData] = useState<CardData[]>([]);
   const detailOpen = useRecoilValue(CardDetailOpenAtom);
+  const nodeName = useRecoilValue(NodeNameAtom);
   const getData = useCard();
 
   useEffect(() => {
@@ -33,9 +34,9 @@ function CardPanel() {
         <>
           <div className="flex flex-row justify-between mb-4">
             <div className="px-4 font-semibold leading-6 text-white bg-blue-600 rounded">
-              #Tag
+              # {nodeName}
             </div>
-            <div>page nation</div>
+            <div></div>
           </div>
           <div className="grid grid-cols-3 grid-flow-row w-[32rem] gap-y-3">
             {cardData?.map((data: CardData, index: number) => {
