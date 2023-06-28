@@ -32,8 +32,7 @@ const CardDetail = ({
   const cloneCard = async () => {
     const token = getToken();
     const data = await POST(`social/clone`, { cardId: cardId }, token);
-    console.log(data);
-    if (data.data === 200) {
+    if (data.status === 200) {
       setIsPlus(true);
       setShowModal(false);
     }
