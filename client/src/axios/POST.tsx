@@ -7,10 +7,10 @@ export const POST = async (uri: string, data: any, headers: any) => {
       data,
       headers
     );
-    console.log(res.data);
+    console.log(`${uri} - POST 성공`);
     return res.data;
   } catch (err) {
-    console.log(err);
+    console.log(`${uri} - POST 실패`, err);
     return err;
   }
 };

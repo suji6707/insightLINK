@@ -28,9 +28,8 @@ const Users = () => {
   const getUsers = async () => {
     const token = getToken();
     const data = await GET("social/user", token);
-    // 에러 핸들링 코드 필요 🚨
-    if (data) {
-      setUsers(data);
+    if (data.status === 200) {
+      setUsers(data.data);
     }
   };
 

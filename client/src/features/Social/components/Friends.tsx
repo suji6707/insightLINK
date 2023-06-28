@@ -25,9 +25,8 @@ const Friends = () => {
   const getFriends = async () => {
     const token = getToken();
     const data = await GET("social/updated", token);
-    // 에러 핸들링 코드 필요 🚨
-    if (data != null) {
-      setFriends(data);
+    if (data.status === 200) {
+      setFriends(data.data);
     }
   };
 
@@ -83,7 +82,7 @@ const Friends = () => {
           onMouseMove={handleMouseMove}
         >
           {friends &&
-            friends.map((f: Friends) => {
+            friends?.map((f: Friends) => {
               return (
                 <li
                   key={f.userId}
@@ -102,7 +101,7 @@ const Friends = () => {
                     />
                   </div>
                   <p className="flex flex-col items-center justify-center overflow-hidden text-center w-6.0625rem h-auto text-gray-900 font-kanit text-lg leading-normal tracking-wider">
-                    NickName
+                    {f.userName}
                   </p>
                 </li>
               );
