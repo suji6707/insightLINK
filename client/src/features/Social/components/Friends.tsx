@@ -2,8 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import getToken from "@/axios/getToken";
 import { GET } from "@/axios/GET";
 import CardDetail from "@/features/Social/components/CardDetail";
-import { Friends } from "@/types/social.types"
-
+import { Friends } from "@/types/social.types";
 
 const Friends = () => {
   const [friends, setFriends] = useState([]);
@@ -22,7 +21,7 @@ const Friends = () => {
   const getFriends = async () => {
     const token = getToken();
     const data = await GET("social/updated", token);
-    console.log(data);
+    // 에러 핸들링 코드 필요 🚨
     if (data != null) {
       setFriends(data);
     }
