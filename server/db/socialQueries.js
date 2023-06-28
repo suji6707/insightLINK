@@ -112,7 +112,7 @@ export const recommendSimilarQuery = (userId) => {
     ) 
   ) AS subquery
   WHERE rn <= 2
-  LIMIT 7;`;
+  LIMIT 20;`;
 };
 
 /* 2. 친구 아닌 사람의 추천카드 */
@@ -146,7 +146,7 @@ export const recommendDiscoverQuery = (userId, recommendList) => {
     )
   ) AS subquery
 WHERE rn <= 2
-LIMIT 5;`;
+LIMIT 15;`;
 };
 
 // 내가 보지 않았고
