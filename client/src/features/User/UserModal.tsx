@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import LogoutBtn from "./LogoutBtn";
-import GoogleLogoutBtn from "@/features/User/GoogleLogoutBtn";
-import { useSession } from "next-auth/react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { AiFillEdit, AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
@@ -16,7 +14,6 @@ type UserModalProps = {
 const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
   const router = useRouter();
 
-  const { data: sessionData } = useSession();
   const [token, setToken] = useState<string | null>(null);
   const [userInfo, setUserInfo] = useState<any>(null);
   const [editedNickname, setEditedNickname] = useState<string>("");
@@ -30,7 +27,7 @@ const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const response = await axios.get(`${process.env.SOURCE_PATH}/api/myinfo`, {
+        const response = await axios.get("/api/myinfo", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -61,7 +58,7 @@ const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
   const handleNicknameSave = async () => {
     try {
       const response = await axios.patch(
-        `${process.env.SOURCE_PATH}/api/myinfo`,
+        "http://localhost:8800/api/myinfo",
         {
           editedNickname: editedNickname,
         },
@@ -164,11 +161,9 @@ const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
             Setting
           </p>
           <div className="flex flex-col items-start gap-4">
-            {typeof window !== "undefined" && sessionData?.user && token ? (
-              <GoogleLogoutBtn />
-            ) : token ? (
+            { token ? 
               <LogoutBtn />
-            ) : null}
+            : null}
             {token && <WithdrawalBtn token={token} userInfo={userInfo} />}
           </div>
         </div>

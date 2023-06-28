@@ -11,6 +11,8 @@ const router = express.Router();
 router.post('/', async (req, res) => {
     const { email, name, password} = req.body;
 
+    console.log(req.body);
+
     let connection = null;
 
     const imageUrl = 'https://cdn.pixabay.com/photo/2023/04/15/17/19/cat-7928232_1280.png'

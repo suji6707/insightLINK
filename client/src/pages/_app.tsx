@@ -2,7 +2,6 @@ import { RecoilRoot } from "recoil";
 import "@/styles/globals.css";
 import { ThemeProvider } from "next-themes";
 import { AppProps } from "next/app";
-import { SessionProvider } from "next-auth/react";
 import Script from "next/script";
 
 declare global {
@@ -28,9 +27,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           src="https://developers.kakao.com/sdk/js/kakao.js"
           onLoad={kakaoInit}
         />
-        <SessionProvider session={pageProps.session}>
           <Component {...pageProps} />
-        </SessionProvider>
       </ThemeProvider>
     </RecoilRoot>
   );

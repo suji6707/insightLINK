@@ -1,8 +1,8 @@
 import '../dotenv.js';
 import { db } from '../connect.js';
 import { userProfileQuery  } from '../db/userQueries.js';
-
 import { logger } from '../winston/logger.js';
+
 
 export const getUserProfile = async (req, res) => {
   const { user } = res.locals;
