@@ -48,11 +48,11 @@ const cloneCards = async (userId, cardId) => {
       }
 
       logger.info(`/routes/social/cloneCard 폴더 cloneCards함수, copyResult1 : ${copyResult1}`);
-      const copyResult2 = await connection.query(cardCloneQuery, [newFileId.fileId, tagId]);
+      const copyResult2 = await connection.query(cardCloneQuery, [newFileId, tagId]);
       logger.info(`/routes/social/cloneCard 폴더 cloneCards함수, copyResult2 : ${copyResult2}`);
     } 
 
-      logger.info(`/routes/social/cloneCard 폴더 cloneCards함수, newFileId : ${newFileId.fileId}`);
+      logger.info(`/routes/social/cloneCard 폴더 cloneCards함수, newFileId : ${newFileId}`);
 
       logger.info(`/routes/social/cloneCard 폴더 cloneCards함수, Copying card ${cardId} to user ${userId} successed!`);
     
