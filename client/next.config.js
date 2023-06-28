@@ -10,12 +10,8 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "https://insightlinkapi.jisuheo.shop/:path*",
-      },
-      {
-        source: "/api/auth/:path*",
-        destination: "https://insightlinkapi.jisuheo.shop/auth/:path*",
-      },
+        destination: "https://insightlinkapi.jisuheo.shop/api/:path*",
+      }
     ];
   },
 };
