@@ -75,6 +75,8 @@ const extractTagFromImage = async (imgUrl, req, res) => {
   };
 };
 
+
+
 router.post('/', upload.array('photos'),
   async (req, res) => {
 
@@ -101,26 +103,26 @@ router.post('/', upload.array('photos'),
         /* Tag 가공 -> index, KR */
         const tag1 = tagJSON.tags[0];   // tag english string
         const tag2 = tagJSON.tags[1];
-        // tag[0]
-        const tagRow1 = combinedList.find(item => item.englishKeyword === tag1);
-        if (!tagRow1) {
-          logger.info(`/routes/uploads 폴더, post, No matching element found for ${tag1}.`);
-        }
-        // tag[1]
-        const tagRow2 = combinedList.find(item => item.englishKeyword === tag2);
-        if (!tagRow2) {
-          logger.info(`/routes/uploads 폴더, post, No matching element found for ${tag2}.`);
-        }
-
-        /* SQL - File */
-        const [ result1 ] = await connection.query(q1, [ useId, imgUrl, sumText ]);
-        // console.log(result1);
-        /* SQL - Tag */
-        const [ result2 ] = await connection.query(q2, [ result1.insertId, tagRow1.koreanKeyword, tagRow1.index ]);   // file's insertId, tag name(KR), tag[0] enum
-        const [ result3 ] = await connection.query(q2, [ result1.insertId, tagRow2.koreanKeyword, tagRow2.index ]);   // file's insertId, tag name(KR), tag[1] enum
         
-      }
+        const tagRow1 = combinedList.find(item => item.englishKeyword === tag1);
+        const tagRow2 = combinedList.find(item => item.englishKeyword === tag2);
 
+        if (tagRow1 && tagRow2) {
+        /* SQL - File */
+          const [ result1 ] = await connection.query(q1, [ useId, imgUrl, sumText ]);
+          // console.log(result1);
+          /* SQL - Tag */
+          const [ result2 ] = await connection.query(q2, [ result1.insertId, tagRow1.koreanKeyword, tagRow1.index ]);   // file's insertId, tag name(KR), tag[0] enum
+          const [ result3 ] = await connection.query(q2, [ result1.insertId, tagRow2.koreanKeyword, tagRow2.index ]);   // file's insertId, tag name(KR), tag[1] enum
+        } else {
+          if (!tagRow1) {
+            logger.info(`/routes/uploads 폴더, post, No matching element found for ${tag1}.`);
+          }
+          if (!tagRow2) {
+            logger.info(`/routes/uploads 폴더, post, No matching element found for ${tag2}.`);
+          }
+        }
+      }
       // console.log(tagList);
       connection.release();
 
@@ -132,7 +134,6 @@ router.post('/', upload.array('photos'),
       logger.error('/routes/uploads 폴더, post, err : ', err);
       res.status(400).send('ERROR');
     }
-    
   },
 );
 

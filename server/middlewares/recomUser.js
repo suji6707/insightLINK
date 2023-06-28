@@ -122,7 +122,7 @@ export const recomNewCards = async (userId, res) => {
       };
       cardList.push(obj);
     }
-    console.log('fr:', cardList);
+    // console.log('fr:', cardList);
     connection.release();
     logger.info('/routes/social/recomCard 폴더 recomNewCards함수, get 성공 !');
     res.status(200).send(cardList);
