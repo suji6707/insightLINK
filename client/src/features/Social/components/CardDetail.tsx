@@ -32,11 +32,11 @@ const CardDetail = ({
   const cloneCard = async () => {
     const token = getToken();
     const data = await POST(`social/clone`, { cardId: cardId }, token);
-    console.log(data);
-    if (data.data === 200) {
-      setIsPlus(true);
-      setShowModal(false);
-    }
+    // 임시 => 카드 리스트 리렌더링 필요 🚨
+    // if (data.data === 200) {
+    setIsPlus(true);
+    setShowModal(false);
+    // }
   };
 
   useEffect(() => {
@@ -45,7 +45,7 @@ const CardDetail = ({
 
   return (
     <div
-      className="fixed inset-0 bg-white bg-opacity-30"
+      className="fixed inset-0 bg-white bg-opacity-30 z-20"
       ref={modalRef}
       onClick={(e) => modalOutsideClicked(e)}
     >
