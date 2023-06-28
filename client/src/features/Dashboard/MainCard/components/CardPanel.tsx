@@ -22,8 +22,6 @@ function CardPanel() {
     }
   }, [getData]);
 
-  console.log(cardData);
-
   return (
     <div>
       {detailOpen ? (

@@ -15,13 +15,13 @@ interface DashboardLayoutProps {
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const openCard = useRecoilValue(DashBoardCardAtom);
-  const [showImgModal, setShowImgModal] = useRecoilState(ImgModalAtom);
+  const showImgModal = useRecoilValue(ImgModalAtom);
 
   return (
     <>
-      <main className="">
-        <NavBar />
+      <main>
         <Wrapper>
+          <NavBar />
           <div className="w-[75rem] flex flex-col items-center justify-between m-auto">
             <UserPanel />
             <div className="flex flex-row justify-between w-full">

@@ -63,8 +63,8 @@ export default function NavBar() {
                 objectType: "text",
                 text: "나의 그래프를 확인해봐요.",
                 link: {
-                  mobileWebUrl: 'http://3.35.239.116:3000/dashboard/'+21,
-                  webUrl: 'http://3.35.239.116:3000/dashboard/'+21,
+                  mobileWebUrl: "http://3.35.239.116:3000/dashboard/" + 21,
+                  webUrl: "http://3.35.239.116:3000/dashboard/" + 21,
                 },
               });
             }
@@ -78,7 +78,7 @@ export default function NavBar() {
   };
 
   return (
-    <div className="flex items-center justify-between h-20 flex-shrink-0 self-stretch py-0 px-10">
+    <div className="flex items-center self-stretch justify-between flex-shrink-0 h-20 py-0 ">
       <Link href="/dashboard">
         <p className="text-3xl font-extrabold">insightLINK</p>
       </Link>
@@ -88,14 +88,14 @@ export default function NavBar() {
         </Link>
       </div>
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-4 self-stretch">
-          <div className="flex w-7 h-7 flex-col justify-center items-center">
+        <div className="flex items-center self-stretch gap-4">
+          <div className="flex flex-col items-center justify-center w-7 h-7">
             <BsShareFill
-              className="text-gray-800 text-1xl font-xeicon leading-normal"
+              className="leading-normal text-gray-800 text-1xl font-xeicon"
               onClick={handleShareIconClick}
             />
           </div>
-          <div className="flex w-7 h-7 flex-col justify-center items-center">
+          <div className="flex flex-col items-center justify-center w-7 h-7">
             <AiTwotoneBell className="text-gray-800 text-[1rem] font-xeicon leading-normal" />
           </div>
         </div>
@@ -118,7 +118,7 @@ export default function NavBar() {
         )} */}
         <div
           onClick={() => setShowImgModal(true)}
-          className="flex items-center justify-center h-10 px-4 gap-1 rounded bg-gray-900 cursor-pointer"
+          className="flex items-center justify-center h-10 gap-1 px-4 bg-gray-900 rounded cursor-pointer"
         >
           <AiOutlineUpload className="text-white text-[1rem] font-xeicon leading-normal" />
           <p className="text-white text-[1.125rem] font-kanit font-semibold leading-normal tracking-tighter">

@@ -42,8 +42,8 @@ export default function UserInfo() {
   return (
     <>
       <div className="flex flex-col">
-        <div className="flex flex-row justify-between mb-2">
-          <h1 className="mb-1 text-3xl">{userInfo?.userName}</h1>
+        <div className="flex flex-row justify-between px-4 mb-2">
+          <h1 className="mb-1 text-2xl font-medium">{userInfo?.userName}</h1>
           {isLogin ? <GraphEditBtn /> : <FollowBtn />}
         </div>
 

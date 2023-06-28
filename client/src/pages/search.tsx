@@ -24,22 +24,22 @@ export default function Search() {
   useEffect(() => {
     const fetchData = async () => {
       axios
-      .get("api/search/tags", {
-        params: {
-          keyword: keyword,
-        },
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
-      .then((response) => {
-        // Handle the response from the backend
-        setTaglist(response.data.result);
-      })
-      .catch((error) => {
-        // Handle any errors that occurred during the API request
-        console.error("API error:", error);
-      });
+        .get("api/search/tags", {
+          params: {
+            keyword: keyword,
+          },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })
+        .then((response) => {
+          // Handle the response from the backend
+          setTaglist(response.data.result);
+        })
+        .catch((error) => {
+          // Handle any errors that occurred during the API request
+          console.error("API error:", error);
+        });
     };
 
     if (keyword) {
@@ -106,8 +106,8 @@ export default function Search() {
 
   return (
     <>
-      <NavBar />
       <Wrapper className="flex items-center justify-center w-full">
+        <NavBar />
         <div>
           <div className="flex justify-center items-end w-[75rem] h-[6.5rem]">
             <div className="w-[1200px] h-[104px] p-0 flex justify-center items-end">
@@ -128,7 +128,7 @@ export default function Search() {
                     className={`flex items-center justify-center h-[2rem] py-0 px-[1rem] rounded-md bg-[${tagColors[0]}]`}
                     onClick={() => handleTagClick(tag)}
                   >
-                    <span className="text-white text-base font-kanit font-semibold leading-150 tracking-tighter">
+                    <span className="text-base font-semibold tracking-tighter text-white font-kanit leading-150">
                       # {tag}
                     </span>
                   </div>
@@ -142,11 +142,11 @@ export default function Search() {
               </div>
 
               <div className="flex flex-col items-start gap-[1rem] self-stretch">
-                <div className="flex justify-between items-center self-stretch">
+                <div className="flex items-center self-stretch justify-between">
                   {clickedTag && (
                     <>
                       <div className="flex items-center justify-center h-[2rem] py-0 px-[1rem] rounded-md bg-[#254D9B]">
-                        <span className="text-white text-base font-kanit font-semibold leading-150 tracking-tighter">
+                        <span className="text-base font-semibold tracking-tighter text-white font-kanit leading-150">
                           # {clickedTag}
                         </span>
                       </div>
