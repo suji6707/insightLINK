@@ -112,10 +112,10 @@ export const recommendSimilarQuery = (userId) => {
     ) 
   ) AS subquery
   WHERE rn <= 2
-  LIMIT 7;`;
+  LIMIT 20;`;
 };
 
-/* 2. 친구 아닌 사람의 추천카드 */
+/* 2. 친구 아닌 사람 추천카드 */
 export const recommendDiscoverQuery = (userId, recommendList) => {
   const listform = recommendList.map((user) => user.user_id).join(', ');
   return `SELECT *
@@ -146,8 +146,11 @@ export const recommendDiscoverQuery = (userId, recommendList) => {
     )
   ) AS subquery
 WHERE rn <= 2
-LIMIT 5;`;
+LIMIT 15`;
 };
+    
+ 
+
 
 // 내가 보지 않았고
 // DeletedCards 테이블에 없는
