@@ -8,10 +8,10 @@ export const GET = async (uri: string, headers?: any): Promise<any | null> => {
     } else {
       res = await axios.get(`http://localhost:8800/api/${uri}`);
     }
-    console.log("GET 성공");
-    return res.data;
+    console.log(`${uri} - GET 성공`);
+    return res;
   } catch (err) {
-    console.log("GET 실패", err);
+    console.log(`${uri} - GET 실패`, err);
     return err;
   }
 };

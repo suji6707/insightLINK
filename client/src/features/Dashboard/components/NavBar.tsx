@@ -25,10 +25,9 @@ export default function NavBar() {
 
   const getProfileImg = async () => {
     const token = getToken();
-    const response = await GET("user/profile", token);
-    if (response) {
-      console.log(response);
-      setUserProfile(response.userProfile);
+    const data = await GET("user/profile", token);
+    if (data.status === 200) {
+      setUserProfile(data.data.userProfile);
     }
   };
 

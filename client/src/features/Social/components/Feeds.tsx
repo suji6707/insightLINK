@@ -3,42 +3,56 @@ import { useRouter } from "next/router";
 
 import getToken from "@/axios/getToken";
 import { GET } from "@/axios/GET";
-import Card from "@/features/Dashboard/MainCard/components/Card";
 import CardDetail from "./CardDetail";
-// Recoil
-import { useRecoilState } from "recoil";
-import { ReloadFeedsAtom } from "@/recoil/atoms/SocialAtom";
 // Types
 import { CardData } from "@/types/dashborad.types";
+import { AiOutlineClose } from "react-icons/ai";
+import { BiFullscreen } from "react-icons/bi";
+import { useRecoilState } from "recoil";
+import { SocialImgModalAtom } from "@/recoil/atoms/SocialAtom";
 
 const Feeds = () => {
   const [cards, setCards] = useState<CardData[]>();
   // 모달
   const modalRef = useRef<HTMLDivElement>(null);
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useRecoilState(SocialImgModalAtom);
   const [userId, setUserId] = useState(1);
   const [cardId, setCardId] = useState(1);
-  const [feedChange, setFeedChange] = useRecoilState(ReloadFeedsAtom);
 
   const router = useRouter();
 
   const getFeeds = async () => {
     const token = getToken();
     const data = await GET(`social/card`, token);
+    if (data.status === 200) {
+      setCards(data.data);
+    }
     if (data.response?.status === 400) {
       setCards([]);
-    } else {
-      setCards(data);
-      setFeedChange(false);
     }
   };
 
   useEffect(() => {
     getFeeds();
-  }, [feedChange]);
+  }, []);
 
   const handleClick = (userid: number) => {
     router.push(`/dashboard/${userid}`);
+  };
+
+  const rejectCard = async (id: number) => {
+    const data = await GET(`graph?userId=${id}`, getToken());
+    if (data.status === 200) {
+      // const newCards = cards.filter((c) => c.id !== id);
+      // setCards(newCards);
+
+      // 리렌더링 처리 필요 🚨
+      getFeeds();
+    }
+  };
+
+  const handleClose = (id: number) => {
+    rejectCard(id);
   };
 
   const modalOutsideClicked = (e: any) => {
@@ -53,9 +67,36 @@ const Feeds = () => {
         Feed
       </h2>
       <div className="grid grid-cols-3 grid-flow-row gap-y-3 self-stretch flex-wrap min-h-[53rem]">
-        {cards?.map((data: CardData, index: number) => {
-          return <Card data={data} key={index} isFeed={true} />;
-        })}
+        {cards &&
+          cards.map((c: CardData) => {
+            return (
+              <>
+                <div className="w-[10rem] bg-gray-100 h-[10rem] border-2 rounded border-gray-300 relative hover:border-blue-500 flex justify-center items-center">
+                  <img
+                    src={c?.cardImg}
+                    className="object-cover max-w-full max-h-full"
+                    onClick={() => handleClick(c.cardId)}
+                  />
+                  <button
+                    onClick={() => handleClose(c?.userId)}
+                    className="absolute svg-button-nomal left-3 bottom-3 cursor-pointer"
+                  >
+                    <AiOutlineClose className="self-center z-1" size="1rem" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowModal(true);
+                      setCardId(c.cardId);
+                      setUserId(c.userId);
+                    }}
+                    className="absolute svg-button-nomal right-3 bottom-3 cursor-pointer"
+                  >
+                    <BiFullscreen className="self-center z-1" size="1rem" />
+                  </button>
+                </div>
+              </>
+            );
+          })}
         {/* {cards &&
           cards.map((c: Card, index: number) => {
             return (
