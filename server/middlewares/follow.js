@@ -19,11 +19,11 @@ export const followAdd = async (req, res) => {
     connection = await db.getConnection();
     const [result] = await connection.query(followAddQuery, [userId, following_id]);
     connection.release();
-    logger.info(`/routes/social/follow 폴더 followAdd함수, post 성공 !`);
+    logger.info('/routes/social/follow 폴더 followAdd함수, post 성공 !');
     res.status(200).send(`User ${userId} has started following User ${following_id}.`);
   } catch (err) {
     connection?.release();
-    logger.error("/routes/social/follow 폴더 followAdd함수, post, err : ", err);
+    logger.error('/routes/social/follow 폴더 followAdd함수, post, err : ', err);
     res.status(500).send('Internal Server Error');
   }
 };
@@ -39,11 +39,11 @@ export const followDelete = async (req, res) => {
     connection = await db.getConnection();
     const [result] = await connection.query(followDeleteQuery, [userId, following_id]);
     connection.release();
-    logger.info(`/routes/social/follow 폴더 followDelete함수, post 성공 !`);
+    logger.info('/routes/social/follow 폴더 followDelete함수, post 성공 !');
     res.status(200).send(`User ${userId} has canceled a follow to User ${following_id}.`);
   } catch (err) {
     connection?.release();
-    logger.error("/routes/social/follow 폴더 followDelete함수, post, err : ", err);
+    logger.error('/routes/social/follow 폴더 followDelete함수, post, err : ', err);
     res.status(500).send('Internal Server Error');
   }
 };
@@ -57,7 +57,10 @@ export const updatedCards = async (req, res) => {
   try {
     connection = await db.getConnection();
     const [followList] = await connection.query(findFollowQuery, [userId]);
-    // console.log(followList);
+    /* admin 계정 디폴트로 띄우기 */
+    followList.unshift( { following_id: 130 });
+    
+    // console.log('fr: ', followList);
 
     let data = [];
     for (const user of followList) {
@@ -81,11 +84,11 @@ export const updatedCards = async (req, res) => {
       data.push(obj);
     }
     connection.release();
-    logger.info(`/routes/social/follow 폴더 updatedCards함수, post 성공 !`);
+    logger.info('/routes/social/follow 폴더 updatedCards함수, post 성공 !');
     res.status(200).send(data);
   } catch (err) {
     connection?.release();
-    logger.error("/routes/social/follow 폴더 updatedCards함수, post, err : ", err);
+    logger.error('/routes/social/follow 폴더 updatedCards함수, post, err : ', err);
     res.status(500).send('Internal Server Error');    
   }
 };
