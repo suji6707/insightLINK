@@ -93,11 +93,6 @@ export const recommendSimilarQuery = (userId) => {
 
 /* 2. 친구 아닌 사람의 추천카드 */
 export const recommendDiscoverQuery = (userId, recommendList) => {
-  console.log('recommendList', recommendList)
-  console.log(recommendList[0])
-  if (recommendList.length === 0) {
-    return
-  }
   const listform = recommendList.map((user) => user.user_id).join(', ')
   return `SELECT *
   FROM (

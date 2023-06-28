@@ -55,7 +55,7 @@ export default function Home() {
       setPasswordMatchError(false);
     }
 
-    const response = await axios.post(`${serverPath}/api/signup`, {
+    const response = await axios.post(`/api/signup`, {
       email: userEmail,
       name: userName,
       password: password,
