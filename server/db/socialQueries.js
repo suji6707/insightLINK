@@ -149,6 +149,8 @@ WHERE rn <= 2
 LIMIT 15;`;
 };
 
+ 
+
 
 // 내가 보지 않았고
 // DeletedCards 테이블에 없는
