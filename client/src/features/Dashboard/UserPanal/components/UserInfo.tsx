@@ -26,21 +26,21 @@ export default function UserInfo() {
   return (
     <>
       <div className="flex flex-col">
-        <h1 className="text-3xl">{userInfo?.userName}</h1>
-        <div className="flex">
-          <div className="p-2">
-            <div>태그 수</div>
-            <div>+{userInfo?.tagCnt}</div>
-          </div>
-          <div className="p-2">
-            <div>카드 수</div>
-            <div>+{userInfo?.cardCnt}</div>
-          </div>
-          <div className="p-2">
-            <div>친구 수</div>
-            <div>+{userInfo?.followCnt}</div>
-          </div>
+        <h1 className="mb-1 text-3xl">{userInfo?.userName}</h1>
 
+        <div className="flex gap-4">
+          <div className="user-info-cnt">
+            <div>태그 수</div>
+            <div className="user-info-cnt-num">{userInfo?.tagCnt}</div>
+          </div>
+          <div className="user-info-cnt">
+            <div>카드 수</div>
+            <div className="user-info-cnt-num">{userInfo?.cardCnt}</div>
+          </div>
+          <div className="user-info-cnt">
+            <div>친구 수</div>
+            <div className="user-info-cnt-num">{userInfo?.followCnt}</div>
+          </div>
           <FollowBtn />
         </div>
       </div>

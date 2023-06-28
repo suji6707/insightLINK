@@ -3,7 +3,16 @@
 @tailwind utilities;
 
 @layer components {
+  .user-info-cnt {
+    @apply px-4 py-2 border rounded-md flex flex-row justify-center items-center gap-2 border-gray-200;
+  }
+  .user-info-cnt-num {
+    @apply text-xl font-semibold;
+  }
   .svg-button-nomal {
     @apply flex items-center justify-center bg-white rounded cursor-pointer hover:bg-gray-50 w-7 h-7;
+  }
+  .card-detail-edit-btn {
+    @apply flex flex-row mt-3 justify-end;
   }
 }
