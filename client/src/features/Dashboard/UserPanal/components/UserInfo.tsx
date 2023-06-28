@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from "react";
+// recoil
+import { useRecoilValue } from "recoil";
+import { LoginStateAtom } from "@/recoil/atoms/LoginStateAtom";
+
 import { useRouter } from "next/router";
-import { User_Info_Api } from "@/axios/dashBoardApi";
 // components
 import FollowBtn from "@/features/Dashboard/UserPanal/components/FollowBtn";
+import GraphEditBtn from "@/features/Dashboard/UserPanal/components/GraphEditBtn";
+import { User_Info_Api } from "@/axios/dashBoardApi";
 // types
-import { UserInfo } from "@/types/dashborad.types";
+import { UserInfo_DTO } from "@/types/dashborad.types";
 
 export default function UserInfo() {
-  const [userInfo, setUserInfo] = useState<UserInfo>();
+  const [userInfo, setUserInfo] = useState<UserInfo_DTO>();
+  const [isLogin, setIsLogin] = useState<boolean>(false);
+  const loginId = useRecoilValue(LoginStateAtom);
   const router = useRouter();
 
   useEffect(() => {
@@ -18,7 +25,16 @@ export default function UserInfo() {
 
       const response = await User_Info_Api(userid);
       setUserInfo(response);
-      console.log("userInfo data: ", response);
+
+      if (userid) {
+        if (loginId == userid) {
+          setIsLogin(true);
+        } else {
+          setIsLogin(false);
+        }
+      } else {
+        setIsLogin(true);
+      }
     };
     getUserInfoData();
   }, []);
@@ -26,7 +42,10 @@ export default function UserInfo() {
   return (
     <>
       <div className="flex flex-col">
-        <h1 className="mb-1 text-3xl">{userInfo?.userName}</h1>
+        <div className="flex flex-row justify-between mb-2">
+          <h1 className="mb-1 text-3xl">{userInfo?.userName}</h1>
+          {isLogin ? <GraphEditBtn /> : <FollowBtn />}
+        </div>
 
         <div className="flex gap-4">
           <div className="user-info-cnt">
@@ -41,7 +60,6 @@ export default function UserInfo() {
             <div>친구 수</div>
             <div className="user-info-cnt-num">{userInfo?.followCnt}</div>
           </div>
-          <FollowBtn />
         </div>
       </div>
     </>

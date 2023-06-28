@@ -115,9 +115,11 @@ export const Add_Follow_API = async (followId?: string | undefined) => {
   }
 };
 
-export const Cancel_Follow_API = async (params?: string | undefined) => {
+export const Cancel_Follow_API = async (followId?: string | undefined) => {
   try {
-    const response = await axiosInstance.delete(`/api/social/follow/${params}`);
+    const response = await axiosInstance.delete(
+      `/api/social/follow/${followId ? `?followId=${followId}` : ""}`
+    );
     return response;
   } catch (err) {
     console.error(err);

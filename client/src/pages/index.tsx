@@ -24,6 +24,7 @@ export default function Home() {
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     setToken(storedToken);
+    localStorage.theme = "light";
   }, [token]);
 
   useEffect(() => {

@@ -9,9 +9,13 @@ export default function GraphEditBtn() {
   return (
     <>
       {editMode ? (
-        <p onClick={() => setEditMode(false)}>수정 완료</p>
+        <button onClick={() => setEditMode(false)} className="follow-btn">
+          수정 완료
+        </button>
       ) : (
-        <p onClick={() => setEditMode(true)}>그래프 수정</p>
+        <button onClick={() => setEditMode(true)} className="follow-btn">
+          그래프 수정
+        </button>
       )}
     </>
   );

@@ -37,6 +37,7 @@
     "react-icons": "^4.10.1",
     "react-use-websocket": "^3.0.0",
     "recoil": "^0.7.7",
+    "recoil-persist": "^5.0.1",
     "styled-components": "^5.3.11",
     "tailwind-styled-components": "^2.2.0",
     "typeface-roboto": "^1.1.13",
