@@ -44,7 +44,7 @@ const CardDetail = ({
 
   return (
     <div
-      className="fixed inset-0 bg-white bg-opacity-30"
+      className="fixed inset-0 bg-white bg-opacity-30 z-20"
       ref={modalRef}
       onClick={(e) => modalOutsideClicked(e)}
     >

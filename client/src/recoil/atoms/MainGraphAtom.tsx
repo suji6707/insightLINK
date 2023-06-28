@@ -86,3 +86,8 @@ export const ImgUpLoadAtom = atom({
   key: "imgUpLoadAtom",
   default: false,
 });
+
+export const AlarmCntAtom = atom({
+  key: "alarmCntAtom",
+  default: true,
+});

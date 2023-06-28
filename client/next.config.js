@@ -10,19 +10,9 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: "/api/:path*",
-        destination: "http://localhost:8800/api/:path*",
+        source: process.env.SOURCE_PATH,
+        destination: process.env.SOURCE_URL,
       },
-    ];
-  },
-
-  reactStrictMode: true,
-  async rewrites() {
-    return [
-      {
-        source: "/api/:path*",
-        destination: "https://insightlinkapi.jisuheo.shop/api/:path*",
-      }
     ];
   },
 };
