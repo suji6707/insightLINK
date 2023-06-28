@@ -21,6 +21,7 @@ const CardDetail = ({
       `cards/info?cardId=${cardId}&userId=${userId}`,
       token
     );
+    // 에러 핸들링 코드 필요 🚨
     if (data) {
       setDetail(data);
     }

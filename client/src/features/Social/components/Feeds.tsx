@@ -17,7 +17,7 @@ interface Card {
 }
 
 const Feeds = () => {
-  const [cards, setCards] = useState<Card[]>([]);
+  const [cards, setCards] = useState<Card[]>();
   // 모달
   const modalRef = useRef<HTMLDivElement>(null);
   const [showModal, setShowModal] = useState(false);
@@ -26,8 +26,10 @@ const Feeds = () => {
 
   const getFeeds = async () => {
     const token = getToken();
-    const data = await GET(`social/card?`, token);
-    if (data != null) {
+    const data = await GET(`social/card`, token);
+    if (data.response.status === 400) {
+      setCards([]);
+    } else {
       setCards(data);
     }
   };
@@ -55,6 +57,7 @@ const Feeds = () => {
     }
   };
 
+  console.log("cards", cards);
   return (
     <div className="w-full">
       <p className="mb-4 text-3xl font-bold">피드</p>

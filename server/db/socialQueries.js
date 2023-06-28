@@ -17,38 +17,31 @@ export const recomUserQuery = (userId, limit) => {
   )
   GROUP BY f.user_id
   ORDER BY shared_tags_count DESC, COUNT(DISTINCT f.file_id) DESC
-  LIMIT ${limit};`;
-};
-
-
-
-
+  LIMIT ${limit};`
+}
 
 /* 가장 많은 카드 수가 달린 태그 상위 ?개 추출 */
-export const tagQuery = 
-`SELECT t.tag, COUNT(*) as tag_count
+export const tagQuery = `SELECT t.tag, COUNT(*) as tag_count
   FROM Tag AS t
   JOIN File AS f ON t.file_id = f.file_id
   WHERE f.user_id = ?
   GROUP BY t.tag
   ORDER BY tag_count DESC
-  LIMIT 2`;
+  LIMIT 2`
 
-export const profileQuery = 
-`SELECT u.user_name, u.profile_img
+export const profileQuery = `SELECT u.user_name, u.profile_img
   FROM User AS u
-  WHERE u.user_id = ?`;
+  WHERE u.user_id = ?`
 
 /* 카드 소유자 확인 */
-export const fileToUserQurey = 
-`SELECT u.user_id, u.user_name, u.profile_img
+export const fileToUserQurey = `SELECT u.user_id, u.user_name, u.profile_img
   FROM User AS u
   JOIN File AS f ON u.user_id = f.user_id
-  WHERE file_id = ?`;
+  WHERE file_id = ?`
 
 /* 추천 카드 거절 */
-export const rejectCardQuery = 
-'INSERT INTO z_DeletedCards (user_id, file_id) VALUES (?, ?)';
+export const rejectCardQuery =
+  'INSERT INTO z_DeletedCards (user_id, file_id) VALUES (?, ?)'
 
 /************************ 카드 추천 로직 ************************/
 /* 1. 친구 피드 */
@@ -95,16 +88,17 @@ export const recommendSimilarQuery = (userId) => {
     ) 
   ) AS subquery
   WHERE rn <= 2
-  LIMIT 7;`;
-};
+  LIMIT 7;`
+}
 
-
-
-
- 
 /* 2. 친구 아닌 사람의 추천카드 */
 export const recommendDiscoverQuery = (userId, recommendList) => {
-  const listform = recommendList.map(user => user.user_id).join(', ');
+  console.log('recommendList', recommendList)
+  console.log(recommendList[0])
+  if (recommendList.length === 0) {
+    return
+  }
+  const listform = recommendList.map((user) => user.user_id).join(', ')
   return `SELECT *
   FROM (
     SELECT
@@ -133,9 +127,8 @@ export const recommendDiscoverQuery = (userId, recommendList) => {
     )
   ) AS subquery
 WHERE rn <= 2
-LIMIT 5;`;
-};
-
+LIMIT 5;`
+}
 
 // 내가 보지 않았고
 // DeletedCards 테이블에 없는
