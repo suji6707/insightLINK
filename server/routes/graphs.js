@@ -6,7 +6,7 @@ import { graphCountQuery, graphDirectionQuery } from '../db/graphQueries.js'
 import { logger } from '../winston/logger.js'
 
 function cycleCount(connections, nodes) {
-  let count = 0
+  let count = -1
   const visited = new Set()
   const groups = new Map()
 
