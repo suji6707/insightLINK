@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 import NavBar from "@/features/Dashboard/components/NavBar";
 import { Wrapper } from "@/styles/wrapper";
 
-// const serverPath = "http://localhost:8800";
+const serverPath = "http://3.35.239.116:8800";
 
 export default function Home() {
   const router = useRouter();

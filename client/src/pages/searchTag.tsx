@@ -30,7 +30,7 @@ export default function Search() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8800/dashboard/tags/all",
+          "http://3.35.239.116:8800/dashboard/tags/all",
           {
             params: {
               search: keywords,

@@ -63,8 +63,8 @@ export default function NavBar() {
                 objectType: "text",
                 text: "나의 그래프를 확인해봐요.",
                 link: {
-                  mobileWebUrl: "http://localhost:3000/dashboard/" + 21,
-                  webUrl: "http://localhost:3000/dashboard/" + 21,
+                  mobileWebUrl: 'http://3.35.239.116:3000/dashboard/'+21,
+                  webUrl: 'http://3.35.239.116:3000/dashboard/'+21,
                 },
               });
             }
