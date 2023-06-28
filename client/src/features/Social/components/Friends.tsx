@@ -1,8 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
+
 import getToken from "@/axios/getToken";
 import { GET } from "@/axios/GET";
 import CardDetail from "@/features/Social/components/CardDetail";
+// Types
 import { Friends } from "@/types/social.types";
+// Assets
+import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 
 const Friends = () => {
   const [friends, setFriends] = useState([]);
@@ -62,37 +66,52 @@ const Friends = () => {
   };
 
   return (
-    <div className="w-full">
-      <p className="text-3xl font-bold">친구</p>
-      <ul
-        ref={listRef}
-        className="flex justify-start w-full py-5 overflow-x-hidden overflow-y-hidden scrolling-touch cursor-grab"
-        onMouseDown={handleMouseDown}
-        onMouseLeave={handleMouseLeave}
-        onMouseUp={handleMouseLeave}
-        onMouseMove={handleMouseMove}
-      >
-        {friends &&
-          friends.map((f: Friends) => {
-            return (
-              <li
-                key={f.userId}
-                className="flex-shrink-0 p-2 m-2 rounded-full bg-gradient-to-tr from-violet-600 to-yellow-300"
-              >
-                <img
-                  src={f.profile_img}
-                  className="w-24 h-24 transition transform rounded-full cursor-pointer hover:-rotate-6"
-                  alt="profile"
-                  onClick={() => {
-                    setShowModal(true);
-                    setCardId(f.cardId);
-                    setUserId(f.userId);
-                  }}
-                />
-              </li>
-            );
-          })}
-      </ul>
+    <div className="flex h-60 pb-10 flex-col items-start gap-10 self-stretch shadow-sm">
+      <h2 className="text-gray-900 text-[1.5rem] font-kanit font-semibold leading-1.5 tracking-tighter">
+        News
+      </h2>
+      <div className="flex items-center gap-8 flex-1 self-stretch">
+        <div className="flex w-[1.75rem] h-[1.75rem] flex-col justify-center items-center">
+          <BsChevronLeft className="text-gray-800 text-base font-xeicon leading-normal" />
+        </div>
+        <ul
+          ref={listRef}
+          className="flex justify-start w-full py-5 overflow-x-hidden overflow-y-hidden scrolling-touch cursor-grab"
+          onMouseDown={handleMouseDown}
+          onMouseLeave={handleMouseLeave}
+          onMouseUp={handleMouseLeave}
+          onMouseMove={handleMouseMove}
+        >
+          {friends &&
+            friends.map((f: Friends) => {
+              return (
+                <li
+                  key={f.userId}
+                  className="flex flex-col justify-center items-center w-[6.25rem] h-[8.25rem] flex-shrink-0 m-2 gap-3"
+                >
+                  <div className="w-[6.25rem] h-[6.25rem] transition transform rounded-full cursor-pointer hover:-rotate-6 bg-colorBlue flex justify-center items-center">
+                    <img
+                      src={f.profile_img}
+                      className="w-[5.25rem] h-[5.25rem] rounded-full"
+                      alt="profile"
+                      onClick={() => {
+                        setShowModal(true);
+                        setCardId(f.cardId);
+                        setUserId(f.userId);
+                      }}
+                    />
+                  </div>
+                  <p className="flex flex-col items-center justify-center overflow-hidden text-center w-6.0625rem h-auto text-gray-900 font-kanit text-lg leading-normal tracking-wider">
+                    NickName
+                  </p>
+                </li>
+              );
+            })}
+        </ul>
+        <div className="flex w-[1.75rem] h-[1.75rem] flex-col justify-center items-center">
+          <BsChevronRight className="text-gray-800 text-base font-xeicon leading-normal" />
+        </div>
+      </div>
       {showModal && (
         <CardDetail
           modalRef={modalRef}
