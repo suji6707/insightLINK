@@ -146,9 +146,9 @@ export const recommendDiscoverQuery = (userId, recommendList) => {
     )
   ) AS subquery
 WHERE rn <= 2
-LIMIT 15;`;
+LIMIT 15`;
 };
-
+    
  
 
 
