@@ -10,8 +10,8 @@ import Users from "@/features/Social/components/Users";
 export default function Social() {
   return (
     <>
-      <NavBar />
-      <Wrapper className="border-l border-r px-4">
+      <Wrapper className="px-4 border-l border-r">
+        <NavBar />
         <Friends />
         <Feeds />
       </Wrapper>

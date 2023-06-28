@@ -62,8 +62,8 @@ export default function Home() {
 
   return (
     <div>
-      <NavBar />
       <Wrapper>
+        <NavBar />
         <div className="flex justify-center mt-20">
           <div className="text-center">
             <p className="mt-20 text-2xl">

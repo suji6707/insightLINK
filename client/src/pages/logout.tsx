@@ -23,27 +23,25 @@ export default function Home() {
   };
 
   return (
-    <div>
+    <Wrapper>
       <NavBar />
-      <Wrapper>
-        <div className="flex flex-col items-center justify-center h-screen">
-          <div className="container flex flex-col items-end max-w-md mx-auto">
-            {/* Updated class */}
-          </div>
-          <div className="flex justify-end mt-4">
-            {typeof window !== "undefined" && sessionData?.user && token ? (
-              <GoogleLogoutBtn />
-            ) : token ? (
-              <button
-                onClick={handleLogout}
-                className="px-4 py-2 mr-4 font-bold text-white bg-black rounded"
-              >
-                로그아웃
-              </button>
-            ) : null}
-          </div>
+      <div className="flex flex-col items-center justify-center h-screen">
+        <div className="container flex flex-col items-end max-w-md mx-auto">
+          {/* Updated class */}
         </div>
-      </Wrapper>
-    </div>
+        <div className="flex justify-end mt-4">
+          {typeof window !== "undefined" && sessionData?.user && token ? (
+            <GoogleLogoutBtn />
+          ) : token ? (
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 mr-4 font-bold text-white bg-black rounded"
+            >
+              로그아웃
+            </button>
+          ) : null}
+        </div>
+      </div>
+    </Wrapper>
   );
 }

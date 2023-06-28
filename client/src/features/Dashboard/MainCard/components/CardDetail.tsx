@@ -11,6 +11,7 @@ import useDetail from "@/features/Dashboard/MainCard/hook/useDetail";
 import { CardDataDetail } from "@/types/dashborad.types";
 // API
 import { Card_Edit_Api, Card_Delete_Api } from "@/axios/dashBoardApi";
+import DuplicatiobCardBtn from "@/features/Dashboard/MainCard/components/DuplicateCardBtn";
 
 function CardDetail() {
   const [cardDetailData, setCardDetailData] = useState<Partial<CardDataDetail>>(
@@ -70,20 +71,63 @@ function CardDetail() {
     <>
       <div className="relative w-full h-full px-8 pb-8 overflow-auto border rounded-lg shadow-md">
         <div className="sticky top-0 flex pt-6 pb-4 bg-white">
-          {cardDetailData?.cardTag ? (
-            cardDetailData?.cardTag.map((data: string, index: number) => {
-              return (
-                <div
-                  className="flex items-center justify-center px-4 mr-2 font-semibold leading-6 text-white bg-blue-600 rounded"
-                  key={index}
-                >
-                  # {data}
-                </div>
-              );
-            })
-          ) : (
-            <></>
-          )}
+          <div className="flex items-center justify-start w-full h-full">
+            {cardDetailData?.cardTag ? (
+              cardDetailData?.cardTag.map((data: string, index: number) => {
+                return (
+                  <div
+                    className="flex items-center justify-center px-4 mr-2 font-semibold text-center text-white bg-blue-600 rounded"
+                    key={index}
+                  >
+                    # {data}
+                  </div>
+                );
+              })
+            ) : (
+              <></>
+            )}
+            {isLogin ? (
+              isEditingContent ? (
+                <>
+                  <div className="h-full card-detail-edit-btn">
+                    <button
+                      className="svg-button-nomal"
+                      onClick={() => setIsEditingContent(false)}
+                    >
+                      <BsXLg />
+                    </button>
+                    <button
+                      className="svg-button-nomal"
+                      onClick={handleContentSave}
+                    >
+                      <BsPencilFill />
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="h-full card-detail-edit-btn">
+                    <button
+                      className="svg-button-nomal"
+                      onClick={handleCardDelete}
+                    >
+                      <BsTrashFill />
+                    </button>
+                    <button
+                      className="svg-button-nomal"
+                      onClick={handleContentEdit}
+                    >
+                      <BsPencilFill />
+                    </button>
+                  </div>
+                </>
+              )
+            ) : (
+              <>
+                <DuplicatiobCardBtn />
+              </>
+            )}
+          </div>
           <button
             onClick={handleDetailOpen}
             className="ml-auto svg-button-nomal"
@@ -97,41 +141,20 @@ function CardDetail() {
             className="object-cover max-w-full max-h-full"
           />
         </div>
-        {/* {isLogin ? ( */}
-        {true ? (
+        {isLogin ? (
           <>
-            <div className="">
-              {isEditingContent ? (
-                <>
-                  <textarea
-                    value={editedContent}
-                    onChange={handleContentChange}
-                    rows={editedContent?.length / 15}
-                    className="w-full outline-none resize-none h-1/3 bg-gray-50"
-                  />
-                  <div className="card-detail-edit-btn">
-                    <button className="svg-button-nomal">
-                      <BsXLg />
-                    </button>
-                    <button className="svg-button-nomal">
-                      <BsPencilFill onClick={handleContentSave} />
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  {editedContent || cardDetailData?.content}
-                  <div className="card-detail-edit-btn">
-                    <button className="svg-button-nomal">
-                      <BsTrashFill onClick={handleCardDelete} />
-                    </button>
-                    <button className="svg-button-nomal">
-                      <BsPencilFill onClick={handleContentEdit} />
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
+            {isEditingContent ? (
+              <>
+                <textarea
+                  value={editedContent}
+                  onChange={handleContentChange}
+                  rows={editedContent?.length / 15}
+                  className="w-full bg-gray-100 outline-none resize-none h-1/3"
+                />
+              </>
+            ) : (
+              <>{editedContent || cardDetailData?.content}</>
+            )}
           </>
         ) : (
           <>

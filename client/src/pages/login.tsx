@@ -58,8 +58,8 @@ export default function Home() {
 
   return (
     <div>
-      <NavBar />
       <Wrapper>
+        <NavBar />
         <div className="flex flex-col items-center justify-center h-screen">
           <div className="container flex flex-col items-end max-w-md mx-auto">
             <div className="flex items-center justify-end mb-4">
