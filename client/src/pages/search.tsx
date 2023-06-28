@@ -14,51 +14,38 @@ export default function Search() {
   const router = useRouter();
   const [clickedTag, setClickedTag] = useState("");
   const [taglist, setTaglist] = useState([]);
+  const [cardlist, setcardlist] = useState([]);
 
   const tagColors = ["#254D9B", "#7D46C5", "#195E31"];
 
-  const cardsList = [
-    {
-      id: 1,
-      imageUrl:
-        "https://sw-jungle-s3.s3.ap-northeast-2.amazonaws.com/1687843535811.IMG_3173.PNG",
-    },
-    {
-      id: 2,
-      imageUrl:
-        "https://sw-jungle-s3.s3.ap-northeast-2.amazonaws.com/1687773671502.IMG_8501.PNG",
-    },
-    {
-      id: 3,
-      imageUrl:
-        "https://sw-jungle-s3.s3.ap-northeast-2.amazonaws.com/1687530677847.20180528_003830.jpg",
-    },
-    {
-      id: 4,
-      imageUrl:
-        "https://sw-jungle-s3.s3.ap-northeast-2.amazonaws.com/1687851681338.%EC%A0%95%EA%B8%80.jpg",
-    },
-    {
-      id: 5,
-      imageUrl:
-        "https://sw-jungle-s3.s3.ap-northeast-2.amazonaws.com/1687853694968.IMG_3531.PNG",
-    },
-    {
-      id: 6,
-      imageUrl:
-        "https://sw-jungle-s3.s3.ap-northeast-2.amazonaws.com/1687843535811.IMG_3173.PNG",
-    },
-    {
-      id: 7,
-      imageUrl:
-        "https://sw-jungle-s3.s3.ap-northeast-2.amazonaws.com/1687706804082.1576465200061.jpg",
-    },
-    {
-      id: 8,
-      imageUrl:
-        "https://sw-jungle-s3.s3.ap-northeast-2.amazonaws.com/20180712_0105241687530374731.jpg",
-    },
-  ];
+  const keyword = router.query.search;
+  // console.log("keyword : ",keyword)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      axios
+      .get("api/search/tags", {
+        params: {
+          keyword: keyword,
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((response) => {
+        // Handle the response from the backend
+        setTaglist(response.data.result);
+      })
+      .catch((error) => {
+        // Handle any errors that occurred during the API request
+        console.error("API error:", error);
+      });
+    };
+
+    if (keyword) {
+      fetchData();
+    }
+  }, [keyword]); // Include currentPage in the dependency array
 
   const handleSearch = (value: string) => {
     // Perform actions with the search value (e.g., send to backend)
@@ -80,7 +67,6 @@ export default function Search() {
       })
       .then((response) => {
         // Handle the response from the backend
-        console.log("API response:", response.data.result);
         setTaglist(response.data.result);
       })
       .catch((error) => {
@@ -109,7 +95,8 @@ export default function Search() {
       )
       .then((response) => {
         // Handle the response from the backend
-        console.log("API response:", response.data.result);
+        // console.log("API response:", response.data.result);
+        setcardlist(response.data.result);
       })
       .catch((error) => {
         // Handle any errors that occurred during the API request
@@ -181,8 +168,8 @@ export default function Search() {
                   )}
                 </div>
                 <div className="flex items-start content-start gap-[0.75rem] flex-1 self-stretch flex-wrap">
-                  {cardsList &&
-                    cardsList.map((card) => {
+                  {cardlist &&
+                    cardlist.map((card: { id: number }) => {
                       return (
                         <Card
                           key={card.id}

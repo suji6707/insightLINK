@@ -1,7 +1,7 @@
 import express from 'express';
 import '../dotenv.js';
 import { db } from '../connect.js';
-import { searchContent , searchTag, tagList } from '../db/searchQueries.js';
+import { searchContent , searchTag, tagList, cardList } from '../db/searchQueries.js';
 
 import { logger } from '../winston/logger.js';
 
@@ -34,12 +34,22 @@ router.get('/tags', async (req, res) => {
 router.post('/cards', async (req, res) => {
   const { user } = res.locals;
   const userId = user.user_id;
-  console.log("userId : ", userId);
 
   const { tag } = req.body;
-  console.log(tag);
 
-  res.send({result : "전달"});
+  let connection = null;
+
+  try {
+    connection = await db.getConnection();
+    const [result] = await connection.query(cardList(userId, tag));
+
+    logger.info("/routes/search/cards 폴더, get, 성공");
+    res.send({result: result});
+  } catch(err) {
+    connection?.release();
+    logger.error("/routes/search/cards 폴더, get, err : ", err);
+    res.status(500).send('Internal Server Error');
+  }
 
 });
 
