@@ -4,8 +4,6 @@ import { useRouter } from "next/router";
 import NavBar from "@/features/Dashboard/components/NavBar";
 // Component
 
-const serverPath = "http://3.35.239.116:8800";
-
 export default function Home() {
   const router = useRouter();
 

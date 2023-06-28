@@ -19,8 +19,6 @@ const Card: React.FC<CardProps> = ({ data }) => {
   const [detailOpen, setDetailOpen] = useRecoilState(CardDetailOpenAtom);
   const setClickedDetail = useSetRecoilState(ClickedCardDetailAtom);
 
-  console.log(data);
-
   const handleCardClick = () => {
     setDetailOpen(!detailOpen);
     setClickedDetail(data?.cardId);
