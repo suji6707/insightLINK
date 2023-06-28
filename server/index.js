@@ -4,6 +4,7 @@ import http from 'http';
 import cors from 'cors';
 import morgan from 'morgan'; // log
 import bodyParser from 'body-parser'; // 요청정보 처리
+import { logger } from './winston/logger.js';
 
 /* Router */
 import uploadRouter from './routes/uploads.js';
@@ -35,9 +36,10 @@ const port = process.env.PORT || 8000;
 /* Middleware */
 app.use(express.json());
 app.use(cors());
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan(':method :status :url :response-time ms', {stream : logger.stream}))
 
 /* Routing */
 app.use('/api/upload', authMiddleware, uploadRouter);
@@ -47,7 +49,7 @@ app.use('/api/user', userRouter);
 app.use('/api/graph', authMiddleware, graphRouter);
 app.use('/api/cards', cardRouter);
 app.use('/api/social', socialRouter);
-app.use('/dashboard', searchRouter);
+app.use('/api/search', authMiddleware, searchRouter);
 app.use('/api/myinfo', authMiddleware, mypageRouter);
 
 app.use('/api/tag', authMiddleware, tagRouter);
@@ -60,6 +62,7 @@ app.use('/api/dummy2', dummyRouter2);
 
 /* NGINX test */
 app.get('/hello', async (req, res) => {
+  logger.info('hello test');
   res.write('hello');
   await setTimeout(500);
   res.write('world');
@@ -79,5 +82,5 @@ app.get('/api/users/me', authMiddleware, async (req, res) => {
 
 /* Server */
 server.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+  logger.info(`Server Start Listening on port ${port}`);
 });

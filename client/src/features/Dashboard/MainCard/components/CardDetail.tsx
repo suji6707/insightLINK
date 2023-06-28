@@ -69,12 +69,12 @@ function CardDetail() {
   return (
     <>
       <div className="relative w-full h-full px-8 pb-8 overflow-auto border rounded-lg shadow-md">
-        <div className="sticky top-0 flex justify-between pt-6 pb-4 bg-white">
+        <div className="sticky top-0 flex pt-6 pb-4 bg-white">
           {cardDetailData?.cardTag ? (
             cardDetailData?.cardTag.map((data: string, index: number) => {
               return (
                 <div
-                  className="px-4 font-semibold leading-6 text-white bg-blue-600 rounded"
+                  className="flex items-center justify-center px-4 mr-2 font-semibold leading-6 text-white bg-blue-600 rounded"
                   key={index}
                 >
                   # {data}
@@ -84,13 +84,19 @@ function CardDetail() {
           ) : (
             <></>
           )}
-          <button onClick={handleDetailOpen} className="svg-button-nomal">
+          <button
+            onClick={handleDetailOpen}
+            className="ml-auto svg-button-nomal"
+          >
             <BsXLg />
           </button>
         </div>
-
-        <img src={cardDetailData?.cardImage} className="mb-6" />
-
+        <div className="w-full h-[25rem] mb-6 flex justify-center items-center">
+          <img
+            src={cardDetailData?.cardImage}
+            className="object-cover max-w-full max-h-full"
+          />
+        </div>
         {/* {isLogin ? ( */}
         {true ? (
           <>
@@ -101,9 +107,9 @@ function CardDetail() {
                     value={editedContent}
                     onChange={handleContentChange}
                     rows={editedContent?.length / 15}
-                    style={{ width: "100%" }}
+                    className="w-full outline-none resize-none h-1/3 bg-gray-50"
                   />
-                  <div className="absolute flex flex-row right-9 bottom-3 ">
+                  <div className="card-detail-edit-btn">
                     <button className="svg-button-nomal">
                       <BsXLg />
                     </button>
@@ -115,7 +121,7 @@ function CardDetail() {
               ) : (
                 <>
                   {editedContent || cardDetailData?.content}
-                  <div className="absolute flex flex-row bottom-3 right-9 ">
+                  <div className="card-detail-edit-btn">
                     <button className="svg-button-nomal">
                       <BsTrashFill onClick={handleCardDelete} />
                     </button>
