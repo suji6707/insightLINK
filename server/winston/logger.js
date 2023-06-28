@@ -2,7 +2,7 @@ import winston from 'winston';
 import winstonDaily from 'winston-daily-rotate-file';
 
 const logDir = 'logs';  // logs 디렉토리 하위에 로그 파일 저장
-const { combine, timestamp, printf } = winston.format;
+const { combine, timestamp, printf, colorize } = winston.format;
 
 // Define log format
 const logFormat = printf(info => {
@@ -53,3 +53,10 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 export { logger };
+
+logger.stream = {// morgan wiston 설정
+  write: message => {
+      logger.info(message);
+  }
+}
+
