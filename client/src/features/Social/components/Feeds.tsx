@@ -1,54 +1,44 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/router";
+
 import getToken from "@/axios/getToken";
-
 import { GET } from "@/axios/GET";
+import Card from "@/features/Dashboard/MainCard/components/Card";
 import CardDetail from "./CardDetail";
-// Assets
-import { AiOutlineCloseCircle } from "react-icons/ai";
-
-interface Card {
-  cardId: number;
-  userId: number;
-  userName: string;
-  img: string;
-  tag: string;
-  content: string;
-  isFriend: boolean;
-}
+// Recoil
+import { useRecoilState } from "recoil";
+import { ReloadFeedsAtom } from "@/recoil/atoms/SocialAtom";
+// Types
+import { CardData } from "@/types/dashborad.types";
 
 const Feeds = () => {
-  const [cards, setCards] = useState<Card[]>();
+  const [cards, setCards] = useState<CardData[]>();
   // 모달
   const modalRef = useRef<HTMLDivElement>(null);
   const [showModal, setShowModal] = useState(false);
   const [userId, setUserId] = useState(1);
   const [cardId, setCardId] = useState(1);
+  const [feedChange, setFeedChange] = useRecoilState(ReloadFeedsAtom);
+
+  const router = useRouter();
 
   const getFeeds = async () => {
     const token = getToken();
     const data = await GET(`social/card`, token);
-    if (data.response.status === 400) {
+    if (data.response?.status === 400) {
       setCards([]);
     } else {
       setCards(data);
+      setFeedChange(false);
     }
   };
 
   useEffect(() => {
     getFeeds();
-  }, []);
+  }, [feedChange]);
 
-  const rejectCard = async (id: number) => {
-    const data = await GET(`graph?userId=${id}`, getToken());
-    if (data) {
-      // const newCards = cards.filter((c) => c.id !== id);
-      // setCards(newCards);
-      getFeeds();
-    }
-  };
-
-  const handleClose = (id: number) => {
-    rejectCard(id);
+  const handleClick = (userid: number) => {
+    router.push(`/dashboard/${userid}`);
   };
 
   const modalOutsideClicked = (e: any) => {
@@ -57,12 +47,16 @@ const Feeds = () => {
     }
   };
 
-  console.log("cards", cards);
   return (
-    <div className="w-full">
-      <p className="mb-4 text-3xl font-bold">피드</p>
-      <ul>
-        {cards &&
+    <div className="flex pb-5 flex-col items-start gap-[2rem] self-stretch border-b border-gray-900 shadow-sm">
+      <h2 className="text-gray-900 text-[1.5rem] font-kanit font-semibold leading-1.5 tracking-tighter">
+        Feed
+      </h2>
+      <div className="grid grid-cols-3 grid-flow-row gap-y-3 self-stretch flex-wrap min-h-[53rem]">
+        {cards?.map((data: CardData, index: number) => {
+          return <Card data={data} key={index} isFeed={true} />;
+        })}
+        {/* {cards &&
           cards.map((c: Card, index: number) => {
             return (
               <li
@@ -76,7 +70,13 @@ const Feeds = () => {
                   <p className="mb-4">이런 인사이트는 어떤가요?</p>
                 )}
                 <div className="flex flex-row items-center w-full">
-                  <img src={c.img} className="w-12 h-12 rounded-full" />
+                  <img
+                    src={c.img}
+                    className="w-12 h-12 rounded-full cursor-pointer"
+                    onClick={() => {
+                      handleClick(c.userId);
+                    }}
+                  />
                   <div className="flex items-center justify-between w-full p-2">
                     <p className="w-full font-bold">{c.userName}</p>
                     <div className="flex items-center justify-end w-full">
@@ -100,8 +100,8 @@ const Feeds = () => {
                 </p>
               </li>
             );
-          })}
-      </ul>
+          })} */}
+      </div>
       {showModal && (
         <CardDetail
           modalRef={modalRef}

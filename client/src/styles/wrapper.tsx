@@ -1,4 +1,3 @@
 import tw from "tailwind-styled-components";
 
-export const Wrapper = tw.div`
-w-screen h-screen w-[75rem] mx-auto`;
+export const Wrapper = tw.div`flex h-screen px-10 flex-col items-start`;

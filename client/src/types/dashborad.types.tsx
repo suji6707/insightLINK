@@ -29,6 +29,12 @@ export interface CardData {
   cardTag: string[];
   cardContent: string;
   cardImg: string;
+  userId: number;
+  userName: string;
+  img: string;
+  tag: string;
+  content: string;
+  isFriend: boolean;
 }
 
 export interface CardDataDetail {

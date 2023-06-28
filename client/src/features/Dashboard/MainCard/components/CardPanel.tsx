@@ -38,7 +38,7 @@ function CardPanel() {
           </div>
           <div className="grid grid-cols-3 grid-flow-row w-[32rem] gap-y-3">
             {cardData?.map((data: CardData, index: number) => {
-              return <Card data={data} key={index} />;
+              return <Card data={data} key={index} isFeed={false} />;
             })}
           </div>
         </>
