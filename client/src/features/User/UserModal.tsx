@@ -4,7 +4,7 @@ import GoogleLogoutBtn from "@/features/User/GoogleLogoutBtn";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { AiFillEdit } from "react-icons/ai";
+import { AiFillEdit, AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 
 import SwitchToggle from "./SwithToggle";
 import WithdrawalBtn from "./WithdrawalBtn";
@@ -30,7 +30,7 @@ const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const response = await axios.get("http://3.35.239.116:8800/api/myinfo", {
+        const response = await axios.get("http://localhost:8800/api/myinfo", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -61,7 +61,7 @@ const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
   const handleNicknameSave = async () => {
     try {
       const response = await axios.patch(
-        "http://3.35.239.116:8800/api/myinfo",
+        "http://localhost:8800/api/myinfo",
         {
           editedNickname: editedNickname,
         },
@@ -83,70 +83,94 @@ const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="bg-white p-8 rounded-lg shadow-lg text-center">
-        <h2 className="font-bold mb-4">User Modal</h2>
-        {token ? (
-          isEditingNickname ? (
-            <>
-              <input
-                type="text"
-                value={editedNickname}
-                onChange={handleNicknameChange}
-                className="mb-2"
-              />
-              <button
-                onClick={handleNicknameSave}
-                className="text-blue-500 hover:text-blue-700 ml-2"
-              >
-                저장
-              </button>
-            </>
-          ) : (
-            <>
-              <p className="flex items-center justify-center">
-                이름 : {userInfo?.name}
-                <span className="ml-2">
-                  <AiFillEdit
-                    onClick={() => handleNicknameEdit(userInfo?.name)}
-                  />
-                </span>
-              </p>
-            </>
-          )
-        ) : null}
-
-        {token ? (
-          <>
-            <p>이메일 : {userInfo?.email}</p>
-            <p>
-              프로필 이미지:
-              <img
-                src={userInfo?.image as string}
-                alt="Profile"
-                className="rounded-full w-20 h-20 mx-auto mt-4 mb-2"
-              />
-            </p>
-            <SwitchToggle />
-          </>
-        ) : null}
-
-        {typeof window !== "undefined" && sessionData?.user && token ? (
-          <GoogleLogoutBtn />
-        ) : token ? (
-          <LogoutBtn />
-        ) : null}
-
-        {token ? (
-          <WithdrawalBtn token={token} userInfo={userInfo} />
-        ) : null}
-        <div className="flex flex-col items-center justify-center space-y-4 mt-8">
-          <button
-            className="bg-black text-white font-bold py-2 px-4 rounded mt-2"
+    <div className="fixed inset-0 flex justify-center items-center z-50">
+      <div className="fixed flex w-[37.5rem] pt-3 pr-6 pb-5 pl-6 flex-col items-start rounded-lg border border-gray-200 bg-white shadow-md z-50">
+        <div className="flex h-[3.75rem] justify-between items-center self-stretch">
+          <h2 className="text-gray-900 text-3xl font-kanit font-semibold leading-6 tracking-tighter">
+            Account
+          </h2>
+          <AiOutlineClose
             onClick={closeModal}
-          >
-            닫기
-          </button>
+            className="text-gray-400 text-base font-xeicon leading-normal"
+          />
+        </div>
+        <div className="flex py-[2rem] items-start self-stretch border-b-2 border-gray-900">
+          <p className="flex flex-col w-40 text-gray-900 text-xl font-kanit font-semibold leading-6 tracking-tighter">
+            My Profile
+          </p>
+          <div className="flex items-center gap-3">
+            {token && (
+              <>
+                <img
+                  src={userInfo?.image as string}
+                  alt="Profile"
+                  className="rounded-full w-[4rem] h-[4rem]"
+                />
+                {isEditingNickname ? (
+                  <div className="flex w-[12.5rem] h-11 px-1 justify-between items-center border-b border-blue-500 bg-gray-200">
+                    <input
+                      type="text"
+                      value={editedNickname}
+                      onChange={handleNicknameChange}
+                      className="flex items-center gap-2 flex-1 bg-gray-200 text-gray-900 text-lg font-kanit font-light leading-6"
+                    />
+                  </div>
+                ) : (
+                  <div className="flex w-[12.5rem] h-11 px-1 justify-between items-center">
+                    <p className="text-gray-900 text-lg font-kanit font-light leading-6">
+                      {userInfo?.name}
+                    </p>
+                  </div>
+                )}
+                {isEditingNickname ? (
+                  <button
+                    onClick={handleNicknameSave}
+                    className="flex items-center gap-[0.375rem]"
+                  >
+                    <AiOutlineCheck className="flex items-center gap-[0.375rem] text-colorBlue" />
+                    <p className="text-colorBlue text-xl font-kanit leading-normal tracking-tight">
+                      Done
+                    </p>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleNicknameEdit(userInfo?.name)}
+                    className="flex items-center gap-[0.375rem]"
+                  >
+                    <AiFillEdit
+                      className="flex items-center gap-[0.375rem] text-colorBlue"
+                      onClick={() => handleNicknameEdit(userInfo?.name)}
+                    />
+                    <p className="text-colorBlue text-xl font-kanit leading-normal tracking-tight">
+                      Edit
+                    </p>
+                  </button>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+        <div className="flex py-7 items-start self-stretch border-b-2 border-gray-900">
+          <p className="flex flex-col w-40 text-gray-900 text-xl font-kanit font-semibold leading-6 tracking-tighter">
+            Notification
+          </p>
+          <div className="flex flex-col items-start gap-3">
+            <SwitchToggle text="Desktop notification" />
+            <SwitchToggle text="Connect to Slack" />
+          </div>
+        </div>
+        <div className="flex py-7 items-start self-stretch">
+          <p className="flex flex-col w-40 text-gray-900 text-xl font-kanit font-semibold leading-6 tracking-tighter">
+            Setting
+          </p>
+          <div className="flex flex-col items-start gap-4">
+            {typeof window !== "undefined" && sessionData?.user && token ? (
+              <GoogleLogoutBtn />
+            ) : token ? (
+              <LogoutBtn />
+            ) : null}
+            {token && <WithdrawalBtn token={token} userInfo={userInfo} />}
+          </div>
         </div>
       </div>
     </div>
