@@ -31,7 +31,7 @@ const CardDetail = ({
 
   const cloneCard = async () => {
     const token = getToken();
-    const data = await POST(`social/clone`, { cardId: cardId }, token);
+    const data: any = await POST(`social/clone`, { cardId: cardId }, token);
     if (data.status === 200) {
       setIsPlus(true);
       setShowModal(false);
@@ -44,20 +44,20 @@ const CardDetail = ({
 
   return (
     <div
-      className="fixed inset-0 bg-white bg-opacity-30 z-20"
+      className="fixed inset-0 z-20 bg-white bg-opacity-30"
       ref={modalRef}
       onClick={(e) => modalOutsideClicked(e)}
     >
       <div className="absolute flex-col justify-start w-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white border top-1/2 left-1/2 h-4/6 drop-shadow-xl rounded-xl">
         <div className="flex flex-row justify-between p-2 p-4 border-b border-current">
-          <div className="w-full flex flex-row items-center justify-between">
+          <div className="flex flex-row items-center justify-between w-full">
             <div className="flex items-center">
               <img
                 src={detail?.profile_img}
                 className="w-24 h-24 rounded-full border-[0.5rem] border-colorBlue"
                 alt="profile"
               />
-              <p className="text-3xl font-semibold ml-5">{detail?.userName}</p>
+              <p className="ml-5 text-3xl font-semibold">{detail?.userName}</p>
             </div>
             <div className="flex">
               {detail?.cardTag &&
@@ -71,7 +71,7 @@ const CardDetail = ({
             </div>
           </div>
         </div>
-        <div className="w-3/4 h-96 mx-auto flex flex-col justify-center items-center pt-5 overflow-y-auto pt-48">
+        <div className="flex flex-col items-center justify-center w-3/4 pt-5 pt-48 mx-auto overflow-y-auto h-96">
           <img
             src={detail?.cardImage}
             className="w-full cursor-pointer"

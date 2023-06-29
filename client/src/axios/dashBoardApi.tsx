@@ -25,6 +25,8 @@ export const Main_graph_Api = async (
 
   try {
     const response = await axiosInstance.get(url);
+
+    console.log(response);
     return response.data;
   } catch (err) {
     console.error(err);
