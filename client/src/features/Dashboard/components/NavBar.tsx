@@ -14,7 +14,7 @@ import UserModal from "@/features/User/UserModal";
 // Assets
 import { AiOutlineUpload, AiTwotoneBell } from "react-icons/ai";
 import { BiUser } from "react-icons/bi";
-import { BsSunFill, BsFillMoonFill, BsShareFill } from "react-icons/bs";
+import { BsShareFill } from "react-icons/bs";
 
 import html2canvas from "html2canvas";
 

@@ -106,7 +106,7 @@ export default function Search() {
 
   return (
     <>
-      <Wrapper className="flex items-center justify-center w-full">
+      <div className="h-screen max-w-[75rem] mx-auto">
         <NavBar />
         <div>
           <div className="flex justify-center items-end w-[75rem] h-[6.5rem]">
@@ -183,7 +183,7 @@ export default function Search() {
             </div>
           </div>
         </div>
-      </Wrapper>
+      </div>
     </>
   );
 }
