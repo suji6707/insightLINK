@@ -1,25 +1,25 @@
-import React from 'react';
-import axios from 'axios';
+import React from "react";
+import axios from "axios";
 
-const serverPath = "http://3.35.239.116:8800"
+const serverPath = "http://3.35.239.116:8800";
 
 function UseronlyButton() {
   const sessionManage = async () => {
     try {
       // Get the session token from local storage
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
 
       if (!token) {
-        console.log('User not logged in.');
-        alert('User not logged in.');
+        console.log("User not logged in.");
+        alert("User not logged in.");
         return;
       }
 
       // Set the session token in the request headers
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
       // Make the request to the protected endpoint
-      const response = await axios.get(`${serverPath}/api/users/me`);
+      const response = await axios.get(`/api/users/me`);
       console.log(response.data);
       alert(`${response.data.user.user_name} 님이 버튼에 접근했습니다.`);
     } catch (error) {

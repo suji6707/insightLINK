@@ -58,7 +58,7 @@ const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
   const handleNicknameSave = async () => {
     try {
       const response = await axios.patch(
-        "http://localhost:8800/api/myinfo",
+        "/api/myinfo",
         {
           editedNickname: editedNickname,
         },
@@ -80,19 +80,19 @@ const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex justify-center items-center z-50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="fixed flex w-[37.5rem] pt-3 pr-6 pb-5 pl-6 flex-col items-start rounded-lg border border-gray-200 bg-white shadow-md z-50">
         <div className="flex h-[3.75rem] justify-between items-center self-stretch">
-          <h2 className="text-gray-900 text-3xl font-kanit font-semibold leading-6 tracking-tighter">
+          <h2 className="text-3xl font-semibold leading-6 tracking-tighter text-gray-900 font-kanit">
             Account
           </h2>
           <AiOutlineClose
             onClick={closeModal}
-            className="text-gray-400 text-base font-xeicon leading-normal"
+            className="text-base leading-normal text-gray-400 font-xeicon"
           />
         </div>
         <div className="flex py-[2rem] items-start self-stretch border-b-2 border-gray-900">
-          <p className="flex flex-col w-40 text-gray-900 text-xl font-kanit font-semibold leading-6 tracking-tighter">
+          <p className="flex flex-col w-40 text-xl font-semibold leading-6 tracking-tighter text-gray-900 font-kanit">
             My Profile
           </p>
           <div className="flex items-center gap-3">
@@ -109,12 +109,12 @@ const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
                       type="text"
                       value={editedNickname}
                       onChange={handleNicknameChange}
-                      className="flex items-center gap-2 flex-1 bg-gray-200 text-gray-900 text-lg font-kanit font-light leading-6"
+                      className="flex items-center flex-1 gap-2 text-lg font-light leading-6 text-gray-900 bg-gray-200 font-kanit"
                     />
                   </div>
                 ) : (
                   <div className="flex w-[12.5rem] h-11 px-1 justify-between items-center">
-                    <p className="text-gray-900 text-lg font-kanit font-light leading-6">
+                    <p className="text-lg font-light leading-6 text-gray-900 font-kanit">
                       {userInfo?.name}
                     </p>
                   </div>
@@ -125,7 +125,7 @@ const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
                     className="flex items-center gap-[0.375rem]"
                   >
                     <AiOutlineCheck className="flex items-center gap-[0.375rem] text-colorBlue" />
-                    <p className="text-colorBlue text-xl font-kanit leading-normal tracking-tight">
+                    <p className="text-xl leading-normal tracking-tight text-colorBlue font-kanit">
                       Done
                     </p>
                   </button>
@@ -138,7 +138,7 @@ const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
                       className="flex items-center gap-[0.375rem] text-colorBlue"
                       onClick={() => handleNicknameEdit(userInfo?.name)}
                     />
-                    <p className="text-colorBlue text-xl font-kanit leading-normal tracking-tight">
+                    <p className="text-xl leading-normal tracking-tight text-colorBlue font-kanit">
                       Edit
                     </p>
                   </button>
@@ -147,8 +147,8 @@ const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
             )}
           </div>
         </div>
-        <div className="flex py-7 items-start self-stretch border-b-2 border-gray-900">
-          <p className="flex flex-col w-40 text-gray-900 text-xl font-kanit font-semibold leading-6 tracking-tighter">
+        <div className="flex items-start self-stretch border-b-2 border-gray-900 py-7">
+          <p className="flex flex-col w-40 text-xl font-semibold leading-6 tracking-tighter text-gray-900 font-kanit">
             Notification
           </p>
           <div className="flex flex-col items-start gap-3">
@@ -156,14 +156,12 @@ const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
             <SwitchToggle text="Connect to Slack" />
           </div>
         </div>
-        <div className="flex py-7 items-start self-stretch">
-          <p className="flex flex-col w-40 text-gray-900 text-xl font-kanit font-semibold leading-6 tracking-tighter">
+        <div className="flex items-start self-stretch py-7">
+          <p className="flex flex-col w-40 text-xl font-semibold leading-6 tracking-tighter text-gray-900 font-kanit">
             Setting
           </p>
           <div className="flex flex-col items-start gap-4">
-            { token ? 
-              <LogoutBtn />
-            : null}
+            {token ? <LogoutBtn /> : null}
             {token && <WithdrawalBtn token={token} userInfo={userInfo} />}
           </div>
         </div>
