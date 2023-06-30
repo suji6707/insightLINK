@@ -3,7 +3,7 @@ export interface Friends {
   userId: number;
   userName: string;
   profile_img: string;
-};
+}
 
 export interface Cards {
   cardId: number;
@@ -15,8 +15,6 @@ export interface Cards {
 }
 
 export interface CardDetail {
-  modalRef: React.ForwardedRef<HTMLDivElement>;
-  modalOutsideClicked: (e: any) => void;
-  cardId?: number;
-  userId?: number;
+  cardId: number;
+  userId: number;
 }

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 
-import getToken from "@/axios/getToken";
 import { GET } from "@/axios/GET";
 import { POST } from "@/axios/POST";
 import { DELETE } from "@/axios/DELETE";
@@ -24,6 +23,7 @@ const randomColors = [
 const Users = () => {
   const [users, setUsers] = useState<any[]>([]);
   const router = useRouter();
+
   // 추천 친구 조회
   const getUsers = async () => {
     const data = await GET("social/user", true);
@@ -48,14 +48,18 @@ const Users = () => {
     getUsers();
   };
 
-  const handleClick = (userid: number) => {
+  const handleRedirectToDashboard = (userid: number) => {
     router.push(`/dashboard/${userid}`);
+  };
+
+  const handleRedirectToSearch = (tag: string) => {
+    router.push(`/search?search=${tag}`);
   };
 
   return (
     <div className="w-[20rem] py-[3.75rem] flex-col items-start space-y-6 self-stretch">
       <div className="flex justify-between items-center self-stretch">
-        <p className="text-gray-900 text-2xl font-kanit font-semibold leading-6 tracking-tight">
+        <p className="text-gray-900 text-2xl  font-semibold leading-6 tracking-tight">
           Connect more...
         </p>
         <div className="flex w-7 h-7 flex-col justify-center items-center">
@@ -80,13 +84,13 @@ const Users = () => {
                       className="w-[2rem] h-[2rem] rounded-full cursor-pointer"
                       alt="profile"
                       onClick={() => {
-                        handleClick(u.userId);
+                        handleRedirectToDashboard(u.userId);
                       }}
                     />
                     <p
-                      className="text-gray-900 text-lg font-kanit leading-normal tracking-wide"
+                      className="text-gray-900 text-lg  leading-normal tracking-wide"
                       onClick={() => {
-                        handleClick(u.userId);
+                        handleRedirectToDashboard(u.userId);
                       }}
                     >
                       {u.userName}
@@ -110,8 +114,9 @@ const Users = () => {
                             Math.floor(Math.random() * randomColors.length)
                           ],
                       }}
+                      onClick={() => handleRedirectToSearch(t)}
                     >
-                      <p className="text-white text-xl font-kanit font-semibold leading-6 tracking-wider">
+                      <p className="text-white text-xl  font-semibold leading-6 tracking-wider">
                         #{t}
                       </p>
                     </li>

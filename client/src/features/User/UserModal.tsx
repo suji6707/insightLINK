@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import axios from "axios";
 import { GET } from "@/axios/GET";
 // Components
 import LogoutBtn from "./LogoutBtn";
