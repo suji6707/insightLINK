@@ -1,9 +1,5 @@
 import React, { useRef, useState } from "react";
-// recoil
-import { UploadingAtom } from "@/recoil/atoms/MainGraphAtom";
-import AWS from "aws-sdk";
 
-import getToken from "@/axios/getToken";
 import { POST } from "@/axios/POST";
 import ImageList from "@/features/ImageUpload/ImgList";
 // Recoil
@@ -13,8 +9,9 @@ import {
   ImgModalAtom,
   UploadedImgAtom,
   UploadedImgNumAtom,
-  ImgUpLoadAtom,
 } from "@/recoil/atoms/MainGraphAtom";
+// Hooks
+import useUploadImagesToS3 from "./hooks/useUploadImagesToS3";
 // Assets
 import { BiLoader } from "react-icons/bi";
 import {
@@ -22,25 +19,18 @@ import {
   AiOutlineClose,
   AiOutlineUpload,
 } from "react-icons/ai";
+import { ImgUpLoadAtom, UploadingAtom } from "@/recoil/atoms/ImageUploadAtom";
 
-type ImgInfo = {
-  blob: Blob;
-  name: string;
-  size: number;
-  type: string;
-};
-
-export default function ImageUpload() {
+const ImageUpload = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  // const modalRef = useRef<HTMLDivElement>(null);
-  const [imgList, setImgList] = useState<ImgInfo[]>([]);
-  const [tags, setTags] = useRecoilState(ExportedTagsAtom);
-  const [imageUrl, setImageUrl] = useRecoilState(UploadedImgAtom);
-  const [imgNum, setImgNum] = useRecoilState(UploadedImgNumAtom);
   const [showImgModal, setShowImgModal] = useRecoilState(ImgModalAtom);
   const [uploading, setUploading] = useRecoilState(UploadingAtom);
-
   const [imgUpLoad, setImgUpLoad] = useRecoilState(ImgUpLoadAtom);
+
+  const [imgList, setImgList] = useState<ImgInfo[]>([]);
+  const [imgNum, setImgNum] = useRecoilState(UploadedImgNumAtom);
+  const [imageUrl, setImageUrl] = useRecoilState(UploadedImgAtom);
+  const [tags, setTags] = useRecoilState(ExportedTagsAtom);
 
   const handleInput = () => {
     fileInputRef.current?.click();
@@ -67,122 +57,25 @@ export default function ImageUpload() {
     setImgNum(newImgList.length);
   };
 
-  if (process.env.S3_ACCESS_KEY && process.env.S3_SECRET_KEY) {
-    AWS.config.update({
-      credentials: {
-        accessKeyId: process.env.S3_ACCESS_KEY,
-        secretAccessKey: process.env.S3_SECRET_KEY,
-      },
-      region: "ap-northeast-2",
-      signatureVersion: "2023-06-23",
-    });
-  }
-
-  const resizeImage = (image: Blob, width: number): Promise<Blob> => {
-    return new Promise<Blob>((resolve, reject) => {
-      const img = new Image();
-      img.src = URL.createObjectURL(image);
-
-      img.onload = () => {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-
-        if (ctx) {
-          const aspectRatio = img.width / img.height;
-          const height = width / aspectRatio;
-
-          canvas.width = width;
-          canvas.height = height;
-
-          ctx.drawImage(img, 0, 0, width, height);
-
-          canvas.toBlob(
-            (resizedBlob) => {
-              if (resizedBlob) {
-                resolve(resizedBlob);
-              } else {
-                reject(new Error("이미지 리사이징 실패"));
-              }
-            },
-            "image/jpeg",
-            0.9
-          );
-        } else {
-          reject(new Error("캔버스 컨텍스트 가져오기 실패"));
-        }
-      };
-
-      img.onerror = () => {
-        reject(new Error("이미지 로딩 실패"));
-      };
-    });
-  };
-
   const uploadImages = async () => {
-    setShowImgModal(false);
     const startTime = performance.now();
-    try {
-      const promises = imgList.map((file) => {
-        return new Promise<string>((resolve, reject) => {
-          const { blob } = file;
-          const fileName = `${Date.now()}.${file.name}`;
 
-          // 이미지 리사이징
-          const width = 400;
-          resizeImage(blob, width)
-            .then((resizedBlob) => {
-              console.log("원본 Image Size:", blob.size);
-              console.log("Resized Image Size:", resizedBlob.size);
+    useUploadImagesToS3;
+    const POSTImgLink = async () => {
+      const data: any = await POST("upload", imageUrl, true);
 
-              // 리사이즈된 이미지 업로드
-              const s3 = new AWS.S3();
-              s3.upload(
-                {
-                  Bucket: "sw-jungle-s3",
-                  Key: fileName,
-                  Body: resizedBlob,
-                  ContentType: file.type,
-                },
-                (
-                  uploadError: Error | null,
-                  data: AWS.S3.ManagedUpload.SendData
-                ) => {
-                  if (uploadError) {
-                    reject(uploadError);
-                  } else if (data && data.Location) {
-                    resolve(data.Location);
-                  } else {
-                    reject(new Error("이미지 업로드 실패 - S3"));
-                  }
-                }
-              );
-            })
-            .catch((error) => {
-              reject(error);
-            });
-        });
-      });
+      const endTime = performance.now();
+      const executionTime = endTime - startTime;
+      console.log("Execution time:", executionTime, "ms");
 
-      const uploadedImageUrls = await Promise.all(promises);
-      setImageUrl(uploadedImageUrls);
+      if (data.status === 200) {
+        setUploading(false);
+        setImgNum(0);
+        setImgUpLoad(!imgUpLoad);
+      }
+    };
 
-      const POSTImgLink = async () => {
-        const data: any = await POST("upload", uploadedImageUrls, true);
-
-        const endTime = performance.now();
-        const executionTime = endTime - startTime;
-        console.log("Execution time:", executionTime, "ms");
-
-        if (data.status === 200) {
-          setUploading(false);
-          setImgUpLoad(!imgUpLoad);
-        }
-      };
-
-      POSTImgLink();
-    } catch (error) {
-      console.error("이미지 업로드 실패", error);
-    }
+    POSTImgLink();
   };
 
   // const modalOutsideClicked = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -260,6 +153,7 @@ export default function ImageUpload() {
           <div
             onClick={() => {
               setUploading(true);
+              setShowImgModal(false);
               uploadImages();
             }}
             className="flex items-center justify-center h-10 gap-1 px-4 bg-white border-2 rounded cursor-pointer border-colorBlue"
@@ -321,4 +215,6 @@ export default function ImageUpload() {
       </div>
     </div>
   );
-}
+};
+
+export default ImageUpload;

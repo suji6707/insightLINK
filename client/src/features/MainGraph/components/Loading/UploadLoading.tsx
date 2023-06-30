@@ -14,8 +14,8 @@ import { BiLoader } from "react-icons/bi";
 
 const UploadLoading = () => {
   const [imageUrl, setImageUrl] = useRecoilState(UploadedImgAtom);
-  const [tags, setTags] = useRecoilState(ExportedTagsAtom);
   const [imgNum, setImgNum] = useRecoilState(UploadedImgNumAtom);
+  const [tags, setTags] = useRecoilState(ExportedTagsAtom);
 
   return (
     <div className="bg-gray-100 h-screen">

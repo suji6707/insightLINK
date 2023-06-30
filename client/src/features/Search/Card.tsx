@@ -2,14 +2,7 @@ import React, { useState } from "react";
 import { AiOutlineExpand } from "react-icons/ai";
 import CardModal from "./CardModal";
 
-type HandleExpandClickType = (id: number) => void;
-
-type CardProps = {
-  card: any;
-  handleExpandClick: HandleExpandClickType;
-};
-
-const Card: React.FC<CardProps> = ({ card, handleExpandClick }) => {
+const Card: React.FC<CardProps> = ({ card }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
@@ -34,9 +27,7 @@ const Card: React.FC<CardProps> = ({ card, handleExpandClick }) => {
         </div>
       </div>
 
-      {isModalOpen && (
-        <CardModal card={card} closeModal={closeModal} />
-      )}
+      {isModalOpen && <CardModal card={card} closeModal={closeModal} />}
     </>
   );
 };
