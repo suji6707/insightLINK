@@ -9,7 +9,7 @@ export const authMiddleware = async (req, res, next) => {
 
   if (!authToken || authType !== 'Bearer') {
     res.status(401).send({
-      errorMessage: 'This function is available after logging in.',
+      errorMessage: 'This function is available after log in.',
     });
     return;
   }
