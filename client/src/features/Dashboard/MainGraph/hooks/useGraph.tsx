@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 // recoil
 import { useRecoilValue } from "recoil";
-import { EditModeAtom, ImgUpLoadAtom } from "@/recoil/atoms/MainGraphAtom";
+import { EditModeAtom } from "@/recoil/atoms/MainGraphAtom";
+import { ImgUpLoadAtom } from "@/recoil/atoms/ImageUploadAtom";
 
-import { useRouter } from "next/router";
 import { Main_graph_Api } from "@/axios/dashBoardApi";
 import { Main_graph_Api_DTO } from "@/types/dashborad.types";
 
