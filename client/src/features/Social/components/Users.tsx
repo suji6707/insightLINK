@@ -64,7 +64,7 @@ const Users = () => {
         </p>
         <div className="flex w-7 h-7 flex-col justify-center items-center">
           <AiOutlineReload
-            className="text-gray-800 text-base font-xeicon leading-normal"
+            className="text-gray-800 text-base font-xeicon leading-normal cursor-pointer"
             onClick={() => getUsers()}
           />
         </div>
@@ -88,7 +88,7 @@ const Users = () => {
                       }}
                     />
                     <p
-                      className="text-gray-900 text-lg  leading-normal tracking-wide"
+                      className="text-gray-900 text-lg  leading-normal tracking-wide cursor-pointer"
                       onClick={() => {
                         handleRedirectToDashboard(u.userId);
                       }}
@@ -107,7 +107,7 @@ const Users = () => {
                   {u.tags.map((t: string, index: number) => (
                     <li
                       key={index}
-                      className="flex h-[2.25rem] px-4 justify-center items-center rounded"
+                      className="flex h-[2.25rem] px-4 justify-center items-center rounded cursor-pointer"
                       style={{
                         backgroundColor:
                           randomColors[

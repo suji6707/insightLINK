@@ -29,7 +29,7 @@ export default function Home() {
           {token ? (
             <button
               onClick={handleLogout}
-              className="px-4 py-2 mr-4 font-bold text-white bg-black rounded"
+              className="px-4 py-2 mr-4 font-bold text-white bg-black rounded cursor-pointer"
             >
               로그아웃
             </button>

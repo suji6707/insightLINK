@@ -9,8 +9,11 @@ export default function DuplicateCardBtn() {
 
   return (
     <>
-      <button onClick={handleDuplicateCard} className="follow-btn">
-      복제
+      <button
+        onClick={handleDuplicateCard}
+        className="follow-btn  cursor-pointer"
+      >
+        복제
       </button>
     </>
   );

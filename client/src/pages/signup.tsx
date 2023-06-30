@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import NavBar from "@/features/Dashboard/components/NavBar";
+
 import { POST } from "@/axios/POST";
-// Component
 
 export default function Home() {
   const router = useRouter();
@@ -64,7 +63,7 @@ export default function Home() {
     );
 
     if (response.data.success) {
-      alert(`Success! User ${userName} was successfully created!`);
+      alert(`안녕하세요, ${userName}님! 인사이트를 발견하세요!`);
       setUserEmail("");
       setPassword("");
       setConfirmPassword("");
@@ -79,112 +78,98 @@ export default function Home() {
     const token = localStorage.getItem("token");
 
     if (token) {
-      // User is already logged in, redirect to another page
       router.replace("/dashboard");
     }
   }, []);
 
   return (
-    <div>
-      <NavBar />
-      <div className="flex flex-col items-center justify-center h-screen">
-        <div className="container mx-auto max-w-md flex flex-col items-end">
-          <div className="mb-4 flex items-center justify-end">
-            <label
-              className="block text-gray-700 text-sm font-bold mr-2"
-              htmlFor="email"
-            >
-              이메일:
-            </label>
-            <div className="input-box ml-auto">
-              <input
-                id="email"
-                value={userEmail}
-                onChange={(event) => setUserEmail(event.target.value)}
-                placeholder="이메일"
-                className="form_input inline-block border border-gray-300 rounded px-2 py-1"
-              />
-            </div>
+    <div className="flex flex-col items-center justify-center h-screen w-screen">
+      <div className="container mx-auto max-w-md flex flex-col">
+        <div className="mb-4 flex items-center justify-end">
+          <label
+            className="block text-gray-700 text-sm font-bold mr-2"
+            htmlFor="email"
+          >
+            이메일 :
+          </label>
+          <input
+            id="email"
+            value={userEmail}
+            onChange={(event) => setUserEmail(event.target.value)}
+            placeholder="이메일"
+            className="form_input inline-block border border-gray-300 rounded px-2 py-1"
+          />
+        </div>
+        {emailFormatError && (
+          <div className="text-red-500 text-right">이메일 형식이 아닙니다.</div>
+        )}
+        {checkUserEmail && (
+          <div className="text-red-500 text-right">
+            이미 회원가입한 이메일입니다.
           </div>
-          {emailFormatError && (
-            <div className="text-red-500 text-right">
-              이메일 형식이 아닙니다.
-            </div>
-          )}
-          {checkUserEmail && (
-            <div className="text-red-500 text-right">
-              이미 회원가입한 이메일입니다.
-            </div>
-          )}
-          <div className="mb-4 flex items-center justify-end">
-            <label
-              className="block text-gray-700 text-sm font-bold mr-2"
-              htmlFor="password"
-            >
-              비밀번호:
-            </label>
-            <div className="input-box ml-auto">
-              <input
-                id="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                placeholder="비밀번호"
-                type="password"
-                className="form_input inline-block border border-gray-300 rounded px-2 py-1"
-              />
-            </div>
+        )}
+        <div className="mb-4 flex items-center justify-end">
+          <label
+            className="block text-gray-700 text-sm font-bold mr-2"
+            htmlFor="password"
+          >
+            비밀번호 :
+          </label>
+          <input
+            id="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            placeholder="비밀번호"
+            type="password"
+            className="form_input inline-block border border-gray-300 rounded px-2 py-1"
+          />
+        </div>
+        <div className="mb-4 flex items-center justify-end">
+          <label
+            className="block text-gray-700 text-sm font-bold mr-2"
+            htmlFor="confirmPassword"
+          >
+            비밀번호 확인 :
+          </label>
+          <input
+            id="confirmPassword"
+            value={confirmPassword}
+            onChange={(event) => setConfirmPassword(event.target.value)}
+            placeholder="비밀번호 확인"
+            type="password"
+            className="form_input inline-block border border-gray-300 rounded px-2 py-1"
+          />
+        </div>
+        {passwordMatchError && (
+          <div className="text-red-500 text-right">
+            비밀번호가 일치하지 않습니다.
           </div>
-          <div className="mb-4 flex items-center justify-end">
-            <label
-              className="block text-gray-700 text-sm font-bold mr-2"
-              htmlFor="confirmPassword"
-            >
-              비밀번호 확인:
-            </label>
-            <div className="input-box ml-auto">
-              <input
-                id="confirmPassword"
-                value={confirmPassword}
-                onChange={(event) => setConfirmPassword(event.target.value)}
-                placeholder="비밀번호 확인"
-                type="password"
-                className="form_input inline-block border border-gray-300 rounded px-2 py-1"
-              />
-            </div>
+        )}
+        {passwordError && (
+          <div className="text-red-500 text-right">
+            비밀번호는 문자(대문자 또는 소문자)와 숫자의 조합을 최소 5자
+            이상이여야 합니다.
           </div>
-          {passwordMatchError && (
-            <div className="text-red-500 text-right">
-              비밀번호가 일치하지 않습니다.
-            </div>
-          )}
-          {passwordError && (
-            <div className="text-red-500 text-right">
-              비밀번호는 문자(대문자 또는 소문자)와 숫자의 조합을 최소 5자
-              이상이여야 합니다.
-            </div>
-          )}
-          <div className="mb-4 flex items-center justify-end">
-            <label
-              className="block text-gray-700 text-sm font-bold mr-2"
-              htmlFor="userName"
-            >
-              이름:
-            </label>
-            <div className="input-box ml-auto">
-              <input
-                id="userName"
-                value={userName}
-                onChange={(event) => setUserName(event.target.value)}
-                placeholder="이름"
-                className="form_input inline-block border border-gray-300 rounded px-2 py-1"
-              />
-            </div>
-          </div>
+        )}
+        <div className="mb-4 flex items-center justify-end">
+          <label
+            className="block text-gray-700 text-sm font-bold mr-2"
+            htmlFor="userName"
+          >
+            이름 :
+          </label>
+          <input
+            id="userName"
+            value={userName}
+            onChange={(event) => setUserName(event.target.value)}
+            placeholder="이름"
+            className="form_input inline-block border border-gray-300 rounded px-2 py-1"
+          />
         </div>
         <div className="flex justify-end mt-4">
           <button
             onClick={doUserRegistration}
-            className="bg-black text-white font-bold py-2 px-4 rounded"
+            className="bg-black text-white font-bold py-2 px-[4.5rem] rounded cursor-pointer"
           >
             회원가입
           </button>

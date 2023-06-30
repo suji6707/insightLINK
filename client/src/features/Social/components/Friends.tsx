@@ -83,7 +83,7 @@ const Friends = () => {
                   <div className="w-[6.25rem] h-[6.25rem] transition transform rounded-full cursor-pointer hover:-rotate-6 bg-colorBlue flex justify-center items-center">
                     <img
                       src={f.profile_img}
-                      className="w-[5.25rem] h-[5.25rem] rounded-full"
+                      className="w-[5.25rem] h-[5.25rem] rounded-full cursor-pointer"
                       alt="profile"
                       onClick={() => {
                         setShowModal(true);

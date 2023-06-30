@@ -58,7 +58,7 @@ const Feeds = () => {
               >
                 <img
                   src={c?.cardImg}
-                  className="object-cover max-w-full max-h-full"
+                  className="object-cover max-w-full max-h-full cursor-pointer"
                   onClick={() => {
                     setShowModal(true);
                     setCardId(c.cardId);
