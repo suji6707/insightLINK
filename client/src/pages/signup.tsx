@@ -53,7 +53,7 @@ export default function Home() {
       setPasswordMatchError(false);
     }
 
-    const response = await POST(
+    const response: any = await POST(
       "signup",
       {
         email: userEmail,

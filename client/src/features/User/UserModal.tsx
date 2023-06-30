@@ -54,7 +54,7 @@ const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
 
   const handleNicknameSave = async () => {
     try {
-      const response = await PATCH(
+      const response: any = await PATCH(
         "myinfo",
         {
           editedNickname: editedNickname,

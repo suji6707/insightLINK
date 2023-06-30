@@ -167,7 +167,7 @@ export default function ImageUpload() {
       setImageUrl(uploadedImageUrls);
 
       const POSTImgLink = async () => {
-        const data = await POST("upload", uploadedImageUrls, true);
+        const data: any = await POST("upload", uploadedImageUrls, true);
 
         const endTime = performance.now();
         const executionTime = endTime - startTime;

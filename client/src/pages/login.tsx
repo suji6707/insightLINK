@@ -18,7 +18,7 @@ export default function Home() {
   const setLoginId = useSetRecoilState(LoginStateAtom);
 
   const handleLogin = async () => {
-    const response = await POST(
+    const response: any = await POST(
       "login/generic",
       {
         email: userEmail,
