@@ -1,6 +1,7 @@
 import express from 'express';
 import '../dotenv.js';
 import { db } from '../connect.js';
+// import { combinedList } from '../services/taglist.js';   // 전부 DB SELECT로 바꿔야 함. 
 
 
 const router = express.Router();
@@ -155,6 +156,25 @@ const followDummy = async () => {
 };
 
 // followDummy();   /* 주석해제 유의 */
+
+
+// const makeTagList = async () => {
+//   let connection = null;
+//   try {
+//     connection = await db.getConnection();
+//     for (let i = 0; i < combinedList.length; i++) {
+//       let sql = `INSERT INTO taglist (englishKeyword, koreanKeyword) 
+//                   VALUES (?, ?)`;
+//       connection.query(sql, [combinedList[i].englishKeyword, combinedList[i].koreanKeyword]);
+//     }
+//     connection.release();
+//   } catch (err) {
+//     connection?.release();
+//     console.log(err);
+//   }
+// };
+
+// makeTagList();
 
 
 export default router;

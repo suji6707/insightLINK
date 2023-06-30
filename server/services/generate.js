@@ -1,6 +1,8 @@
 import '../dotenv.js';
+import { db } from '../connect.js';
 import { Configuration, OpenAIApi } from 'openai';
-import * as Taglist from './taglist.js'; 
+import { stringify } from 'uuid';
+// import * as Taglist from './taglist.js'; 
 
 
 const configuration = new Configuration({
@@ -25,7 +27,7 @@ export const generate = async (req, res, ocr) => {
   } try {
     const completion = await openai.createCompletion({
       model: 'text-davinci-003',
-      prompt: generatePrompt(ocr),
+      prompt: await generatePrompt(ocr),
       temperature: 0,
       max_tokens: 400,
       top_p: 1,
@@ -50,15 +52,48 @@ export const generate = async (req, res, ocr) => {
   }
 };
 
-const generatePrompt = (ocrResult) => {
-  let exportTagCount = process.env.EXPORT_TAG_COUNT;
-  let prompt = `Given ${Taglist.countTags()} categories: `; 
-  prompt += `${Taglist.convertToPlainText()}.`;
-  prompt += `Please select the ${exportTagCount} categories that best describe the uploaded data. If none of the categories are applicable, please select the ${exportTagCount} categories that appear to be most relevant.\n`;
-  // console.log(prompt);
-  prompt += 'Provide them in JSON format.\'{"tags":[]}\'\n';
-  prompt += 'Uploaded data:';
-  prompt += ocrResult;
-  // console.log(prompt);
-  return prompt;
+
+const convertToPlainText = (taglist) => {
+  let plainText = '';
+  const array = taglist;
+  for (let i = 0; i < array.length; i++) {
+    plainText += `"${array[i]}"`;
+    if (i === array.length - 2) {
+      plainText += ' and ';
+    } else if (i !== array.length - 1) {
+      plainText += ',';
+    }
+  }
+  return plainText;
+};
+
+/* TODO: convertToPlainText() 대신 JSON stringify ??? */
+
+const generatePrompt = async (ocrResult) => {
+  let connection = null;
+  try {
+    connection = await db.getConnection();
+    const [rows] = await connection.query('SELECT englishKeyword FROM taglist');
+    connection.release();
+    const taglist = rows.map(row => row.englishKeyword);   // taglist 테이블의 englishKeywords를 리스트로.
+    const taglistText = taglist.map(tag => JSON.stringify(tag)).join(',');
+
+
+    let exportTagCount = process.env.EXPORT_TAG_COUNT;
+    let prompt = `Given ${taglist.length} categories: `; 
+    prompt += `${taglistText}.`;
+    prompt += `Please select the ${exportTagCount} categories that best describe the uploaded data. If none of the categories are applicable, please select the ${exportTagCount} categories that appear to be most relevant.\n`;
+    // console.log(prompt);
+    prompt += 'Provide them in JSON format.\'{"tags":[]}\'\n';
+    prompt += 'Uploaded data:';
+    prompt += ocrResult;
+
+    console.log(prompt);
+
+    return prompt;
+  } catch (err) {
+    connection?.release();
+    console.log(err);
+    throw new Error('generate FAILED');
+  }
 };
