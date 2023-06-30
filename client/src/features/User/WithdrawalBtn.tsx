@@ -22,7 +22,7 @@ const WithdrawalBtn: React.FC<WithdrawalBtnProps> = ({ userInfo }) => {
 
   return (
     <button
-      className="bg-black text-white font-bold py-2 px-4 rounded mt-2"
+      className="bg-black text-white font-bold py-2 px-4 rounded mt-2 cursor-pointer"
       onClick={handleWithdrawal}
     >
       탈퇴

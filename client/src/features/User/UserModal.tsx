@@ -80,7 +80,7 @@ const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
           </h2>
           <AiOutlineClose
             onClick={closeModal}
-            className="text-base leading-normal text-gray-400 font-xeicon"
+            className="text-base leading-normal text-gray-400 font-xeicon cursor-pointer"
           />
         </div>
         <div className="flex py-[2rem] items-start self-stretch border-b-2 border-gray-900">
@@ -112,7 +112,7 @@ const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
             {isEditingNickname ? (
               <button
                 onClick={handleNicknameSave}
-                className="flex items-center gap-[0.375rem]"
+                className="flex items-center gap-[0.375rem] cursor-pointer"
               >
                 <AiOutlineCheck className="flex items-center gap-[0.375rem] text-colorBlue" />
                 <p className="text-xl leading-normal tracking-tight text-colorBlue font-kanit">
@@ -122,10 +122,10 @@ const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
             ) : (
               <button
                 onClick={() => handleNicknameEdit(userInfo?.name)}
-                className="flex items-center gap-[0.375rem]"
+                className="flex items-center gap-[0.375rem] cursor-pointer"
               >
                 <AiFillEdit
-                  className="flex items-center gap-[0.375rem] text-colorBlue"
+                  className="flex items-center gap-[0.375rem] text-colorBlue cursor-pointer"
                   onClick={() => handleNicknameEdit(userInfo?.name)}
                 />
                 <p className="text-xl leading-normal tracking-tight text-colorBlue font-kanit">

@@ -91,13 +91,13 @@ function CardDetail() {
                 <>
                   <div className="h-full card-detail-edit-btn">
                     <button
-                      className="svg-button-nomal"
+                      className="svg-button-nomal  cursor-pointer"
                       onClick={() => setIsEditingContent(false)}
                     >
                       <BsXLg />
                     </button>
                     <button
-                      className="svg-button-nomal"
+                      className="svg-button-nomal  cursor-pointer"
                       onClick={handleContentSave}
                     >
                       <BsPencilFill />
@@ -108,13 +108,13 @@ function CardDetail() {
                 <>
                   <div className="h-full card-detail-edit-btn">
                     <button
-                      className="svg-button-nomal"
+                      className="svg-button-nomal  cursor-pointer"
                       onClick={handleCardDelete}
                     >
                       <BsTrashFill />
                     </button>
                     <button
-                      className="svg-button-nomal"
+                      className="svg-button-nomal  cursor-pointer"
                       onClick={handleContentEdit}
                     >
                       <BsPencilFill />
@@ -129,8 +129,8 @@ function CardDetail() {
             )}
           </div>
           <button
+            className="ml-auto svg-button-nomal  cursor-pointer"
             onClick={handleDetailOpen}
-            className="ml-auto svg-button-nomal"
           >
             <BsXLg />
           </button>

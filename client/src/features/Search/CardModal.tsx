@@ -23,7 +23,7 @@ const CardModal: React.FC<CardModalProps> = ({ card, closeModal }) => {
             </div>
             <div
               onClick={closeModal}
-              className="flex w-[1.75rem] h-[1.75rem] flex-col justify-center items-center rounded-[0.25rem] bg-[#FFF]"
+              className="flex w-[1.75rem] h-[1.75rem] flex-col justify-center items-center rounded-[0.25rem] bg-[#FFF] cursor-pointer"
             >
               close
             </div>

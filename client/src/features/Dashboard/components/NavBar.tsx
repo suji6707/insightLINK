@@ -102,12 +102,12 @@ export default function NavBar() {
         <div className="flex items-center self-stretch gap-4">
           <div className="flex flex-col items-center justify-center w-7 h-7">
             <BsShareFill
-              className="leading-normal text-gray-800 text-1xl font-xeicon"
+              className="leading-normal text-gray-800 text-1xl font-xeicon cursor-pointer"
               onClick={handleShareIconClick}
             />
           </div>
           <button
-            className="relative flex flex-col items-center justify-center w-7 h-7"
+            className="relative flex flex-col items-center justify-center w-7 h-7  cursor-pointer"
             onClick={handleOpenAlarm}
           >
             <AiTwotoneBell className="text-gray-800 text-[1rem] font-xeicon leading-normal" />
@@ -122,13 +122,13 @@ export default function NavBar() {
         {userProfile ? (
           <img
             src={userProfile}
-            className="w-10 h-10 rounded-full"
+            className="w-10 h-10 rounded-full  cursor-pointer"
             onClick={handleUserIconClick}
           />
         ) : (
           <BiUser
+            className="text-gray-800 text-[1rem] font-xeicon leading-normal  cursor-pointer"
             onClick={handleUserIconClick}
-            className="text-gray-800 text-[1rem] font-xeicon leading-normal"
           />
         )}
         {/* {currentTheme === "dark" ? (
@@ -137,8 +137,8 @@ export default function NavBar() {
           <BsFillMoonFill size={30} onClick={() => setTheme("dark")} />
         )} */}
         <div
-          onClick={() => setShowImgModal(true)}
           className="flex items-center justify-center h-10 gap-1 px-4 bg-gray-900 rounded cursor-pointer"
+          onClick={() => setShowImgModal(true)}
         >
           <AiOutlineUpload className="text-white text-[1rem] font-xeicon leading-normal" />
           <p className="text-white text-[1.125rem] font-kanit font-semibold leading-normal tracking-tighter">

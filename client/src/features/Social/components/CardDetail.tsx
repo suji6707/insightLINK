@@ -74,7 +74,7 @@ const CardDetail = ({ cardId, userId }: CardDetail) => {
 
   return (
     <div
-      className="z-10 fixed inset-0 bg-opacity-10 flex justify-center items-center"
+      className="z-10 fixed inset-0 bg-opacity-10 flex justify-center items-center cursor-pointer"
       ref={modalRef}
       onClick={(e) => modalOutsideClicked(e)}
     >
@@ -84,7 +84,7 @@ const CardDetail = ({ cardId, userId }: CardDetail) => {
             Feed Detail
           </p>
           <AiOutlineClose
-            className="text-base leading-normal text-gray-400 font-xeicon"
+            className="text-base leading-normal text-gray-400 font-xeicon cursor-pointer"
             onClick={() => setShowModal(false)}
           />
         </div>
@@ -94,7 +94,7 @@ const CardDetail = ({ cardId, userId }: CardDetail) => {
               return (
                 <div
                   key={index}
-                  className="flex h-9 px-4 justify-center items-center rounded"
+                  className="flex h-9 px-4 justify-center items-center rounded cursor-pointer"
                   style={{
                     backgroundColor:
                       randomColors[
@@ -129,8 +129,9 @@ const CardDetail = ({ cardId, userId }: CardDetail) => {
           <div className="flex h-[2.75rem] justify-between items-center flex-1">
             <div className="flex flex-col items-start gap-2">
               <p
-                className="text-gray-900  font-light text-base leading-none tracking-widest"
+                className="text-gray-900  font-light text-base leading-none tracking-widest cursor-pointer"
                 onClick={() => {
+                  setShowModal(false);
                   handleRedirectToDashboard(userId);
                 }}
               >
@@ -141,7 +142,7 @@ const CardDetail = ({ cardId, userId }: CardDetail) => {
               </p>
             </div>
             <div
-              className="flex items-center justify-center h-11 px-5 gap-1 rounded-md bg-gray-900"
+              className="flex items-center justify-center h-11 px-5 gap-1 rounded-md bg-gray-900 cursor-pointer"
               onClick={cloneCard}
             >
               <AiOutlineUpload className="text-white text-base font-xeicon font-normal" />

@@ -28,8 +28,8 @@ const Card: React.FC<CardProps> = ({ data }) => {
     <div className="w-[10rem] bg-gray-100 h-[10rem] border-2 rounded border-gray-300 relative hover:border-blue-500 flex justify-center items-center">
       <img src={data?.cardImg} className="object-cover max-w-full max-h-full" />
       <button
-        onClick={handleCardClick}
         className="absolute svg-button-nomal right-3 bottom-3 cursor-pointer"
+        onClick={handleCardClick}
       >
         <BiFullscreen className="self-center z-1" size="1rem" />
       </button>

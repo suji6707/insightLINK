@@ -131,7 +131,7 @@ const ImageUpload = () => {
             }}
           /> */}
           <AiOutlineClose
-            className="text-lg leading-none cursor-pointer"
+            className="text-lg leading-none cursor-pointer cursor-pointer"
             style={{
               color: "#A1A1A1",
               fontFamily: "xeicon",

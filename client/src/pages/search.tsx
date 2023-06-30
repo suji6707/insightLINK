@@ -131,7 +131,7 @@ export default function Search() {
                 {taglist.map((tag, index) => (
                   <div
                     key={index}
-                    className={`flex items-center justify-center h-[2rem] py-0 px-[1rem] rounded-md bg-[#254D9B]`}
+                    className={`flex items-center justify-center h-[2rem] py-0 px-[1rem] rounded-md bg-[#254D9B] cursor-pointer`}
                     onClick={() => handleTagClick(tag)}
                   >
                     <span className="text-base font-semibold tracking-tighter text-white  leading-150">
@@ -167,7 +167,7 @@ export default function Search() {
                         )} of ${totalCards}`}
                       </div>
                       <div
-                        className={`flex items-center justify-center w-[1.75rem] h-[1.75rem] rounded-md bg-[#FFF] ${
+                        className={`flex items-center justify-center w-[1.75rem] h-[1.75rem] rounded-md bg-[#FFF]  cursor-pointer${
                           currentPage === 1
                             ? "opacity-50 cursor-not-allowed"
                             : ""
@@ -184,7 +184,7 @@ export default function Search() {
                         )}`}
                       </div>
                       <div
-                        className={`flex items-center justify-center w-[1.75rem] h-[1.75rem] rounded-md bg-[#FFF] ${
+                        className={`flex items-center justify-center w-[1.75rem] h-[1.75rem] rounded-md bg-[#FFF] cursor-pointer ${
                           currentPage === Math.ceil(totalCards / cardsPerPage)
                             ? "opacity-50 cursor-not-allowed"
                             : ""
