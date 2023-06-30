@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import getToken from "@/axios/getToken";
 import { GET } from "@/axios/GET";
+
 import CardDetail from "@/features/Social/components/CardDetail";
 // Types
 import { Friends } from "@/types/social.types";
@@ -16,7 +16,6 @@ const Friends = () => {
   const [startX, setStartX] = useState<number>(0);
   const [scrollLeft, setScrollLeft] = useState<number>(0);
   // 모달
-  const modalRef = useRef<HTMLDivElement>(null);
   const [showModal, setShowModal] = useState(false);
   const [userId, setUserId] = useState(1);
   const [cardId, setCardId] = useState(1);
@@ -57,18 +56,12 @@ const Friends = () => {
     }
   };
 
-  const modalOutsideClicked = (e: any) => {
-    if (modalRef.current === e.target) {
-      setShowModal(false);
-    }
-  };
-
   return (
     <div className="flex h-60 pb-10 flex-col items-start gap-10 self-stretch shadow-sm">
-      <h2 className="text-gray-900 text-[1.5rem] font-kanit font-semibold leading-1.5 tracking-tighter">
+      <h2 className="text-gray-900 text-[1.5rem]  font-semibold leading-1.5 tracking-tighter">
         News
       </h2>
-      <div className="flex items-center gap-8 flex-1 self-stretch">
+      <div className="flex items-center gap-8 flex-1 self-stretch w-[53rem]">
         <div className="flex w-[1.75rem] h-[1.75rem] flex-col justify-center items-center">
           <BsChevronLeft className="text-gray-800 text-base font-xeicon leading-normal" />
         </div>
@@ -99,7 +92,7 @@ const Friends = () => {
                       }}
                     />
                   </div>
-                  <p className="flex flex-col items-center justify-center overflow-hidden text-center w-6.0625rem h-auto text-gray-900 font-kanit text-lg leading-normal tracking-wider">
+                  <p className="flex flex-col items-center justify-center overflow-hidden text-center w-6.0625rem h-auto text-gray-900  text-lg leading-normal tracking-wider">
                     {f.userName}
                   </p>
                 </li>
@@ -110,14 +103,7 @@ const Friends = () => {
           <BsChevronRight className="text-gray-800 text-base font-xeicon leading-normal" />
         </div>
       </div>
-      {showModal && (
-        <CardDetail
-          modalRef={modalRef}
-          modalOutsideClicked={modalOutsideClicked}
-          cardId={cardId}
-          userId={userId}
-        />
-      )}
+      {showModal && <CardDetail cardId={cardId} userId={userId} />}
     </div>
   );
 };
