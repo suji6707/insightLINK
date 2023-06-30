@@ -2,6 +2,7 @@ import { RecoilRoot } from "recoil";
 import "@/styles/globals.css";
 import { ThemeProvider } from "next-themes";
 import { AppProps } from "next/app";
+import { Kanit } from "next/font/google";
 import Script from "next/script";
 
 declare global {
@@ -19,6 +20,13 @@ const kakaoInit = () => {
   }
 };
 
+const kanit = Kanit({
+  weight: ["100", "200", "300", "400", "500", "600"],
+  style: ["normal"],
+  subsets: ["latin", "latin-ext", "thai"],
+  variable: "--font-inter",
+});
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <RecoilRoot>
@@ -27,7 +35,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           src="https://developers.kakao.com/sdk/js/kakao.js"
           onLoad={kakaoInit}
         />
+        <main className={`${kanit.variable} font-sans`}>
           <Component {...pageProps} />
+        </main>
       </ThemeProvider>
     </RecoilRoot>
   );
