@@ -27,7 +27,7 @@ const UploadLoading = () => {
             style={{ boxShadow: "0px 4px 8px 0px rgba(0, 0, 0, 0.16)" }}
           >
             <div className="flex h-[3.75rem] justify-start items-center self-stretch">
-              <p className="text-[1.5rem] font-kanit font-semibold leading-normal tracking-tight">
+              <p className="text-[1.5rem]  font-semibold leading-normal tracking-tight">
                 분석
               </p>
               {/* <AiOutlineClose className="text-gray-400 text-1xl font-xeicon leading-normal" /> */}
