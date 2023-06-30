@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
-// Component
 import NavBar from "@/features/Dashboard/components/NavBar";
 import { Wrapper } from "@/styles/wrapper";
 import SearchBar from "@/features/Search/SearchBar";
 import Card from "@/features/Search/Card";
-// Assets
 import { CgSearch } from "react-icons/cg";
 import { AiOutlineExpand, AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 
@@ -14,41 +12,71 @@ export default function Search() {
   const router = useRouter();
   const [clickedTag, setClickedTag] = useState("");
   const [taglist, setTaglist] = useState([]);
-  const [cardlist, setcardlist] = useState([]);
+  const [cardlist, setCardlist] = useState([]);
 
-  const tagColors = ["#254D9B", "#7D46C5", "#195E31"];
+  const [currentPage, setCurrentPage] = useState(1);
+  const [cardsPerPage] = useState(14);
+  const [totalCards, setTotalCards] = useState(cardlist.length);
 
-  const keyword = router.query.search;
-  // console.log("keyword : ",keyword)
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
 
   useEffect(() => {
     const fetchData = async () => {
-      axios
-        .get("api/search/tags", {
+      try {
+        const keyword = router.query.search;
+        const response = await axios.get("api/search/tags", {
           params: {
-            keyword: keyword,
+            keyword,
           },
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        })
-        .then((response) => {
-          // Handle the response from the backend
-          setTaglist(response.data.result);
-        })
-        .catch((error) => {
-          // Handle any errors that occurred during the API request
-          console.error("API error:", error);
         });
+        setTaglist(response.data.result);
+      } catch (error) {
+        console.error("API error:", error);
+      }
     };
 
-    if (keyword) {
+    if (router.query.search) {
       fetchData();
     }
-  }, [keyword]); // Include currentPage in the dependency array
+  }, [router.query.search]);
+
+  useEffect(() => {
+    const fetchCards = async () => {
+      try {
+        const response = await axios.post(
+          "api/search/cards",
+          {
+            tag: clickedTag,
+            page: currentPage,
+            perPage: cardsPerPage,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        setCardlist(response.data.result);
+        setTotalCards(response.data.totalResults);
+        console.log(totalCards);
+      } catch (error) {
+        console.error("API error:", error);
+      }
+    };
+
+    if (clickedTag) {
+      setCardlist([]); // Clear the cardlist before fetching new results
+      fetchCards();
+    }
+  }, [clickedTag, currentPage]);
 
   const handleSearch = (value: string) => {
-    // Perform actions with the search value (e.g., send to backend)
     console.log("Search value:", value);
 
     if (value.trim() === "") {
@@ -66,42 +94,21 @@ export default function Search() {
         },
       })
       .then((response) => {
-        // Handle the response from the backend
         setTaglist(response.data.result);
       })
       .catch((error) => {
-        // Handle any errors that occurred during the API request
         console.error("API error:", error);
       });
   };
 
   const handleExpandClick = (cardId: number) => {
-    console.log("클릭한 카드 id : ", cardId);
+    console.log("Clicked card id:", cardId);
   };
 
   const handleTagClick = (tag: string) => {
     console.log("Clicked tag:", tag);
     setClickedTag(tag);
-
-    axios
-      .post(
-        "api/search/cards",
-        { tag: tag }, // Replace 'tag' with the actual value you want to send
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      )
-      .then((response) => {
-        // Handle the response from the backend
-        // console.log("API response:", response.data.result);
-        setcardlist(response.data.result);
-      })
-      .catch((error) => {
-        // Handle any errors that occurred during the API request
-        console.error("API error:", error);
-      });
+    setCurrentPage(1); // Reset currentPage to 1
   };
 
   return (
@@ -121,11 +128,11 @@ export default function Search() {
               <div className="text-[#181818] leading-trim tracking-tight text-capitalize text-[1.25rem] font-kanit font-semibold">
                 in Tags
               </div>
-              <div className="flex items-start gap-[1rem] ">
+              <div className="flex items-start gap-[1rem] flex-wrap">
                 {taglist.map((tag, index) => (
                   <div
                     key={index}
-                    className={`flex items-center justify-center h-[2rem] py-0 px-[1rem] rounded-md bg-[${tagColors[0]}]`}
+                    className={`flex items-center justify-center h-[2rem] py-0 px-[1rem] rounded-md bg-[#254D9B]`}
                     onClick={() => handleTagClick(tag)}
                   >
                     <span className="text-base font-semibold tracking-tighter text-white font-kanit leading-150">
@@ -143,29 +150,55 @@ export default function Search() {
 
               <div className="flex flex-col items-start gap-[1rem] self-stretch">
                 <div className="flex items-center self-stretch justify-between">
-                  {clickedTag && (
-                    <>
-                      <div className="flex items-center justify-center h-[2rem] py-0 px-[1rem] rounded-md bg-[#254D9B]">
-                        <span className="text-base font-semibold tracking-tighter text-white font-kanit leading-150">
-                          # {clickedTag}
-                        </span>
+                  <>
+                    <div className="flex items-center justify-center h-[2rem] py-0 px-[1rem] rounded-md bg-[#254D9B]">
+                      <span className="text-base font-semibold tracking-tighter text-white font-kanit leading-150">
+                        # {clickedTag}
+                      </span>
+                    </div>
+                    {/* 페이지 네이션 */}
+                    <div className="flex items-center gap-[0.5rem]">
+                      <div className="text-[#181818] text-[0.875rem] font-kanit font-weight-[300] leading-[160%] tracking-[-0.02625rem]">
+                        {`${Math.min(
+                          (currentPage - 1) * cardsPerPage + 1,
+                          totalCards
+                        )} - ${Math.min(
+                          currentPage * cardsPerPage,
+                          totalCards
+                        )} of ${totalCards}`}
                       </div>
-                      <div className="flex items-center gap-[0.5rem]">
-                        <div className="text-[#181818] text-[0.875rem] font-kanit font-weight-[300] leading-[160%] tracking-[-0.02625rem]">
-                          1 - 12 of 12
-                        </div>
-                        <div className="flex items-center justify-center w-[1.75rem] h-[1.75rem] rounded-md bg-[#FFF]">
-                          <AiOutlineLeft />
-                        </div>
-                        <div className="text-[#181818] text-[0.875rem] font-kanit font-weight-[300] leading-[160%] tracking-[-0.02625rem]">
-                          1 / 1
-                        </div>
-                        <div className="flex items-center justify-center w-[1.75rem] h-[1.75rem] rounded-md bg-[#FFF]">
-                          <AiOutlineRight />
-                        </div>
+                      <div
+                        className={`flex items-center justify-center w-[1.75rem] h-[1.75rem] rounded-md bg-[#FFF] ${
+                          currentPage === 1
+                            ? "opacity-50 cursor-not-allowed"
+                            : ""
+                        }`}
+                        onClick={() =>
+                          currentPage > 1 && handlePageChange(currentPage - 1)
+                        }
+                      >
+                        <AiOutlineLeft />
                       </div>
-                    </>
-                  )}
+                      <div className="text-[#181818] text-[0.875rem] font-kanit font-weight-[300] leading-[160%] tracking-[-0.02625rem]">
+                        {`${currentPage} / ${Math.ceil(
+                          totalCards / cardsPerPage
+                        )}`}
+                      </div>
+                      <div
+                        className={`flex items-center justify-center w-[1.75rem] h-[1.75rem] rounded-md bg-[#FFF] ${
+                          currentPage === Math.ceil(totalCards / cardsPerPage)
+                            ? "opacity-50 cursor-not-allowed"
+                            : ""
+                        }`}
+                        onClick={() =>
+                          currentPage < Math.ceil(totalCards / cardsPerPage) &&
+                          handlePageChange(currentPage + 1)
+                        }
+                      >
+                        <AiOutlineRight />
+                      </div>
+                    </div>
+                  </>
                 </div>
                 <div className="flex items-start content-start gap-[0.75rem] flex-1 self-stretch flex-wrap">
                   {cardlist &&

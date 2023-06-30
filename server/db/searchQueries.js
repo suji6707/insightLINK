@@ -6,7 +6,7 @@ export const tagList = (userId, keyword) => {
 }
 
 export const cardList = (userId, tag) => {
-  return `SELECT f.file_id as id, t.tag, f.img_url as imageUrl, f.content  
+  return `SELECT DISTINCT f.file_id as id, t.tag, f.img_url as imageUrl, f.content  
           FROM File f
           JOIN Tag t ON f.file_id = t.file_id
           WHERE t.tag = '${tag}'
