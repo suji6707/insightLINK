@@ -10,8 +10,6 @@ import {
   UploadedImgAtom,
   UploadedImgNumAtom,
 } from "@/recoil/atoms/MainGraphAtom";
-// Hooks
-import useUploadImagesToS3 from "./hooks/useUploadImagesToS3";
 // Assets
 import { BiLoader } from "react-icons/bi";
 import {
@@ -20,16 +18,17 @@ import {
   AiOutlineUpload,
 } from "react-icons/ai";
 import { ImgUpLoadAtom, UploadingAtom } from "@/recoil/atoms/ImageUploadAtom";
+import UploadImagesToS3 from "./UploadImagesToS3";
 
 const ImageUpload = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showImgModal, setShowImgModal] = useRecoilState(ImgModalAtom);
   const [uploading, setUploading] = useRecoilState(UploadingAtom);
   const [imgUpLoad, setImgUpLoad] = useRecoilState(ImgUpLoadAtom);
+  const [imageUrl, setImageUrl] = useRecoilState(UploadedImgAtom);
 
   const [imgList, setImgList] = useState<ImgInfo[]>([]);
   const [imgNum, setImgNum] = useRecoilState(UploadedImgNumAtom);
-  const [imageUrl, setImageUrl] = useRecoilState(UploadedImgAtom);
   const [tags, setTags] = useRecoilState(ExportedTagsAtom);
 
   const handleInput = () => {
@@ -58,24 +57,31 @@ const ImageUpload = () => {
   };
 
   const uploadImages = async () => {
-    const startTime = performance.now();
+    try {
+      const startTime = performance.now();
 
-    useUploadImagesToS3;
-    const POSTImgLink = async () => {
-      const data: any = await POST("upload", imageUrl, true);
+      const uploadedImageUrls = await UploadImagesToS3(imgList);
+      setImageUrl(uploadedImageUrls);
 
-      const endTime = performance.now();
-      const executionTime = endTime - startTime;
-      console.log("Execution time:", executionTime, "ms");
+      const POSTImgLink = async () => {
+        const data: any = await POST("upload", uploadedImageUrls, true);
 
-      if (data.status === 200) {
-        setUploading(false);
-        setImgNum(0);
-        setImgUpLoad(!imgUpLoad);
-      }
-    };
+        if (data.status === 200) {
+          const endTime = performance.now();
+          const executionTime = endTime - startTime;
+          console.log("Execution time:", executionTime, "ms");
 
-    POSTImgLink();
+          setUploading(false);
+          setImageUrl([]);
+          setImgNum(0);
+          setImgUpLoad(!imgUpLoad);
+        }
+      };
+
+      POSTImgLink();
+    } catch (error) {
+      console.error("이미지 업로드 실패:", error);
+    }
   };
 
   // const modalOutsideClicked = (e: React.MouseEvent<HTMLDivElement>) => {
