@@ -128,7 +128,7 @@ export default function ImageUpload() {
           const fileName = `${Date.now()}.${file.name}`;
 
           // 이미지 리사이징
-          const width = 400;
+          const width = 700;
           resizeImage(blob, width)
             .then((resizedBlob) => {
               console.log("원본 Image Size:", blob.size);
@@ -169,7 +169,7 @@ export default function ImageUpload() {
       const POSTImgLink = async () => {
         const token = getToken();
         const data: any = await POST("upload", uploadedImageUrls, token);
-
+        console.log(data)   // @
         const endTime = performance.now();
         const executionTime = endTime - startTime;
         console.log("Execution time:", executionTime, "ms");

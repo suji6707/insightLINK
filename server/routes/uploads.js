@@ -120,21 +120,8 @@ router.post('/', upload.array('photos'),
           console.log('tagJSON null이 한 번 더 에러처리로 들어옴.');
           continue;
         }
-
         const tag1 = tagJSON.tags[0];   // tag english string
         const tag2 = tagJSON.tags[1];
-      
-        // for (const { tagJSON, sumText, imgUrl } of tagList) {
-        //   if (tagJSON === '<Image>') continue;
-        //   /* Tag 가공 -> index, KR */
-        //   const tag1 = tagJSON.tags[0];   // tag english string
-        //   const tag2 = tagJSON.tags[1];
-        
-        // /* 임시 */
-        // if (tag1 === null || tag2 === null) {
-        //   logger.info(`/routes/uploads 폴더, post, ${tag1} or ${tag2} is null.`);
-        //   continue;
-        // }
         
         /* taglist 테이블에서 영어 키워드에 맞는 한글 키워드 가져오기 */
         const [tagResult1] = await connection.query(q4, [tag1]);
