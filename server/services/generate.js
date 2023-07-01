@@ -25,9 +25,13 @@ export const generate = async (req, res, ocr) => {
     return;
     
   } try {
-    const completion = await openai.createCompletion({
-      model: 'text-davinci-003',
-      prompt: await generatePrompt(ocr),
+    let prompt = await generatePrompt(ocr);
+    
+    console.log(typeof prompt, prompt);
+
+    const completion = await openai.createChatCompletion({
+      model: 'gpt-3.5-turbo',
+      messages: [{ role: 'user', content: prompt}],
       temperature: 0,
       max_tokens: 400,
       top_p: 1,
@@ -35,7 +39,8 @@ export const generate = async (req, res, ocr) => {
       presence_penalty: 0,
       stop: ['<EOL>'],
     });
-    return completion.data.choices[0].text;
+    // console.log('generate 결과: ', completion.data.choices[0].message.content);
+    return completion.data.choices[0].message.content;
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
@@ -75,19 +80,15 @@ const generatePrompt = async (ocrResult) => {
     const taglistText = taglist.map(tag => JSON.stringify(tag)).join(',');
 
     let exportTagCount = process.env.EXPORT_TAG_COUNT;
-    let prompt = `Please brainstorm and select ${exportTagCount} new and unique categories that best describe the uploaded data. Do this even if you think some categories might already be covered in the existing list (${taglistText}). However, if the new categories exactly match any in the existing list, those from the list will be used.\n`;
-    
-    
     // let prompt = `Given ${taglist.length} categories: `; 
-    // prompt += `${taglistText}.`;
-    // prompt += `Please select the ${exportTagCount} categories that best describe the uploaded data. If none of the categories are applicable, please suggest ${exportTagCount} new categories that you believe would be most relevant.\n`;
-    // // console.log(prompt);
+    // prompt += `${taglistText}.`; 
+    let prompt = `Please brainstorm and select ${exportTagCount} new and unique categories that best describe the uploaded data. Do this even if you think some categories might already be covered in the existing list (${taglistText}). However, if the new categories exactly match any in the existing list, those from the list will be used.\n`;
+    // console.log(prompt);
     prompt += 'Provide them in JSON format.\'{"tags":[]}\'\n';
     prompt += 'Uploaded data:';
     prompt += ocrResult;
 
-    // console.log(prompt);
-
+    // console.log('prompt: ', prompt);
     return prompt;
   } catch (err) {
     connection?.release();
