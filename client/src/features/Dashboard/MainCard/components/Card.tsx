@@ -7,12 +7,12 @@ import {
   ClickedCardDetailAtom,
 } from "@/recoil/atoms/MainGraphAtom";
 // Types
-import { CardData } from "@/types/dashborad.types";
+import { CardDataData } from "@/types/dashborad.types";
 // Assets
 import { BiFullscreen } from "react-icons/bi";
 
 interface CardProps {
-  data: CardData;
+  data: CardDataData;
 }
 
 const Card: React.FC<CardProps> = ({ data }) => {
