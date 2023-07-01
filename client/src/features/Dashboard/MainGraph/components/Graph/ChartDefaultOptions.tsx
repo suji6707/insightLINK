@@ -2,6 +2,21 @@ import { Main_graph_Api_DTO } from "@/types/dashborad.types";
 import setCategories from "./setCategories";
 
 const ChartDefaultOptions = (graph: Main_graph_Api_DTO) => {
+  const nodes = graph?.nodes;
+
+  let seenIds = new Set();
+  let seenNames = new Set();
+  let i = 0;
+  while (i < nodes.length) {
+    if (seenIds.has(nodes[i].id) || seenNames.has(nodes[i].name)) {
+      nodes.splice(i, 1);
+    } else {
+      seenIds.add(nodes[i].id);
+      seenNames.add(nodes[i].name);
+      i++;
+    }
+  }
+
   return {
     tooltip: {},
     legend: [
@@ -18,7 +33,7 @@ const ChartDefaultOptions = (graph: Main_graph_Api_DTO) => {
       {
         type: "graph",
         layout: "force",
-        data: graph?.nodes,
+        data: nodes,
         links: graph?.links,
         categories: setCategories(graph?.cnt),
         roam: true,
