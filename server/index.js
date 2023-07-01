@@ -5,6 +5,7 @@ import cors from 'cors';
 import morgan from 'morgan'; // log
 import bodyParser from 'body-parser'; // 요청정보 처리
 import { logger } from './winston/logger.js';
+import { db } from './connect.js';
 
 /* Router */
 import uploadRouter from './routes/uploads.js';
@@ -39,7 +40,7 @@ app.use(cors());
 // app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(morgan(':method :status :url :response-time ms', {stream : logger.stream}))
+app.use(morgan(':method :status :url :response-time ms', {stream : logger.stream}));
 
 /* Routing */
 app.use('/api/upload', authMiddleware, uploadRouter);
@@ -60,13 +61,27 @@ app.use('/api/dummy', dummyRouter);
 app.use('/api/dummy2', dummyRouter2);
 
 
-/* NGINX test */
+/* 도메인 연결 test */
 app.get('/hello', async (req, res) => {
   logger.info('hello test');
   res.write('hello');
   await setTimeout(500);
   res.write('world');
   res.end();
+});
+
+/* 태그 리스트 test */
+app.get('/taglist', async (req, res) => {
+  let connection = null;
+  try {
+    connection = await db.getConnection(); 
+    
+    const [rows] = await connection.query('SELECT englishKeyword FROM taglist');
+    const englishKeywords = rows.map(row => row.englishKeyword);
+    console.log(englishKeywords);
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 
