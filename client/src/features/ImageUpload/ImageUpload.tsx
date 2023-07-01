@@ -128,7 +128,7 @@ export default function ImageUpload() {
           const fileName = `${Date.now()}.${file.name}`;
 
           // 이미지 리사이징
-          const width = 400;
+          const width = 600;
           resizeImage(blob, width)
             .then((resizedBlob) => {
               console.log("원본 Image Size:", blob.size);
