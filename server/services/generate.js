@@ -26,8 +26,8 @@ export const generate = async (req, res, ocr) => {
     
   } try {
     let prompt = await generatePrompt(ocr);
-    
-    console.log(typeof prompt, prompt);
+
+    // console.log(typeof prompt, prompt);
 
     const completion = await openai.createChatCompletion({
       model: 'gpt-3.5-turbo',
@@ -39,7 +39,7 @@ export const generate = async (req, res, ocr) => {
       presence_penalty: 0,
       stop: ['<EOL>'],
     });
-    // console.log('generate 결과: ', completion.data.choices[0].message.content);
+
     return completion.data.choices[0].message.content;
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
