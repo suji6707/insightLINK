@@ -1,7 +1,7 @@
 import '../dotenv.js';
 import { db } from '../connect.js';
 import { Configuration, OpenAIApi } from 'openai';
-import { stringify } from 'uuid';
+// import { stringify } from 'uuid';
 // import * as Taglist from './taglist.js'; 
 
 
@@ -14,7 +14,7 @@ const openai = new OpenAIApi(configuration);
 // console.log('openai:', openai);
 export const generate = async (req, res, ocr) => {
   console.log('generate--------------------------------------------'); 
-  console.log('generate: ', ocr); 
+  // console.log('generate: ', ocr); 
 
   if (!configuration.apiKey) {
     res.status(500).json({
@@ -35,11 +35,7 @@ export const generate = async (req, res, ocr) => {
       presence_penalty: 0,
       stop: ['<EOL>'],
     });
-    // console.log('completion :');
-    // console.log(completion.data.choices[0]);
-    // res.status(200).json({ result: completion.data });
     return completion.data.choices[0].text;
-
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
@@ -78,17 +74,16 @@ const generatePrompt = async (ocrResult) => {
     const taglist = rows.map(row => row.englishKeyword);   // taglist 테이블의 englishKeywords를 리스트로.
     const taglistText = taglist.map(tag => JSON.stringify(tag)).join(',');
 
-
     let exportTagCount = process.env.EXPORT_TAG_COUNT;
     let prompt = `Given ${taglist.length} categories: `; 
     prompt += `${taglistText}.`;
-    prompt += `Please select the ${exportTagCount} categories that best describe the uploaded data. If none of the categories are applicable, please select the ${exportTagCount} categories that appear to be most relevant.\n`;
+    prompt += `Please select the ${exportTagCount} categories that best describe the uploaded data. If none of the categories are applicable, please suggest ${exportTagCount} new categories that you believe would be most relevant.\n`;
     // console.log(prompt);
     prompt += 'Provide them in JSON format.\'{"tags":[]}\'\n';
     prompt += 'Uploaded data:';
     prompt += ocrResult;
 
-    console.log(prompt);
+    // console.log(prompt);
 
     return prompt;
   } catch (err) {
