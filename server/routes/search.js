@@ -35,8 +35,6 @@ router.post('/cards', async (req, res) => {
   const { user } = res.locals;
   const userId = user.user_id;
 
-  console.log("userId : ", userId);
-
   const { tag, page, perPage } = req.body;
 
   let connection = null;
@@ -47,12 +45,8 @@ router.post('/cards', async (req, res) => {
     const offset = (page - 1) * perPage;
     const [result] = await connection.query(cardList(userId, tag, offset, perPage));
 
-    console.log("result_cnt : ", result.length);
-
     const [countResult] = await connection.query(countCard(userId, tag));
     const totalResults = countResult[0].total;
-
-    console.log("totalResults : ", totalResults);
 
     logger.info("/routes/search/cards 폴더, get, 페이지네이션, 성공");
 
