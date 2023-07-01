@@ -60,6 +60,8 @@ app.use('/api/other',authMiddleware,otherRouter);
 app.use('/api/dummy', dummyRouter);
 app.use('/api/dummy2', dummyRouter2);
 
+app.use('/api/share', graphRouter);
+
 
 /* 도메인 연결 test */
 app.get('/hello', async (req, res) => {
