@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 // Recoil
 import { useRecoilState } from "recoil";
 import { SocialImgModalAtom } from "@/recoil/atoms/SocialAtom";
@@ -7,12 +6,12 @@ import { SocialImgModalAtom } from "@/recoil/atoms/SocialAtom";
 import { GET } from "@/axios/GET";
 import CardDetail from "./CardDetail";
 // Types
-import { CardData } from "@/types/dashborad.types";
+import { FeedCardData } from "@/types/dashborad.types";
 // Assets
 import { AiOutlineClose } from "react-icons/ai";
 
 const Feeds = () => {
-  const [cards, setCards] = useState<CardData[]>();
+  const [cards, setCards] = useState<FeedCardData[]>();
   // 모달
   const [showModal, setShowModal] = useRecoilState(SocialImgModalAtom);
   const [userId, setUserId] = useState(1);
@@ -50,7 +49,7 @@ const Feeds = () => {
       </h2>
       <div className="grid grid-cols-5 grid-flow-row gap-y-3 self-stretch flex-wrap min-h-[53rem] w-full">
         {cards &&
-          cards.map((c: CardData, index: number) => {
+          cards.map((c: FeedCardData, index: number) => {
             return (
               <div
                 key={index}

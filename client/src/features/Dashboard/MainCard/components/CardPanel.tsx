@@ -9,7 +9,7 @@ import CardDetail from "@/features/Dashboard/MainCard/components/CardDetail";
 // custom hook
 import useCard from "@/features/Dashboard/MainCard/hook/useCard";
 // types
-import { CardData, CardDataData } from "@/types/dashborad.types";
+import { CardData, FeedCardData } from "@/types/dashborad.types";
 import { getQuote } from "html2canvas/dist/types/css/property-descriptors/quotes";
 
 // Assets
@@ -34,7 +34,7 @@ function CardPanel() {
     if (getData) {
       setCardData(getData);
       setCurrentPage(1);
-      setTotalCards(cardData?.totalResults? cardData?.totalResults : 0);
+      setTotalCards(cardData?.totalResults ? cardData?.totalResults : 0);
     }
   }, [getData]);
 
@@ -45,8 +45,13 @@ function CardPanel() {
       const userid = Array.isArray(router.query.userid)
         ? router.query.userid[0]
         : router.query.userid;
-      
-      const cardData = await Card_Info_Api(nodeName, userid, currentPage, cardsPerPage);
+
+      const cardData = await Card_Info_Api(
+        nodeName,
+        userid,
+        currentPage,
+        cardsPerPage
+      );
       setCardData(cardData);
       setTotalCards(cardData?.totalResults);
     };
@@ -56,7 +61,7 @@ function CardPanel() {
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
-  
+
   return (
     <div>
       {detailOpen ? (
@@ -70,51 +75,47 @@ function CardPanel() {
               # {nodeName}
             </div>
             <div>
-            <div className="flex items-center gap-[0.5rem]">
-                      <div className="text-[#181818] text-[0.875rem]  font-weight-[300] leading-[160%] tracking-[-0.02625rem]">
-                      {`${Math.min(
-                          (currentPage - 1) * cardsPerPage + 1,
-                          totalCards
-                        )} - ${Math.min(
-                          currentPage * cardsPerPage,
-                          totalCards
-                        )} of ${totalCards}`}
-                      </div>
-                      <div
-                        className={`flex items-center justify-center w-[1.75rem] h-[1.75rem] rounded-md bg-[#FFF]  cursor-pointer${
-                          currentPage === 1
-                            ? "opacity-50 cursor-not-allowed"
-                            : ""
-                        }`}
-                        onClick={() =>
-                          currentPage > 1 && handlePageChange(currentPage - 1)
-                        }
-                      >
-                        <AiOutlineLeft />
-                      </div>
-                      <div className="text-[#181818] text-[0.875rem]  font-weight-[300] leading-[160%] tracking-[-0.02625rem]">
-                        {`${currentPage} / ${Math.ceil(
-                          totalCards / cardsPerPage
-                        )}`}
-                      </div>
-                      <div
-                        className={`flex items-center justify-center w-[1.75rem] h-[1.75rem] rounded-md bg-[#FFF] cursor-pointer ${
-                          currentPage === Math.ceil(totalCards / cardsPerPage)
-                            ? "opacity-50 cursor-not-allowed"
-                            : ""
-                        }`}
-                        onClick={() =>
-                          currentPage < Math.ceil(totalCards / cardsPerPage) &&
-                          handlePageChange(currentPage + 1)
-                        }
-                      >
-                        <AiOutlineRight />
-                      </div>
-                    </div>
+              <div className="flex items-center gap-[0.5rem]">
+                <div className="text-[#181818] text-[0.875rem]  font-weight-[300] leading-[160%] tracking-[-0.02625rem]">
+                  {`${Math.min(
+                    (currentPage - 1) * cardsPerPage + 1,
+                    totalCards
+                  )} - ${Math.min(
+                    currentPage * cardsPerPage,
+                    totalCards
+                  )} of ${totalCards}`}
+                </div>
+                <div
+                  className={`flex items-center justify-center w-[1.75rem] h-[1.75rem] rounded-md bg-[#FFF]  cursor-pointer${
+                    currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+                  onClick={() =>
+                    currentPage > 1 && handlePageChange(currentPage - 1)
+                  }
+                >
+                  <AiOutlineLeft />
+                </div>
+                <div className="text-[#181818] text-[0.875rem]  font-weight-[300] leading-[160%] tracking-[-0.02625rem]">
+                  {`${currentPage} / ${Math.ceil(totalCards / cardsPerPage)}`}
+                </div>
+                <div
+                  className={`flex items-center justify-center w-[1.75rem] h-[1.75rem] rounded-md bg-[#FFF] cursor-pointer ${
+                    currentPage === Math.ceil(totalCards / cardsPerPage)
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
+                  onClick={() =>
+                    currentPage < Math.ceil(totalCards / cardsPerPage) &&
+                    handlePageChange(currentPage + 1)
+                  }
+                >
+                  <AiOutlineRight />
+                </div>
+              </div>
             </div>
           </div>
           <div className="grid grid-cols-3 grid-flow-row w-[32rem] gap-y-3">
-            {cardData?.data?.map((data: CardDataData, index: number) => {
+            {cardData?.data?.map((data: FeedCardData, index: number) => {
               return <Card data={data} key={index} />;
             })}
           </div>
