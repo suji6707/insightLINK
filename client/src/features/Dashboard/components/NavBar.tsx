@@ -81,8 +81,6 @@ export default function NavBar() {
             }
           };
           reader.readAsDataURL(blob);
-        } else {
-          console.log("Failed to capture canvas image.");
         }
       });
     });

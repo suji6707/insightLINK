@@ -49,7 +49,6 @@ function CardDetail() {
 
     if (response.data.success) {
       setIsEditingContent(false);
-      console.log("Save edited content:", editedContent);
     }
   };
 

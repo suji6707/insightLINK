@@ -36,7 +36,6 @@ const CardDetail = ({ cardId, userId }: CardDetail) => {
       `cards/info?cardId=${cardId}&userId=${userId}`,
       true
     );
-    console.log(data);
     if (data.status === 200) {
       setDetail(data.data);
     }
@@ -74,7 +73,7 @@ const CardDetail = ({ cardId, userId }: CardDetail) => {
 
   return (
     <div
-      className="z-10 fixed inset-0 bg-opacity-10 flex justify-center items-center cursor-pointer"
+      className="z-10 fixed inset-0 bg-opacity-10 flex justify-center items-center"
       ref={modalRef}
       onClick={(e) => modalOutsideClicked(e)}
     >

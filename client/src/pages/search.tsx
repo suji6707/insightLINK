@@ -63,7 +63,6 @@ export default function Search() {
         );
         setCardlist(response.data.result);
         setTotalCards(response.data.totalResults);
-        console.log(totalCards);
       } catch (error) {
         console.error("API error:", error);
       }
@@ -201,10 +200,10 @@ export default function Search() {
                 </div>
                 <div className="flex items-start content-start gap-[0.75rem] flex-1 self-stretch flex-wrap">
                   {cardlist &&
-                    cardlist.map((card: { id: number }) => {
+                    cardlist.map((card: { id: number }, index: number) => {
                       return (
                         <Card
-                          key={card.id}
+                          key={index}
                           card={card}
                           handleExpandClick={handleExpandClick}
                         />

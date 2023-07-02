@@ -18,3 +18,10 @@ export interface CardDetail {
   cardId: number;
   userId: number;
 }
+
+export interface User {
+  userId: number;
+  img: string;
+  userName: string;
+  tags: string[];
+}

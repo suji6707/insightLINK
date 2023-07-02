@@ -74,10 +74,10 @@ const Friends = () => {
           onMouseMove={handleMouseMove}
         >
           {friends &&
-            friends?.map((f: Friends) => {
+            friends?.map((f: Friends, index: number) => {
               return (
                 <li
-                  key={f.userId}
+                  key={index}
                   className="flex flex-col justify-center items-center w-[6.25rem] h-[8.25rem] flex-shrink-0 m-2 gap-3"
                 >
                   <div className="w-[6.25rem] h-[6.25rem] transition transform rounded-full cursor-pointer hover:-rotate-6 bg-colorBlue flex justify-center items-center">
