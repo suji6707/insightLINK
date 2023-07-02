@@ -15,7 +15,7 @@ import { extractJson } from '../services/jsonUtils.js';
 // import { combinedList }  from '../services/taglist.js';  
 import translate from 'translate-google';
 /* Tag ENDED */
-// import { setTimeout } from 'timers/promises';   
+import { setTimeout } from 'timers/promises';   
 
 /* log */
 import { logger } from '../winston/logger.js';
@@ -55,12 +55,12 @@ const isImage = (ocrResult) => {
 };
 
 
-const extractTagFromImage = async (imgUrl, req, res) => {
+const extractTagFromImage = async (imgUrl, req, res, userId) => {
   const sumText = await processOCR(imgUrl);
   // res.write(JSON.stringify({imgUrl: imgUrl, status: 'process OCR FINISEHD'}));
   let tagJSON = '<Image>';  
   if (!isImage(sumText)) {
-    const tag = await generate(req, res, sumText); 
+    const tag = await generate(req, res, sumText, userId); 
     tagJSON = extractJson(tag);
     console.log('fr: extractTagFromImage: ', tagJSON);
 
@@ -98,12 +98,12 @@ router.post('/', upload.array('photos'),
       const q2 = 'INSERT INTO Tag (file_id, tag, tag_index) VALUES (?, ?, ?)';                            // SQL - Tag   
       const q3 = 'INSERT INTO taglist (user_id, englishKeyword, koreanKeyword, tag_index) VALUES (?, ?, ?, ?)';       // SQL - taglist
       const q4 = 'SELECT t.koreanKeyword, t.tag_index FROM taglist AS t WHERE user_id = ? AND englishKeyword = ?';        // 영어 -> 한글
-      const q5 = 'SELECT MAX(tag_index) AS last_index FROM taglist';
+      const q5 = 'SELECT MAX(tag_index) AS last_index FROM taglist WHERE user_id = ?';
       
       /* 모든 이미지를 S3로 저장, sumText.length != 0 인 것만 OCR 및 태그 추출 후 저장 */
       const promises = [];
       for (const imgUrl of imgUrlList) {
-        promises.push(extractTagFromImage(imgUrl, req, res));
+        promises.push(extractTagFromImage(imgUrl, req, res, userId));
       }
       const tagList = await Promise.all(promises);  // promise 배열을 한번에 풀어줌. 푸는 순서를 보장하지 않지만 n개를 동시에 풀어줌.
       
@@ -145,8 +145,9 @@ router.post('/', upload.array('photos'),
             // 3-1. 구글 번역 후 taglist 저장
             const translatedTag = await translate(tag, {to: 'ko'});   // 한글 키워드
             console.log('tag, 번역: ', tag, translatedTag);
-            const [indexResult] = await connection.query(q5);         // tag_index
+            const [indexResult] = await connection.query(q5, userId);         // tag_index
             const tag_index = indexResult[0].last_index + 1;
+            console.log('fr: 최종 taglist 저장되는 영/한: ', tag, translatedTag);
             await connection.query(q3, [ userId, tag, translatedTag, tag_index ]);     // englishKeyword, koreanKeyword, tag_index + 1
             console.log(`fr: ${translatedTag} 저장 성공!`);
             // 3-2. Tag 테이블 저장.
