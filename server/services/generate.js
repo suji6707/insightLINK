@@ -3,6 +3,8 @@ import { db } from '../connect.js';
 import { Configuration, OpenAIApi } from 'openai';
 // import { stringify } from 'uuid';
 // import * as Taglist from './taglist.js'; 
+/* log */
+import { logger } from '../winston/logger.js';
 
 
 const configuration = new Configuration({
@@ -39,7 +41,7 @@ export const generate = async (req, res, ocr) => {
       presence_penalty: 0,
       stop: ['<EOL>'],
     });
-    // console.log('generate 결과: ', completion.data.choices[0].message.content);
+    console.log('generate 결과: ', completion.data.choices[0].message.content);
     return completion.data.choices[0].message.content;
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
@@ -69,7 +71,7 @@ const convertToPlainText = (taglist) => {
 };
 
 /* TODO: convertToPlainText() 대신 JSON stringify ??? */
-
+let cnt = 0;
 const generatePrompt = async (ocrResult) => {
   let connection = null;
   try {
@@ -88,7 +90,9 @@ const generatePrompt = async (ocrResult) => {
     prompt += 'Uploaded data:';
     prompt += ocrResult;
 
-    // console.log('prompt: ', prompt);
+    cnt += 1
+    logger.info(`generatePrompt total cnt : ${cnt}`);
+    console.log('prompt: ', prompt);
     return prompt;
   } catch (err) {
     connection?.release();
