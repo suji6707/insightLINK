@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { ImgModalAtom, AlarmCntAtom } from "@/recoil/atoms/MainGraphAtom";
 
+import { useRecoilValue } from "recoil";
+import { LoginStateAtom } from "@/recoil/atoms/LoginStateAtom";
+
 import tw from "tailwind-styled-components";
 import { useTheme } from "next-themes";
 import Link from "next/link";
@@ -29,6 +32,9 @@ export default function NavBar() {
 
   const [openAlarm, setOpenAlarm] = useState(false);
   const [alarmCnt, setAlarmCnt] = useRecoilState(AlarmCntAtom);
+
+
+  const loginId = useRecoilValue(LoginStateAtom);
 
   const getProfileImg = async () => {
     const data = await GET("user/profile", true);
@@ -68,8 +74,8 @@ export default function NavBar() {
                 objectType: "text",
                 text: "나의 그래프를 확인해봐요.",
                 link: {
-                  mobileWebUrl: "http://3.35.239.116:3000/dashboard/" + 21,
-                  webUrl: "http://3.35.239.116:3000/dashboard/" + 21,
+                  mobileWebUrl: "http://localhost:3000/dashboard/" + loginId,
+                  webUrl: "http://localhost:3000/dashboard/" + loginId,
                 },
               });
             }
