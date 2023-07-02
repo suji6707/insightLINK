@@ -15,8 +15,8 @@ const openai = new OpenAIApi(configuration);
 
 // console.log('openai:', openai);
 export const generate = async (req, res, ocr) => {
-  // console.log('generate--------------------------------------------'); 
-  console.log('generate: ', ocr); 
+  console.log('generate--------------------------------------------'); 
+  // console.log('generate: ', ocr); 
 
   if (!configuration.apiKey) {
     res.status(500).json({
@@ -27,9 +27,9 @@ export const generate = async (req, res, ocr) => {
     return;
     
   } try {
-    let prompt = await generatePrompt(ocr);
-    
-    console.log(typeof prompt, prompt);
+    let prompt = await generatePrompt(ocr, userId);
+
+    // console.log(typeof prompt, prompt);
 
     const completion = await openai.createChatCompletion({
       model: 'gpt-3.5-turbo',
@@ -41,7 +41,7 @@ export const generate = async (req, res, ocr) => {
       presence_penalty: 0,
       stop: ['<EOL>'],
     });
-    console.log('generate 결과: ', completion.data.choices[0].message.content);
+    // console.log('generate 결과: ', completion.data.choices[0].message.content);
     return completion.data.choices[0].message.content;
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
@@ -71,21 +71,37 @@ const convertToPlainText = (taglist) => {
 };
 
 /* TODO: convertToPlainText() 대신 JSON stringify ??? */
-let cnt = 0;
+
 const generatePrompt = async (ocrResult) => {
   let connection = null;
   try {
     connection = await db.getConnection();
-    const [rows] = await connection.query('SELECT englishKeyword FROM taglist');
+    const [rows] = await connection.query(`SELECT englishKeyword FROM taglist WHERE user_id = ${userId}`);
     connection.release();
     const taglist = rows.map(row => row.englishKeyword);   // taglist 테이블의 englishKeywords를 리스트로.
     const taglistText = taglist.map(tag => JSON.stringify(tag)).join(',');
 
-    let exportTagCount = process.env.EXPORT_TAG_COUNT;
+
+
     // let prompt = `Given ${taglist.length} categories: `; 
     // prompt += `${taglistText}.`; 
-    let prompt = `Please brainstorm and select ${exportTagCount} new and unique categories that best describe the uploaded data. Do this even if you think some categories might already be covered in the existing list (${taglistText}). However, if the new categories exactly match any in the existing list, those from the list will be used.\n`;
-    // console.log(prompt);
+    let exportTagCount = process.env.EXPORT_TAG_COUNT;  // 프롬프트에 2~5 제시
+    let prompt = `Please brainstorm and select ${exportTagCount} new and unique categories that best describe the uploaded data. \n
+                  Do this even if you think some categories might already be covered in the existing list (${taglistText}). \n
+                  However, if the new categories exactly match any in the existing list, those from the list will be used. \n`;
+    
+    /* user_id 3버전 */
+    // let prompt = `Please select ${exportTagCount} categories that best describe the uploaded data. \n
+    //               If none of the categories are applicable, please select the ${exportTagCount} categories that appear to be most relevant.`;
+
+    /* 아직 */
+    // let prompt = `Based on the text data extracted from pictures captured on a mobile screen, \n
+    //               which may include OCR errors and potentially meaningless information like battery level or time, \n
+    //               please analyze the text data and suggest the most appropriate category for it. \n
+    //               If you think multiple categories are suitable, you can suggest up to two to five categories. \n
+    //               Additionally, if you observe any relationships or patterns among the suggested categories, \n
+    //               please propose a new category that captures those insights. \n
+    //               However, please prioritize selecting a category from the following list: ${taglistText}.`;
     prompt += 'Provide them in JSON format.\'{"tags":[]}\'\n';
     prompt += 'Uploaded data:';
     prompt += ocrResult;

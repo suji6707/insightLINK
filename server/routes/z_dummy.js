@@ -160,13 +160,15 @@ const followDummy = async () => {
 
 // console.log(combinedList);
 
+
+/* user_id 넣고 만들기!! */
 const makeTagList = async () => {
   let connection = null;
   try {
     connection = await db.getConnection();
     for (let i = 0; i < combinedList.length; i++) {
-      let sql = `INSERT INTO taglist (englishKeyword, koreanKeyword, tag_index) 
-                  VALUES (?, ?, ?)`;
+      let sql = `INSERT INTO taglist (user_id, englishKeyword, koreanKeyword, tag_index) 
+                  VALUES (4, ?, ?, ?)`;
       connection.query(sql, [ combinedList[i].englishKeyword, combinedList[i].koreanKeyword, combinedList[i].index ]);
     }
     connection.release();
