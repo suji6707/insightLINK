@@ -5,7 +5,7 @@ import { useRecoilValue } from "recoil";
 import { EditModeAtom } from "@/recoil/atoms/MainGraphAtom";
 import { ImgUpLoadAtom } from "@/recoil/atoms/ImageUploadAtom";
 
-import { Main_graph_Api } from "@/axios/dashBoardApi";
+import { Main_graph_Api, Share_graph_Api } from "@/axios/dashBoardApi";
 import { Main_graph_Api_DTO } from "@/types/dashborad.types";
 
 function useGraph() {
@@ -15,6 +15,11 @@ function useGraph() {
   const [data, setData] = useState<Main_graph_Api_DTO | undefined>(undefined);
   const router = useRouter();
 
+  let token: any;
+  if (typeof window !== "undefined") {
+    token = localStorage.getItem("token");
+  }
+
   useEffect(() => {
     if (!router.isReady) return; // if query values are not ready, return
 
@@ -22,7 +27,12 @@ function useGraph() {
       const userid = Array.isArray(router.query.userid)
         ? router.query.userid[0]
         : router.query.userid;
-      const graphData = await Main_graph_Api(userid);
+      let graphData;
+      if (token) {
+        graphData = await Main_graph_Api(userid);
+      } else {
+        graphData = await Share_graph_Api(userid);
+      }
       setData(graphData);
     };
     getGraphData();
