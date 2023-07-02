@@ -168,7 +168,7 @@ const makeTagList = async () => {
     connection = await db.getConnection();
     for (let i = 0; i < combinedList.length; i++) {
       let sql = `INSERT INTO taglist (user_id, englishKeyword, koreanKeyword, tag_index) 
-                  VALUES (2, ?, ?, ?)`;
+                  VALUES (4, ?, ?, ?)`;
       connection.query(sql, [ combinedList[i].englishKeyword, combinedList[i].koreanKeyword, combinedList[i].index ]);
     }
     connection.release();
