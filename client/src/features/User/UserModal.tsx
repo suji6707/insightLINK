@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import Image from "next/image";
 import getToken from "@/axios/getToken";
 import { GET } from "@/axios/GET";
 import { PATCH } from "@/axios/PATCH";
@@ -75,7 +75,7 @@ const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
           </h2>
           <AiOutlineClose
             onClick={closeModal}
-            className="text-base leading-normal text-gray-400 font-xeicon cursor-pointer"
+            className="text-base leading-normal text-gray-400 cursor-pointer font-xeicon"
           />
         </div>
         <div className="flex py-[2rem] items-start self-stretch border-b-2 border-gray-900">
@@ -83,10 +83,12 @@ const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
             My Profile
           </p>
           <div className="flex items-center gap-3">
-            <img
+            <Image
               src={userInfo?.image as string}
               alt="Profile"
-              className="rounded-full w-[4rem] h-[4rem]"
+              width={64} // rem to pixel conversion (1rem = 16px)
+              height={64} // rem to pixel conversion (1rem = 16px)
+              className="rounded-full"
             />
             {isEditingNickname ? (
               <div className="flex w-[12.5rem] h-11 px-1 justify-between items-center border-b border-blue-500 bg-gray-200">

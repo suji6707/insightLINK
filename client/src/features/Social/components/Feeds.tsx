@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 // Recoil
 import { useRecoilState } from "recoil";
 import { SocialImgModalAtom } from "@/recoil/atoms/SocialAtom";
@@ -53,11 +54,14 @@ const Feeds = () => {
             return (
               <div
                 key={index}
-                className="w-[10rem] bg-gray-100 h-[10rem] border-2 rounded border-gray-300 relative hover:border-blue-500 flex justify-center items-center"
+                className="relative w-[10rem] h-[10rem] bg-gray-100 border-2 rounded border-gray-300 hover:border-blue-500 flex justify-center items-center cursor-pointer"
               >
-                <img
+                <Image
                   src={c?.cardImg}
-                  className="object-cover max-w-full max-h-full cursor-pointer"
+                  alt=""
+                  layout="fill"
+                  objectFit="cover"
+                  className="cursor-pointer"
                   onClick={() => {
                     setShowModal(true);
                     setCardId(c.cardId);
@@ -66,7 +70,7 @@ const Feeds = () => {
                 />
                 <button
                   onClick={() => handleClose(c?.userId)}
-                  className="absolute svg-button-nomal right-3 top-3 cursor-pointer"
+                  className="absolute cursor-pointer svg-button-nomal right-3 top-3"
                 >
                   <AiOutlineClose className="self-center z-1" size="1rem" />
                 </button>

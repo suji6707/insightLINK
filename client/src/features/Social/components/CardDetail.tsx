@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/router";
 // Recoil
 import { useRecoilState } from "recoil";
@@ -73,7 +74,7 @@ const CardDetail = ({ cardId, userId }: CardDetail) => {
 
   return (
     <div
-      className="z-10 fixed inset-0 bg-opacity-10 flex justify-center items-center"
+      className="fixed inset-0 z-10 flex items-center justify-center bg-opacity-10"
       ref={modalRef}
       onClick={(e) => modalOutsideClicked(e)}
     >
@@ -83,17 +84,17 @@ const CardDetail = ({ cardId, userId }: CardDetail) => {
             Feed Detail
           </p>
           <AiOutlineClose
-            className="text-base leading-normal text-gray-400 font-xeicon cursor-pointer"
+            className="text-base leading-normal text-gray-400 cursor-pointer font-xeicon"
             onClick={() => setShowModal(false)}
           />
         </div>
-        <div className="flex items-center gap-2 flex-1 self-stretch">
+        <div className="flex items-center self-stretch flex-1 gap-2">
           {detail?.cardTag &&
             detail?.cardTag.map((t: string, index: number) => {
               return (
                 <div
                   key={index}
-                  className="flex h-9 px-4 justify-center items-center rounded cursor-pointer"
+                  className="flex items-center justify-center px-4 rounded cursor-pointer h-9"
                   style={{
                     backgroundColor:
                       randomColors[
@@ -112,12 +113,13 @@ const CardDetail = ({ cardId, userId }: CardDetail) => {
               );
             })}
         </div>
-        <div className="flex items-start gap-6 flex-1 self-stretch">
-          <div className="flex py-5 flex-col items-start flex-1 self-stretch">
-            <img
+        <div className="flex items-start self-stretch flex-1 gap-6">
+          <div className="relative flex py-5 flex-col items-start flex-1 self-stretch h-[24.125rem] w-[24rem]">
+            <Image
               src={detail?.cardImage}
-              className="w-[24rem] h-[24.125rem] object-contain"
-              alt="screenshot"
+              alt=""
+              layout="fill"
+              objectFit="contain"
             />
           </div>
           <p className="flex w-[24rem] flex-col text-gray-900 text-lg  font-normal leading-1.5">
@@ -128,7 +130,7 @@ const CardDetail = ({ cardId, userId }: CardDetail) => {
           <div className="flex h-[2.75rem] justify-between items-center flex-1">
             <div className="flex flex-col items-start gap-2">
               <p
-                className="text-gray-900  font-light text-base leading-none tracking-widest cursor-pointer"
+                className="text-base font-light leading-none tracking-widest text-gray-900 cursor-pointer"
                 onClick={() => {
                   setShowModal(false);
                   handleRedirectToDashboard(userId);
@@ -136,16 +138,16 @@ const CardDetail = ({ cardId, userId }: CardDetail) => {
               >
                 Uploaded by {detail?.userName}
               </p>
-              <p className="text-gray-900  font-light text-base leading-none tracking-widest">
+              <p className="text-base font-light leading-none tracking-widest text-gray-900">
                 {detail?.created_at.slice(0, 9)}
               </p>
             </div>
             <div
-              className="flex items-center justify-center h-11 px-5 gap-1 rounded-md bg-gray-900 cursor-pointer"
+              className="flex items-center justify-center gap-1 px-5 bg-gray-900 rounded-md cursor-pointer h-11"
               onClick={cloneCard}
             >
-              <AiOutlineUpload className="text-white text-base font-xeicon font-normal" />
-              <p className="text-white text-lg  font-semibold">
+              <AiOutlineUpload className="text-base font-normal text-white font-xeicon" />
+              <p className="text-lg font-semibold text-white">
                 Add to my cards
               </p>
             </div>

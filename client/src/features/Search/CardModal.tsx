@@ -1,6 +1,7 @@
 // Search/CardModal.tsx
 
 import React from "react";
+import Image from "next/image";
 import styles from "./CardModal.module.css";
 
 type CardModalProps = {
@@ -11,7 +12,7 @@ type CardModalProps = {
 const CardModal: React.FC<CardModalProps> = ({ card, closeModal }) => {
   return (
     <>
-      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
         <div className="flex flex-col items-start gap-[1.5rem] w-[31.75rem] h-[35.25rem] p-6 bg-[#FFF] border border-gray-100 rounded shadow-1 ">
           <div className="flex justify-between items-center self-stretch bg-[, #FFF]">
             <div className="flex items-center gap-[1.5rem] flex-1">
@@ -31,10 +32,12 @@ const CardModal: React.FC<CardModalProps> = ({ card, closeModal }) => {
           <div
             className={`overflow-y-auto ${styles["mostly-customized-scrollbar"]}`}
           >
-            <div className="w-[28.25rem] flex justify-center items-center bg-lightgray mb-[1.5rem]">
-              <img
+            <div className="relative w-[28.25rem] flex justify-center items-center bg-lightgray mb-[1.5rem]">
+              <Image
                 src={card.imageUrl}
-                className="object-cover max-w-full max-h-full"
+                alt="Card image"
+                layout="fill"
+                objectFit="cover"
               />
             </div>
 

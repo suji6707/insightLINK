@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 // recoil
 import { useRecoilState, useRecoilValue } from "recoil";
 import { CardDetailOpenAtom } from "@/recoil/atoms/MainGraphAtom";
@@ -90,13 +91,13 @@ function CardDetail() {
                 <>
                   <div className="h-full card-detail-edit-btn">
                     <button
-                      className="svg-button-nomal  cursor-pointer"
+                      className="cursor-pointer svg-button-nomal"
                       onClick={() => setIsEditingContent(false)}
                     >
                       <BsXLg />
                     </button>
                     <button
-                      className="svg-button-nomal  cursor-pointer"
+                      className="cursor-pointer svg-button-nomal"
                       onClick={handleContentSave}
                     >
                       <BsPencilFill />
@@ -107,13 +108,13 @@ function CardDetail() {
                 <>
                   <div className="h-full card-detail-edit-btn">
                     <button
-                      className="svg-button-nomal  cursor-pointer"
+                      className="cursor-pointer svg-button-nomal"
                       onClick={handleCardDelete}
                     >
                       <BsTrashFill />
                     </button>
                     <button
-                      className="svg-button-nomal  cursor-pointer"
+                      className="cursor-pointer svg-button-nomal"
                       onClick={handleContentEdit}
                     >
                       <BsPencilFill />
@@ -128,16 +129,18 @@ function CardDetail() {
             )}
           </div>
           <button
-            className="ml-auto svg-button-nomal  cursor-pointer"
+            className="ml-auto cursor-pointer svg-button-nomal"
             onClick={handleDetailOpen}
           >
             <BsXLg />
           </button>
         </div>
-        <div className="w-full h-[25rem] mb-6 flex justify-center items-center">
-          <img
+        <div className="relative max-w-full max-h-full w-full h-[25rem] mb-6 flex justify-center items-center">
+          <Image
             src={cardDetailData?.cardImage}
-            className="object-cover max-w-full max-h-full"
+            alt="Card Detail"
+            layout="fill"
+            objectFit="cover"
           />
         </div>
         {isLogin ? (

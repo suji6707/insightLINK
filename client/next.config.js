@@ -6,12 +6,18 @@ const nextConfig = {
     S3_SECRET_KEY: process.env.S3_SECRET_KEY,
     SERVER_API_URI: process.env.SERVER_API_URI,
   },
+  images: {
+    domains: [
+      "sw-jungle-s3.s3.ap-northeast-2.amazonaws.com",
+      "cdn.pixabay.com",
+    ],
+  },
   reactStrictMode: true,
   async rewrites() {
     return [
       {
         source: "/api/:path*",
-        destination: "https://insightlinkapi.jisuheo.shop/api/:path*",
+        destination: process.env.SOURCE_URL,
       },
     ];
   },

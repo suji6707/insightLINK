@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 // Component
-import NavBar from "@/features/Dashboard/components/NavBar";
 import { Wrapper } from "@/styles/wrapper";
 
 export default function Home() {

@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { useTheme } from "next-themes";
+import Image from "next/image";
+import Link from "next/link";
 //recoil
-import { useRecoilState } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import { ImgModalAtom, AlarmCntAtom } from "@/recoil/atoms/MainGraphAtom";
-
-import { useRecoilValue } from "recoil";
 import { LoginStateAtom } from "@/recoil/atoms/LoginStateAtom";
 
-import tw from "tailwind-styled-components";
-import { useTheme } from "next-themes";
-import Link from "next/link";
-
 import { GET } from "@/axios/GET";
-import getToken from "@/axios/getToken";
+import useNotification from "@/features/Dashboard/components/hooks/useNotification";
 // Components
 import UserModal from "@/features/User/UserModal";
 // Assets
@@ -19,8 +16,8 @@ import { AiOutlineUpload, AiTwotoneBell } from "react-icons/ai";
 import { BiUser } from "react-icons/bi";
 import { BsShareFill } from "react-icons/bs";
 
+import tw from "tailwind-styled-components";
 import html2canvas from "html2canvas";
-
 import AlarmModal from "@/features/Dashboard/components/AlarmModal";
 
 export default function NavBar() {
@@ -33,7 +30,6 @@ export default function NavBar() {
   const [openAlarm, setOpenAlarm] = useState(false);
   const [alarmCnt, setAlarmCnt] = useRecoilState(AlarmCntAtom);
 
-
   const loginId = useRecoilValue(LoginStateAtom);
 
   const getProfileImg = async () => {
@@ -42,10 +38,6 @@ export default function NavBar() {
       setUserProfile(data.data.userProfile);
     }
   };
-
-  useEffect(() => {
-    getProfileImg();
-  }, []);
 
   const handleUserIconClick = () => {
     setUserModalOpen(true);
@@ -56,7 +48,7 @@ export default function NavBar() {
   };
 
   const CategoryLink = tw.p`
-    text-xl font-bold hover:underline underline-offset-8 active:text-yellow-400 mr-4
+  text-xl font-bold hover:underline underline-offset-8 active:text-yellow-400 mr-4
   `;
 
   const handleShareIconClick = () => {
@@ -92,6 +84,12 @@ export default function NavBar() {
     console.log("알람 모달 상태", openAlarm);
   };
 
+  useEffect(() => {
+    getProfileImg();
+  }, []);
+
+  const notiArr = useNotification();
+
   return (
     <div className="flex items-center self-stretch justify-between flex-shrink-0 h-20 py-0 ">
       <Link href="/dashboard">
@@ -106,12 +104,12 @@ export default function NavBar() {
         <div className="flex items-center self-stretch gap-4">
           <div className="flex flex-col items-center justify-center w-7 h-7">
             <BsShareFill
-              className="leading-normal text-gray-800 text-1xl font-xeicon cursor-pointer"
+              className="leading-normal text-gray-800 cursor-pointer text-1xl font-xeicon"
               onClick={handleShareIconClick}
             />
           </div>
           <button
-            className="relative flex flex-col items-center justify-center w-7 h-7  cursor-pointer"
+            className="relative flex flex-col items-center justify-center cursor-pointer w-7 h-7"
             onClick={handleOpenAlarm}
           >
             <AiTwotoneBell className="text-gray-800 text-[1rem] font-xeicon leading-normal" />
@@ -120,15 +118,19 @@ export default function NavBar() {
                 1
               </div>
             )}
-            {openAlarm && <AlarmModal />}
+            {openAlarm && <AlarmModal notiArr={notiArr} />}
           </button>
         </div>
         {userProfile ? (
-          <img
-            src={userProfile}
-            className="w-10 h-10 rounded-full  cursor-pointer"
-            onClick={handleUserIconClick}
-          />
+          <div className="relative w-10 h-10">
+            <Image
+              src={userProfile}
+              alt=""
+              layout="fill"
+              className="rounded-full cursor-pointer"
+              onClick={handleUserIconClick}
+            />
+          </div>
         ) : (
           <BiUser
             className="text-gray-800 text-[1rem] font-xeicon leading-normal  cursor-pointer"

@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
-import Image from "next/image";
 import { GET } from "@/axios/GET";
 import { DELETE } from "@/axios/DELETE";
 // Recoil
@@ -43,18 +42,18 @@ const Users = () => {
 
   return (
     <div className="w-[20rem] py-[3.75rem] flex-col items-start space-y-6 self-stretch">
-      <div className="flex justify-between items-center self-stretch">
-        <p className="text-gray-900 text-2xl  font-semibold leading-6 tracking-tight">
+      <div className="flex items-center self-stretch justify-between">
+        <p className="text-2xl font-semibold leading-6 tracking-tight text-gray-900">
           Connect more...
         </p>
-        <div className="flex w-7 h-7 flex-col justify-center items-center">
+        <div className="flex flex-col items-center justify-center w-7 h-7">
           <AiOutlineReload
-            className="text-gray-800 text-base font-xeicon leading-normal cursor-pointer"
+            className="text-base leading-normal text-gray-800 cursor-pointer font-xeicon"
             onClick={() => getUsers()}
           />
         </div>
       </div>
-      <ul className="flex flex-col items-start gap-3 self-stretch">
+      <ul className="flex flex-col items-start self-stretch gap-3">
         <User />
       </ul>
     </div>

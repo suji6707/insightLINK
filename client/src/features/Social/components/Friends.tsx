@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-
+import Image from "next/image";
 import { GET } from "@/axios/GET";
 
 import CardDetail from "@/features/Social/components/CardDetail";
@@ -57,13 +57,13 @@ const Friends = () => {
   };
 
   return (
-    <div className="flex h-60 pb-10 flex-col items-start gap-10 self-stretch shadow-sm">
+    <div className="flex flex-col items-start self-stretch gap-10 pb-10 shadow-sm h-60">
       <h2 className="text-gray-900 text-[1.5rem]  font-semibold leading-1.5 tracking-tighter">
         News
       </h2>
       <div className="flex items-center gap-8 flex-1 self-stretch w-[53rem]">
         <div className="flex w-[1.75rem] h-[1.75rem] flex-col justify-center items-center">
-          <BsChevronLeft className="text-gray-800 text-base font-xeicon leading-normal" />
+          <BsChevronLeft className="text-base leading-normal text-gray-800 font-xeicon" />
         </div>
         <ul
           ref={listRef}
@@ -80,11 +80,13 @@ const Friends = () => {
                   key={index}
                   className="flex flex-col justify-center items-center w-[6.25rem] h-[8.25rem] flex-shrink-0 m-2 gap-3"
                 >
-                  <div className="w-[6.25rem] h-[6.25rem] transition transform rounded-full cursor-pointer hover:-rotate-6 bg-colorBlue flex justify-center items-center">
-                    <img
+                  <div className="relative w-[6.25rem] h-[6.25rem] transition transform rounded-full cursor-pointer hover:-rotate-6 bg-colorBlue flex justify-center items-center">
+                    <Image
                       src={f.profile_img}
-                      className="w-[5.25rem] h-[5.25rem] rounded-full cursor-pointer"
-                      alt="profile"
+                      alt="Profile"
+                      width={84} // rem to pixel conversion (1rem = 16px)
+                      height={84} // rem to pixel conversion (1rem = 16px)
+                      className="rounded-full cursor-pointer"
                       onClick={() => {
                         setShowModal(true);
                         setCardId(f.cardId);
@@ -100,7 +102,7 @@ const Friends = () => {
             })}
         </ul>
         <div className="flex w-[1.75rem] h-[1.75rem] flex-col justify-center items-center">
-          <BsChevronRight className="text-gray-800 text-base font-xeicon leading-normal" />
+          <BsChevronRight className="text-base leading-normal text-gray-800 font-xeicon" />
         </div>
       </div>
       {showModal && <CardDetail cardId={cardId} userId={userId} />}
