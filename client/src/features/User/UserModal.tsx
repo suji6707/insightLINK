@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 
+import getToken from "@/axios/getToken";
 import { GET } from "@/axios/GET";
+import { PATCH } from "@/axios/PATCH";
 // Components
 import LogoutBtn from "./LogoutBtn";
-
 import SwitchToggle from "./SwithToggle";
 import WithdrawalBtn from "./WithdrawalBtn";
 // Assets
 import { AiFillEdit, AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
-import getToken from "@/axios/getToken";
-import { PATCH } from "@/axios/PATCH";
 
 type UserModalProps = {
   closeModal: () => void;
@@ -24,9 +23,7 @@ const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
   const fetchUserInfo = async () => {
     try {
       const response = await GET("myinfo", true);
-      console.log(response);
       if (response.data.success) {
-        console.log(response.data.userInfo);
         setUserInfo(response.data.userInfo);
       }
     } catch (error) {
@@ -63,9 +60,7 @@ const UserModal: React.FC<UserModalProps> = ({ closeModal }) => {
 
       if (response.data.success) {
         setIsEditingNickname(false);
-        console.log(isEditingNickname);
       }
-      console.log("Save edited nickname:", editedNickname);
     } catch (error) {
       console.error("Error saving the edited nickname:", error);
     }
