@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 import { POST } from "@/axios/POST";
+import { BiArrowBack } from "react-icons/bi";
 
 export default function Home() {
   const router = useRouter();
@@ -82,97 +83,102 @@ export default function Home() {
     }
   }, []);
 
+  const handleBackClick = () => {
+    router.push("/");
+  };
+
+  const handleClick = () => {
+    router.push("/login");
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center h-screen w-screen">
-      <div className="container mx-auto max-w-md flex flex-col">
-        <div className="mb-4 flex items-center justify-end">
-          <label
-            className="block text-gray-700 text-sm font-bold mr-2"
-            htmlFor="email"
-          >
-            이메일 :
-          </label>
-          <input
-            id="email"
-            value={userEmail}
-            onChange={(event) => setUserEmail(event.target.value)}
-            placeholder="이메일"
-            className="form_input inline-block border border-gray-300 rounded px-2 py-1"
-          />
+    <div className="flex flex-col items-center h-screen w-screen bg-gray-50">
+      <div className="flex h-24 px-20 justify-between items-center shrink-0 self-stretch bg-white">
+        <div className="flex items-center gap-6 " onClick={handleBackClick}>
+          <BiArrowBack className="text-gray-900 text-2xl font-xeicon font-normal leading-100" />
+          <p>insightLINK</p>
         </div>
-        {emailFormatError && (
-          <div className="text-red-500 text-right">이메일 형식이 아닙니다.</div>
-        )}
-        {checkUserEmail && (
-          <div className="text-red-500 text-right">
-            이미 회원가입한 이메일입니다.
+      </div>
+      <div className="flex w-[36.25rem] py-12 flex-col justify-center items-center gap-10 bg-white mt-24 rounded-lg border border-gray-100 shadow-md">
+        <p className="flex flex-col self-stretch text-black text-center text-2xl font-ibm-plex-sans font-bold leading-150 tracking-tighter">
+          회원 가입
+        </p>
+        <div className="flex flex-col items-center gap-8">
+          <div className="flex w-25 h-3.75 p-0.25 justify-between items-center border-b-[1px] border-gray-900">
+            <input
+              id="email"
+              value={userEmail}
+              onChange={(event) => setUserEmail(event.target.value)}
+              placeholder="이메일 입력"
+              className=" text-gray-400 text-1.75xl font-ibm-plex-sans font-normal font-medium leading-normal"
+            />
           </div>
-        )}
-        <div className="mb-4 flex items-center justify-end">
-          <label
-            className="block text-gray-700 text-sm font-bold mr-2"
-            htmlFor="password"
-          >
-            비밀번호 :
-          </label>
-          <input
-            id="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            placeholder="비밀번호"
-            type="password"
-            className="form_input inline-block border border-gray-300 rounded px-2 py-1"
-          />
-        </div>
-        <div className="mb-4 flex items-center justify-end">
-          <label
-            className="block text-gray-700 text-sm font-bold mr-2"
-            htmlFor="confirmPassword"
-          >
-            비밀번호 확인 :
-          </label>
-          <input
-            id="confirmPassword"
-            value={confirmPassword}
-            onChange={(event) => setConfirmPassword(event.target.value)}
-            placeholder="비밀번호 확인"
-            type="password"
-            className="form_input inline-block border border-gray-300 rounded px-2 py-1"
-          />
-        </div>
-        {passwordMatchError && (
-          <div className="text-red-500 text-right">
-            비밀번호가 일치하지 않습니다.
+          {emailFormatError && (
+            <div className="text-red-500 text-right">
+              이메일 형식이 아닙니다.
+            </div>
+          )}
+          {checkUserEmail && (
+            <div className="text-red-500 text-right">
+              이미 회원가입한 이메일입니다.
+            </div>
+          )}
+          <div className="flex w-25 h-3.75 p-0.25 justify-between items-center border-b-[1px] border-gray-900">
+            <input
+              id="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              placeholder="비밀번호 입력"
+              type="password"
+              className=" text-gray-400 text-1.75xl font-ibm-plex-sans font-normal font-medium leading-normal"
+            />
           </div>
-        )}
-        {passwordError && (
-          <div className="text-red-500 text-right">
-            비밀번호는 문자(대문자 또는 소문자)와 숫자의 조합을 최소 5자
-            이상이여야 합니다.
+          <div className="flex w-25 h-3.75 p-0.25 justify-between items-center border-b-[1px] border-gray-900">
+            <input
+              id="confirmPassword"
+              value={confirmPassword}
+              onChange={(event) => setConfirmPassword(event.target.value)}
+              placeholder="비밀번호 확인"
+              type="password"
+              className=" text-gray-400 text-1.75xl font-ibm-plex-sans font-normal font-medium leading-normal"
+            />
           </div>
-        )}
-        <div className="mb-4 flex items-center justify-end">
-          <label
-            className="block text-gray-700 text-sm font-bold mr-2"
-            htmlFor="userName"
-          >
-            이름 :
-          </label>
-          <input
-            id="userName"
-            value={userName}
-            onChange={(event) => setUserName(event.target.value)}
-            placeholder="이름"
-            className="form_input inline-block border border-gray-300 rounded px-2 py-1"
-          />
-        </div>
-        <div className="flex justify-end mt-4">
-          <button
-            onClick={doUserRegistration}
-            className="bg-black text-white font-bold py-2 px-[4.5rem] rounded cursor-pointer"
-          >
-            회원가입
-          </button>
+          {passwordMatchError && (
+            <div className="text-red-500 text-right">
+              비밀번호가 일치하지 않습니다.
+            </div>
+          )}
+          {passwordError && (
+            <div className="text-red-500 text-right">
+              비밀번호는 문자(대문자 또는 소문자)와 숫자의 조합을 최소 5자
+              이상이여야 합니다.
+            </div>
+          )}
+          <div className="flex w-25 h-3.75 p-0.25 justify-between items-center border-b-[1px] border-gray-900">
+            <input
+              id="userName"
+              value={userName}
+              onChange={(event) => setUserName(event.target.value)}
+              placeholder="닉네임 입력"
+              className=" text-gray-400 text-1.75xl font-ibm-plex-sans font-normal font-medium leading-normal"
+            />
+          </div>
+          <div className="flex flex-col justify-center items-center gap-6">
+            <div
+              onClick={doUserRegistration}
+              className="flex h-[3.375rem] px-7 justify-center items-center gap-2 rounded bg-gray-900 cursor-pointer"
+            >
+              <p className="text-white text-1.5xl font-ibm-plex-sans font-normal font-semibold leading-normal tracking-wide cursor-pointer">
+                가입하기
+              </p>
+            </div>
+            <p
+              className="text-gray-700 text-1.5xl font-ibm-plex-sans font-normal font-medium leading-normal cursor-pointer"
+              onClick={handleClick}
+            >
+              로그인
+            </p>
+          </div>
         </div>
       </div>
     </div>
