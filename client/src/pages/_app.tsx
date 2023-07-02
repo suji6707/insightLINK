@@ -4,7 +4,8 @@ import { ThemeProvider } from "next-themes";
 import { AppProps } from "next/app";
 import { Kanit } from "next/font/google";
 import Script from "next/script";
-
+import { NextSeo } from "next-seo";
+import Head from "next/head";
 declare global {
   // Make it accessible globally on Kakao
   interface Window {
@@ -35,6 +36,13 @@ function MyApp({ Component, pageProps }: AppProps) {
           src="https://developers.kakao.com/sdk/js/kakao.js"
           onLoad={kakaoInit}
         />
+        <NextSeo title="insightLINK" description="Link your insight" />
+        <Head>
+          <meta
+            name="viewport"
+            content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
+          />
+        </Head>
         <main className={`${kanit.variable} font-sans`}>
           <Component {...pageProps} />
         </main>
