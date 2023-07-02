@@ -34,6 +34,22 @@ export const Main_graph_Api = async (
   }
 };
 
+export const Share_graph_Api = async (
+  userid?: string
+): Promise<Main_graph_Api_DTO> => {
+  let url = `/api/share${userid ? `?userId=${userid}` : ""}`;
+
+  try {
+    const response = await axios.get(url);
+
+    console.log(response);
+    return response.data;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};
+
 export const User_Info_Api = async (userid?: string): Promise<UserInfo_DTO> => {
   let url = `/api/${userid ? `other/${userid}` : `user`}`;
 

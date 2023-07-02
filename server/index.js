@@ -26,6 +26,8 @@ import otherRouter from './routes/other.js';
 import dummyRouter from './routes/z_dummy.js';
 import dummyRouter2 from './routes/z_dummy_category.js';
 
+import userNameRouter from './routes/userName.js';
+
 
 import { authMiddleware } from './middlewares/auth-middleware.js';
 import { setTimeout } from 'timers/promises';
@@ -60,8 +62,8 @@ app.use('/api/other',authMiddleware,otherRouter);
 app.use('/api/dummy', dummyRouter);
 app.use('/api/dummy2', dummyRouter2);
 
-app.use('/api/share', graphRouter);
-
+/* 카카오톡 공유하기 */
+app.use('/api/share', [graphRouter, userNameRouter]);
 
 /* 도메인 연결 test */
 app.get('/hello', async (req, res) => {
