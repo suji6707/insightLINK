@@ -36,10 +36,12 @@ function useGraph() {
       setData(graphData);
     };
     getGraphData();
-    console.log(data);
+    console.log('useGraph: ', data);
   }, [router.isReady, router.query.userid, editMode, imgUpLoad]); // add dependencies
-
-  return data;
+ 
+    if(data){
+      return data
+    } 
 }
 
 export default useGraph;

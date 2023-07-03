@@ -15,7 +15,7 @@ import { extractJson } from '../services/jsonUtils.js';
 // import { combinedList }  from '../services/taglist.js';  
 import translate from 'translate-google';
 /* Tag ENDED */
-// import { setTimeout } from 'timers/promises';   
+import { setTimeout } from 'timers/promises';   
 
 /* log */
 import { logger } from '../winston/logger.js';
@@ -55,16 +55,21 @@ const isImage = (ocrResult) => {
 };
 
 
-const extractTagFromImage = async (imgUrl, req, res) => {
+const extractTagFromImage = async (imgUrl, req, res, userId) => {
   const sumText = await processOCR(imgUrl);
   // res.write(JSON.stringify({imgUrl: imgUrl, status: 'process OCR FINISEHD'}));
   let tagJSON = '<Image>';  
   if (!isImage(sumText)) {
-    const tag = await generate(req, res, sumText); 
+    const tag = await generate(req, res, sumText, userId); 
     tagJSON = extractJson(tag);
-    console.log(tagJSON);
-    /* 실시간 통신 */
-    res.write(JSON.stringify({imgUrl: imgUrl, status: 'extract JSON FINISHED', data: tagJSON}));
+    console.log('fr: extractTagFromImage: ', tagJSON);
+
+    if (!tagJSON || !tagJSON.tags) {
+      logger.error('/routes/uploads 폴더, Invalid JSON data. No "tags" property found.');
+      return null;
+    }
+    /* 프론트 */
+    // res.write(JSON.stringify({imgUrl: imgUrl, status: 'extract JSON FINISHED', data: tagJSON}));
   }
   return {
     imgUrl,
@@ -79,98 +84,73 @@ router.post('/', upload.array('photos'),
   async (req, res) => {
 
     const { user } = res.locals;    // authMiddleware 리턴값
-    const useId = user.user_id;
-
+    const userId = user.user_id;
     const imgUrlList = req.body;
 
     let connection = null;
     try {
       connection = await db.getConnection();  
-      const q1 = 'INSERT INTO File (user_id, img_url, content) VALUES (?, ?, ?)';           // SQL - File 
-      const q2 = 'INSERT INTO Tag (file_id, tag, tag_index) VALUES (?, ?, ?)';              // SQL - Tag   ********* taglist -> Tag 테이블 저장시 index -1 해야함. 0부터 시작하도록.
-      const q3 = 'INSERT INTO taglist (englishKeyword, koreanKeyword) VALUES (?, ?)';       // SQL - taglist
-      const q4 = 'SELECT t.id, t.koreanKeyword FROM taglist AS t WHERE englishKeyword = ?'; // 영어 -> 한글
+      const q1 = 'INSERT INTO File (user_id, img_url, content) VALUES (?, ?, ?)';                         // SQL - File 
+      const q2 = 'INSERT INTO Tag (file_id, tag, tag_index) VALUES (?, ?, ?)';                            // SQL - Tag   
+      const q3 = 'INSERT INTO taglist (user_id, englishKeyword, koreanKeyword, tag_index) VALUES (?, ?, ?, ?)';       // SQL - taglist
+      const q4 = 'SELECT t.koreanKeyword, t.tag_index FROM taglist AS t WHERE user_id = ? AND englishKeyword = ?';        // 영어 -> 한글
+      const q5 = 'SELECT MAX(tag_index) AS last_index FROM taglist WHERE user_id = ?';
       
       /* 모든 이미지를 S3로 저장, sumText.length != 0 인 것만 OCR 및 태그 추출 후 저장 */
       const promises = [];
       for (const imgUrl of imgUrlList) {
-        promises.push(extractTagFromImage(imgUrl, req, res));
+        promises.push(extractTagFromImage(imgUrl, req, res, userId));
       }
       const tagList = await Promise.all(promises);  // promise 배열을 한번에 풀어줌. 푸는 순서를 보장하지 않지만 n개를 동시에 풀어줌.
       
-      for (const { tagJSON, sumText, imgUrl } of tagList) {
-        if (tagJSON === '<Image>') continue;
-        /* Tag 가공 -> index, KR */
-        const tag1 = tagJSON.tags[0];   // tag english string
-        const tag2 = tagJSON.tags[1];
-        
-        /* taglist 테이블에서 영어 키워드에 맞는 한글 키워드 가져오기 */
-        const [tagResult1] = await connection.query(q4, [tag1]);
-        const [tagResult2] = await connection.query(q4, [tag2]);
-
+      /* for문 1) 각 이미지에 대해 */
+      for (const result of tagList) {
+        /* null값 에러처리 */
+        if (result == null) {
+          logger.info('/routes/uploads 폴더, post, tagJSON is null.');
+          continue;
+        }
+        const { tagJSON, sumText, imgUrl } = result;
+        if (tagJSON === '<Image>' || tagJSON == null) {
+          continue;
+        }
         /* SQL - File 사진은 일단 저장 */
-        const [ result1 ] = await connection.query(q1, [ useId, imgUrl, sumText ]);
+        const [ FileResult ] = await connection.query(q1, [ userId, imgUrl, sumText ]);
 
-        /* tag1, tag2가 모두 있는 경우 */
-        if (tagResult1.length != 0 && tagResult2.length != 0) {          
-          /* SQL - Tag */
-          const [ result2 ] = await connection.query(q2, [ result1.insertId, tagResult1[0].koreanKeyword, tagResult1[0].id - 1 ]);   // file's insertId, taglist의 KR, id
-          const [ result3 ] = await connection.query(q2, [ result1.insertId, tagResult2[0].koreanKeyword, tagResult2[0].id - 1 ]);   // file's insertId, taglist의 KR, id
-        } 
-        /* tag1만 없는 경우 */
-        else if (tagResult1.length === 0 && tagResult2.length != 0) {
-          logger.info(`/routes/uploads 폴더, post, No matching element found for ${tag1}.`);
-          try {
-            // 1. 번역 후 taglist 테이블에 저장
-            const translatedTag1 = await translate(tag1, {to: 'ko'});     // 한글 키워드
-            const [taglistResult1] = await connection.query(q3, [tag1, translatedTag1]);
-
-            // 2. Tag 테이블 저장 (translated 기준)
-            const [result2] = await connection.query(q2, [ result1.insertId, translatedTag1, taglistResult1.insertId -1 ]);     //  tag1: 번역된 KR
-            const [result3] = await connection.query(q2, [ result1.insertId, tagResult2[0].koreanKeyword, tagResult2[0].id -1 ]);     //  tag2: 기존 방식
-            console.log(`fr: ${tagResult1} 저장 성공!`);
-          } catch (err) {
-            console.log(err);
-          }
-        } 
-        /* tag2만 없는 경우 */
-        else if (tagResult1.length != 0 && !tagResult2.length === 0) {
-          logger.info(`/routes/uploads 폴더, post, No matching element found for ${tag2}.`);
-          try {
-            // 1. 번역 후 taglist 테이블에 저장
-            const translatedTag2 = await translate(tag2, {to: 'ko'});     // 한글 키워드
-            const [taglistResult2] = await connection.query(q3, [tag2, translatedTag2]);
-
-            // 2. Tag 테이블 저장
-            const [result2] = await connection.query(q2, [ result1.insertId, tagResult1[0].koreanKeyword, tagResult1[0].id -1 ]);   // tag1: 기존 방식     
-            const [result3] = await connection.query(q2, [ result1.insertId, translatedTag2, taglistResult2.insertId -1 ]);   // tag2: 번역된 KR
-            console.log(`fr: ${tagResult2} 저장 성공!`);
-          } catch (err) {
-            console.log(err);
-          }
+        let streamTags = [];
+        /* for문 2) N개의 각 태그에 대해 */
+        for (let i = 0; i < tagJSON.tags.length; i++) {
+          const tag = tagJSON.tags[i];
+          // 1. taglist 존재 여부 
+          const [tagResult] = await connection.query(q4, [userId, tag]);     // t.koreanKeyword, t.tag_index FROM taglist
+          console.log('fr: 기존 taglist: ', tagResult);
+          // 2. 있으면 바로 Tag 테이블 저장.
+          if (tagResult.length != 0) {
+            await connection.query(q2, [ FileResult.insertId, tagResult[0].koreanKeyword, tagResult[0].tag_index ]);      // file_id, tag, tag_index
+            streamTags.push(tagResult[0].koreanKeyword);    // res.write()로 보낼 한글 키워드
+          } 
+          // 3. 없으면 taglist에 새 태그 저장 후 Tag 테이블 저장
+          else {
+            logger.info(`/routes/uploads 폴더, post, No matching element found for ${tag}.`);
+            // 3-1. 구글 번역 후 taglist 저장
+            const translatedTag = await translate(tag, {to: 'ko'});   // 한글 키워드
+            const [indexResult] = await connection.query(q5, userId);         // tag_index
+            const tag_index = indexResult[0].last_index + 1;
+            console.log('fr: 신규 taglist 영/한: ', tag, translatedTag);
+            await connection.query(q3, [ userId, tag, translatedTag, tag_index ]);     // englishKeyword, koreanKeyword, tag_index + 1
+            console.log(`fr: 신규 taglist: ${translatedTag} 저장 성공!`);
+            // 3-2. Tag 테이블 저장.
+            await connection.query(q2, [ FileResult.insertId, translatedTag, tag_index ]);          // file_id, tag, tag_index
+            streamTags.push(translatedTag);
+          } 
         }
-        /* 둘 다 없는 경우 */
-        else {
-          try {
-            // 1. 번역 후 taglist 테이블에 저장
-            const translatedTag1 = await translate(tag1, {to: 'ko'});
-            const translatedTag2 = await translate(tag2, {to: 'ko'});       
-            const [taglistResult1] = await connection.query(q3, [tag1, translatedTag1]);          
-            const [taglistResult2] = await connection.query(q3, [tag2, translatedTag2]);
-
-            const [result2] = await connection.query(q2, [ result1.insertId, translatedTag1, taglistResult1.insertId ]);    // tag1
-            const [result3] = await connection.query(q2, [ result1.insertId, translatedTag2, taglistResult2.insertId ]);    // tag2
-            console.log(`fr: ${tagResult1}, ${tagResult2} 저장 성공!`);
-          } catch (err) {
-            console.log(err);
-          }
-        }
+        /* 프론트 */
+        res.write(JSON.stringify({imgUrl: imgUrl, tags: streamTags}));
       }
-      // console.log(tagList);
       connection.release();
-
-      res.write('SUCCESS');
+      // res.write('SUCCESS');
       return res.end();
+      // res.status(200).send('SUCCESS');
       
     } catch (err) {
       connection?.release();
