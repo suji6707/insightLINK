@@ -93,7 +93,12 @@ export default function NavBar() {
   return (
     <div className="flex items-center self-stretch justify-between flex-shrink-0 h-20 py-0 ">
       <Link href="/dashboard">
-        <p className="text-3xl font-extrabold">insightLINK</p>
+        <Image
+          src="/insightLINK_logo.svg"
+          alt="InsightLINK Logo"
+          width={230}
+          height={230}
+        />
       </Link>
       <div>
         <Link href="/social">
@@ -124,7 +129,7 @@ export default function NavBar() {
         {userProfile ? (
           <div className="relative w-10 h-10">
             <Image
-              src={`/${userProfile}`}
+              src="/insightLINK_profile.png"
               alt=""
               layout="fill"
               className="rounded-full cursor-pointer"
