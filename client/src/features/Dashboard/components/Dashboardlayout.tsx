@@ -33,17 +33,21 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   useEffect(() => {
     const { userid } = router.query;
-    // Axios request to fetch user name
-    axios
-      .get(`/api/share/info?userId=${userid}`)
-      .then((response) => {
-        // Assuming the response contains the user name in the 'name' property
-        setUserName(response.data.userName);
-      })
-      .catch((error) => {
-        console.error("Error fetching user name:", error);
-      });
+  
+    if (userid) {
+      // Axios request to fetch user name
+      axios
+        .get(`/api/share/info?userId=${userid}`)
+        .then((response) => {
+          // Assuming the response contains the user name in the 'userName' property
+          setUserName(response.data.userName);
+        })
+        .catch((error) => {
+          console.error("Error fetching user name:", error);
+        });
+    }
   }, [router.query]);
+  
 
   return (
     <>
