@@ -28,16 +28,18 @@ function useGraph() {
         ? router.query.userid[0]
         : router.query.userid;
       let graphData;
-      // console.log("dfsjdfljsdljf : ", token)
-      // if (token) {
-        graphData = await Main_graph_Api(userid);
-      // } else {
-      //   graphData = await Share_graph_Api(userid);
-      // }
+      if (typeof window !== "undefined") {
+        const token = localStorage.getItem("token");
+        if (token) {
+          graphData = await Main_graph_Api(userid);
+        } else {
+          graphData = await Share_graph_Api(userid);
+        }
+        setData(graphData);
+      }
       setData(graphData);
     };
     getGraphData();
-    console.log('useGraph: ', data);
   }, [router.isReady, router.query.userid, editMode, imgUpLoad]); // add dependencies
  
     if(data){

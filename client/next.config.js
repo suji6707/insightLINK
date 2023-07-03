@@ -1,4 +1,16 @@
 /** @type {import('next').NextConfig} */
+const withPlugins = require("next-compose-plugins");
+const withImages = require("next-images");
+const runtimeCaching = require("next-pwa/cache");
+
+const withPWA = require("next-pwa")({
+  dest: "public",
+  disable: process.env.NODE_ENV === "development",
+  register: true,
+  skipWaiting: true,
+  runtimeCaching,
+  sw: "/service-worker.js",
+});
 
 const nextConfig = {
   env: {
@@ -17,7 +29,7 @@ const nextConfig = {
     remotePatterns: [
       {
         // protocol: 'https',
-        hostname: 'sw-jungle-s3.s3.ap-northeast-2.amazonaws.com',
+        hostname: "sw-jungle-s3.s3.ap-northeast-2.amazonaws.com",
         // port: '',
         // pathname: '/account123/**',
       },
@@ -34,4 +46,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withPWA(nextConfig);
