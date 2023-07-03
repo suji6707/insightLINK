@@ -11,7 +11,7 @@ const LoginBtn: React.FC = () => {
   return (
     <button
       onClick={handleClick}
-      className="font-bold py-2 rounded mr-4 border-black border w-full"
+      className="font-bold py-2 rounded mr-4 border-black border w-full cursor-pointer"
     >
       로그인
     </button>

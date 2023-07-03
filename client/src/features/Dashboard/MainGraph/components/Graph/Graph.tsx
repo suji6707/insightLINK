@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 // recoil
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { DashBoardCardAtom, NodeNameAtom } from "@/recoil/atoms/MainGraphAtom";
 // library
 import * as echarts from "echarts";
@@ -93,10 +93,17 @@ function Graph({ data, editMode }: MainGraphProps) {
     }
   }, [nodeName, openCard]);
 
-  return <div
-    className="w-[150vh] h-[80vh] bg-slate-100 left-1/2 transform -translate-x-1/2"
-    ref={chartRef}
+
+  return (
+    <div
+      className={
+        openCard
+          ? "w-full h-[65vh]"
+          : "w-[150vh] h-[65vh] left-1/2 transform -translate-x-1/2"
+      }
+      ref={chartRef}
     ></div>
+  );
 }
 
 export default Graph;

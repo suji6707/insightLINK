@@ -32,7 +32,7 @@ const ChartDefaultOptions = (graph: Main_graph_Api_DTO) => {
           hideOverlap: true,
         },
         scaleLimit: {
-          min: 2,
+          min: 1,
           max: 5,
         },
         lineStyle: {

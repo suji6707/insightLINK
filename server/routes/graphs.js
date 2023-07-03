@@ -49,9 +49,14 @@ function DFS(v, adj, count, visited, groupList) {
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  /* 로그인 유저*/
-  const { user } = res.locals;
-  const userId = user.user_id;
+
+  let userId = undefined;
+  if(Object.keys(res.locals).length !==0) { // /api/graph 이면서 token 값 있는 경우 사용자 정보
+    /* 로그인 유저*/
+    const {user} = res.locals;
+    userId = user.user_id;
+  }
+
   /* 다른 유저 */
   const otherUserId = req.query.userId;
 
@@ -62,10 +67,11 @@ router.get('/', async (req, res) => {
     if (otherUserId) {
       const graphData = await getGraphData(otherUserId);
       logger.info(
-        `/routes/graphs 폴더, get, 다른 유저 ${otherUserId} 그래프 조회 !`,
-      );
-      return res.send(graphData);
-    }
+        `/routes/graphs 폴더, get, 다른 유저 ${otherUserId} 그래프 조회 !`
+      )
+      return res.send(graphData)
+    } 
+    
     /* 기본 내 그래프 조회 */
     const graphData = await getGraphData(userId);
     logger.info(`/routes/graphs 폴더, get, 내 ${userId} 그래프 조회 !`);
