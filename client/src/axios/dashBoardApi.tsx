@@ -69,7 +69,10 @@ export const Card_Info_Api = async (
   perPage?: number | undefined
 ): Promise<CardData> => {
   let url = `/api/cards/tag${tagname ? `?tagname=${tagname}` : ""}${
-    userid ? `&userId=${userid}` : ""}${page ? `&page=${page}` : "&page=1"}${perPage ? `&perPage=${perPage}` : "&perPage=9"}
+    userid ? `&userId=${userid}` : ""
+  }${page ? `&page=${page}` : "&page=1"}${
+    perPage ? `&perPage=${perPage}` : "&perPage=9"
+  }
   `;
   try {
     const response = await axiosInstance.get(url);
@@ -148,8 +151,8 @@ export const Cancel_Follow_API = async (followId?: string | undefined) => {
 };
 
 export const Duplicate_Card_API = async (
-  cardId?: string | undefined,
-  tagId?: string | undefined
+  cardId?: number | null,
+  tagId?: string | null
 ) => {
   let url = `/api/cards/copy${cardId ? `?cardId=${cardId}` : ""}${
     tagId ? `&tagId=${tagId}` : ""
