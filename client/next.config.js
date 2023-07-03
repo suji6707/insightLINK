@@ -12,6 +12,7 @@ const nextConfig = {
       "cdn.pixabay.com/",
       "encrypted-tbn0.gstatic.com/",
       "search.pstatic.net",
+      "cdn.pixabay.com",
     ],
   },
   reactStrictMode: true,
@@ -20,7 +21,6 @@ const nextConfig = {
       {
         source: "/api/:path*",
         destination: process.env.SOURCE_URL,
-
       },
     ];
   },
