@@ -8,9 +8,10 @@ const nextConfig = {
   },
   images: {
     domains: [
-      "sw-jungle-s3.s3.ap-northeast-2.amazonaws.com",
-      "cdn.pixabay.com",
+      "sw-jungle-s3.s3.ap-northeast-2.amazonaws.com/",
+      "cdn.pixabay.com/",
       "encrypted-tbn0.gstatic.com/",
+      "search.pstatic.net",
     ],
   },
   reactStrictMode: true,

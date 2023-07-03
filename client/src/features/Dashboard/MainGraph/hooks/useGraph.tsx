@@ -28,11 +28,12 @@ function useGraph() {
         ? router.query.userid[0]
         : router.query.userid;
       let graphData;
-      if (token) {
+      // console.log("dfsjdfljsdljf : ", token)
+      // if (token) {
         graphData = await Main_graph_Api(userid);
-      } else {
-        graphData = await Share_graph_Api(userid);
-      }
+      // } else {
+      //   graphData = await Share_graph_Api(userid);
+      // }
       setData(graphData);
     };
     getGraphData();

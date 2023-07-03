@@ -7,7 +7,7 @@ import { logger } from '../winston/logger.js';
 
 
 
-function cycleCount(graphLinks, n, m) {
+function cycleCount(graphLinks, n) {
   // n은 노드 개수, m은 간선 개수
   let adj = Array.from({ length: n }, () => []);   // 노드의 개수(n+1)를 기반으로 각 노드에 대해 빈 배열 초기화
   let visited = Array(n).fill(0);                  // [0] * (n + 1)
@@ -28,7 +28,7 @@ function cycleCount(graphLinks, n, m) {
       count += 1;
     }
   }
-
+  console.log(groupList);
   return groupList;
 }
 
@@ -50,12 +50,9 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
 
-  let userId = undefined;
-  if(Object.keys(res.locals).length !==0) { // /api/graph 이면서 token 값 있는 경우 사용자 정보
-    /* 로그인 유저*/
-    const {user} = res.locals;
-    userId = user.user_id;
-  }
+  /* 로그인 유저*/
+  const { user } = res.locals;
+  const userId = user.user_id;
 
   /* 다른 유저 */
   const otherUserId = req.query.userId;
@@ -67,9 +64,9 @@ router.get('/', async (req, res) => {
     if (otherUserId) {
       const graphData = await getGraphData(otherUserId);
       logger.info(
-        `/routes/graphs 폴더, get, 다른 유저 ${otherUserId} 그래프 조회 !`
-      )
-      return res.send(graphData)
+        `/routes/graphs 폴더, get, 다른 유저 ${otherUserId} 그래프 조회 !`,
+      );
+      return res.send(graphData);
     } 
     
     /* 기본 내 그래프 조회 */
@@ -124,7 +121,7 @@ const getGraphData = async (userId) => {
     const n = graph.nodes.length;
     const m = graphLinks.length;
 
-    const categoryList = cycleCount(graphLinks, n, m);
+    const categoryList = cycleCount(graphLinks, n);
     graph.nodes.forEach((node, index) => {
       node.category = categoryList[index];
     }); 

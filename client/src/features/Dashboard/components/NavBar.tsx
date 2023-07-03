@@ -124,7 +124,7 @@ export default function NavBar() {
         {userProfile ? (
           <div className="relative w-10 h-10">
             <Image
-              src={userProfile}
+              src={`/${userProfile}`}
               alt=""
               layout="fill"
               className="rounded-full cursor-pointer"
