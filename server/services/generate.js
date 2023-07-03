@@ -79,20 +79,23 @@ const generatePrompt = async (ocrResult, userId) => {
     const taglist = rows.map(row => row.englishKeyword);   // taglist 테이블의 englishKeywords를 리스트로.
     const taglistText = taglist.map(tag => JSON.stringify(tag)).join(',');
 
-
-
     // let prompt = `Given ${taglist.length} categories: `; 
     // prompt += `${taglistText}.`; 
     let exportTagCount = process.env.EXPORT_TAG_COUNT;  // 프롬프트에 2~5 제시
-    let prompt = `Please brainstorm and select ${exportTagCount} new and unique categories that best describe the uploaded data. \n
-                  Do this even if you think some categories might already be covered in the existing list (${taglistText}). \n
-                  However, if the new categories exactly match any in the existing list, those from the list will be used. \n`;
+    /* user_id=1 */
+    // let prompt = `Please brainstorm and select ${exportTagCount} new and unique categories that best describe the uploaded data. \n
+    //               Do this even if you think some categories might already be covered in the existing list (${taglistText}). \n
+    //               However, if the new categories exactly match any in the existing list, those from the list will be used. \n`;
     
-    /* user_id 3버전 */
-    // let prompt = `Please select ${exportTagCount} categories that best describe the uploaded data. \n
-    //               If none of the categories are applicable, please select the ${exportTagCount} categories that appear to be most relevant.`;
+    /* user_id=3 */
+    let prompt = `Given ${taglist.length} categories: `; 
+    prompt += `${taglistText}.`;
+    prompt = `Please select between 2 to 5 categories that best describe the uploaded data. \n
+              Prioritize selecting a category from the given categories, \n
+              But if none of the categories are applicable, please select the between 2 to 5 categories that appear to be most relevant. \n
+              `;
 
-    /* 아직 */
+    /* 제약사항 */
     // let prompt = `Based on the text data extracted from pictures captured on a mobile screen, \n
     //               which may include OCR errors and potentially meaningless information like battery level or time, \n
     //               please analyze the text data and suggest the most appropriate category for it. \n

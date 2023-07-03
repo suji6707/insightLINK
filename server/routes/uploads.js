@@ -65,11 +65,7 @@ const extractTagFromImage = async (imgUrl, req, res, userId) => {
     console.log('fr: extractTagFromImage: ', tagJSON);
 
     if (!tagJSON || !tagJSON.tags) {
-      logger.error('Invalid JSON data. No "tags" property found.');
-      return null;
-    }
-    if (tagJSON.tags == null || tagJSON.tags.some(tag => tag == null)) {
-      logger.info('/routes/uploads 폴더, post, Some tags are null.');
+      logger.error('/routes/uploads 폴더, Invalid JSON data. No "tags" property found.');
       return null;
     }
     /* 프론트 */
@@ -111,18 +107,13 @@ router.post('/', upload.array('photos'),
       for (const result of tagList) {
         /* null값 에러처리 */
         if (result == null) {
-          console.log('tagJSON null이 제대로 return null 처리됨.');
+          logger.info('/routes/uploads 폴더, post, tagJSON is null.');
           continue;
         }
         const { tagJSON, sumText, imgUrl } = result;
-
-        // res.write(JSON.stringify({imgUrl: imgUrl, status: 'extract JSON FINISHED', data: tagJSON}));
-
         if (tagJSON === '<Image>' || tagJSON == null) {
-          console.log('tagJSON이 <Image>거나, null이 한 번 더 에러처리로 들어옴.');
           continue;
         }
-
         /* SQL - File 사진은 일단 저장 */
         const [ FileResult ] = await connection.query(q1, [ userId, imgUrl, sumText ]);
 
@@ -130,10 +121,9 @@ router.post('/', upload.array('photos'),
         /* for문 2) N개의 각 태그에 대해 */
         for (let i = 0; i < tagJSON.tags.length; i++) {
           const tag = tagJSON.tags[i];
-          console.log('fr: 태그: ', tag);
           // 1. taglist 존재 여부 
           const [tagResult] = await connection.query(q4, [userId, tag]);     // t.koreanKeyword, t.tag_index FROM taglist
-          console.log('fr: 해당 태그에 대한 taglist: ', tagResult);
+          console.log('fr: 기존 taglist: ', tagResult);
           // 2. 있으면 바로 Tag 테이블 저장.
           if (tagResult.length != 0) {
             await connection.query(q2, [ FileResult.insertId, tagResult[0].koreanKeyword, tagResult[0].tag_index ]);      // file_id, tag, tag_index
@@ -144,12 +134,11 @@ router.post('/', upload.array('photos'),
             logger.info(`/routes/uploads 폴더, post, No matching element found for ${tag}.`);
             // 3-1. 구글 번역 후 taglist 저장
             const translatedTag = await translate(tag, {to: 'ko'});   // 한글 키워드
-            console.log('tag, 번역: ', tag, translatedTag);
             const [indexResult] = await connection.query(q5, userId);         // tag_index
             const tag_index = indexResult[0].last_index + 1;
-            console.log('fr: 최종 taglist 저장되는 영/한: ', tag, translatedTag);
+            console.log('fr: 신규 taglist 영/한: ', tag, translatedTag);
             await connection.query(q3, [ userId, tag, translatedTag, tag_index ]);     // englishKeyword, koreanKeyword, tag_index + 1
-            console.log(`fr: ${translatedTag} 저장 성공!`);
+            console.log(`fr: 신규 taglist: ${translatedTag} 저장 성공!`);
             // 3-2. Tag 테이블 저장.
             await connection.query(q2, [ FileResult.insertId, translatedTag, tag_index ]);          // file_id, tag, tag_index
             streamTags.push(translatedTag);
