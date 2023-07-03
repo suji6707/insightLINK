@@ -79,15 +79,7 @@ const generatePrompt = async (ocrResult, userId) => {
               Prioritize selecting a category from the given categories, \n
               But if none of the categories are applicable, please select the between 2 to 5 categories that appear to be most relevant. \n
               `;
-
-    /* 제약사항 */
-    // let prompt = `Based on the text data extracted from pictures captured on a mobile screen, \n
-    //               which may include OCR errors and potentially meaningless information like battery level or time, \n
-    //               please analyze the text data and suggest the most appropriate category for it. \n
-    //               If you think multiple categories are suitable, you can suggest up to two to five categories. \n
-    //               Additionally, if you observe any relationships or patterns among the suggested categories, \n
-    //               please propose a new category that captures those insights. \n
-    //               However, please prioritize selecting a category from the following list: ${taglistText}.`;
+              
     prompt += 'Provide them in JSON format.\'{"tags":[]}\'\n';
     prompt += 'Uploaded data:';
     prompt += ocrResult;
