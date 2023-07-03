@@ -5,44 +5,55 @@ import { graphCountQuery, graphDirectionQuery } from '../db/graphQueries.js';
 /* log */
 import { logger } from '../winston/logger.js';
 
-function cycleCount(connections, nodes) {
-  let count = -1;
-  const visited = new Set();
-  const groups = new Map();
 
-  for (const node of nodes) {
-    if (!visited.has(node)) {
-      const groupNum = count + 1;
-      DFS(connections, node, visited, groupNum, groups);
-      count++;
+
+function cycleCount(graphLinks, n) {
+  // n은 노드 개수, m은 간선 개수
+  let adj = Array.from({ length: n }, () => []);   // 노드의 개수(n+1)를 기반으로 각 노드에 대해 빈 배열 초기화
+  let visited = Array(n).fill(0);                  // [0] * (n + 1)
+  let count = 0;
+
+  // 양방향 연결 표시. 결국 중복제거 하지만, DFS하려면 어쩔 수 없음.
+  for (let link of graphLinks) {
+    let [a, b] = link.map(num => num - 1); // a and b are 0-based
+    adj[a].push(b);
+    adj[b].push(a);
+  }   
+  let groupList = [];
+
+  for (let i = 0; i < n; i++) {
+    if (visited[i] === 0) {
+      DFS(i, adj, count, visited, groupList);
+      // groupList.push(count);
+      count += 1;
     }
   }
-
-  // 묶음 번호 리스트 생성
-  const groupList = nodes.map((node) => groups.get(node));
+  console.log(groupList);
   return groupList;
 }
 
-function DFS(connections, node, visited, groupNum, groups) {
-  visited.add(node);
-  groups.set(node, groupNum);
+/* m과 연결된 노드를 방문 */
+function DFS(v, adj, count, visited, groupList) {
+  visited[v] = 1;
+  groupList[v] = count;
 
-  const neighbors = connections.find((item) => item.node === node).neighbors;
-  if (neighbors.length > 0) {
-    for (const neighbor of neighbors) {
-      if (!visited.has(neighbor)) {
-        DFS(connections, neighbor, visited, groupNum, groups);
-      }
+  for (const next_node of adj[v]) {
+    if (visited[next_node] === 0) {
+      DFS(next_node, adj, count, visited, groupList);
     }
   }
 }
+
+
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
+
   /* 로그인 유저*/
   const { user } = res.locals;
   const userId = user.user_id;
+
   /* 다른 유저 */
   const otherUserId = req.query.userId;
 
@@ -56,7 +67,8 @@ router.get('/', async (req, res) => {
         `/routes/graphs 폴더, get, 다른 유저 ${otherUserId} 그래프 조회 !`,
       );
       return res.send(graphData);
-    }
+    } 
+    
     /* 기본 내 그래프 조회 */
     const graphData = await getGraphData(userId);
     logger.info(`/routes/graphs 폴더, get, 내 ${userId} 그래프 조회 !`);
@@ -66,6 +78,10 @@ router.get('/', async (req, res) => {
     res.status(500).send('Internal Server Error'); // Send error response
   }
 });
+
+
+
+
 
 const getGraphData = async (userId) => {
   let connection = null;
@@ -99,26 +115,19 @@ const getGraphData = async (userId) => {
       nodes: graphCountResult,
       links: sortDirection(graphDirectionResult),
     };
-    //source와 target 중복 값 제거
-    graph.links = graph.links.filter((link) => link.source !== link.target);
 
-    // graph.category
-    const idList = graph.nodes.map((node) => node.id);
+    // ============================================
     const graphLinks = graph.links.map((link) => [link.source, link.target]);
-    const connections = idList.map((node) => ({ node, neighbors: [] }));
-    for (const edge of graphLinks) {
-      const [a, b] = edge;
-      const nodeA = connections.find((item) => item.node === a);
-      const nodeB = connections.find((item) => item.node === b);
-      nodeA.neighbors.push(b);
-      nodeB.neighbors.push(a);
-    }
-    const categoryList = cycleCount(connections, idList);
+    const n = graph.nodes.length;
+    const m = graphLinks.length;
+
+    const categoryList = cycleCount(graphLinks, n);
     graph.nodes.forEach((node, index) => {
       node.category = categoryList[index];
-    });
+    }); 
+    // ============================================
 
-    // graph.cnt
+    // graph.cnt  
     let maxCategory = -Infinity;
     for (const node of graph.nodes) {
       if (node.category > maxCategory) {
@@ -135,9 +144,38 @@ const getGraphData = async (userId) => {
   }
 };
 
+
+
+
+
+
+
+
+const getCombination = (arr, result) => {
+  for (let i = 0; i < arr.length; i++) {   // 각 node
+    for (let j = i + 1; j < arr.length; j++) {
+      result.push({ source: arr[i].toString(), target: arr[j].toString() });
+    }
+  }
+  return result;
+};
+
+const compareObjects = (obj1, obj2) => {
+  return (
+    (obj1.source === obj2.target && obj1.target === obj2.source) ||
+    (obj1.source === obj2.source && obj1.target === obj2.target)
+  );
+};
+
+
+
+
+
 const sortDirection = (graphDirectionResult) => {
   const fileAndNode = graphDirectionResult;
+  // console.log('fr: fileAndNode: ', fileAndNode);
   const output = [];
+
   const groupedNodes = fileAndNode.reduce((acc, { file, node }) => {
     if (!acc[file]) {
       acc[file] = [node];
@@ -147,19 +185,12 @@ const sortDirection = (graphDirectionResult) => {
     return acc;
   }, {});
 
-  for (const file in groupedNodes) {
-    const nodes = groupedNodes[file];
+  for (const file in groupedNodes) {    // 한 file = '6': [50, 51, 52]
+    const nodes = groupedNodes[file];   // nodes = [50, 51, 52]  
     if (nodes.length > 1) {
-      output.push({ source: nodes[0].toString(), target: nodes[1].toString() });
+      getCombination(nodes, output);
     }
   }
-
-  const compareObjects = (obj1, obj2) => {
-    return (
-      (obj1.source === obj2.target && obj1.target === obj2.source) ||
-      (obj1.source === obj2.source && obj1.target === obj2.target)
-    );
-  };
 
   const uniqueList = output.filter((obj, index, self) => {
     return index === self.findIndex((o) => compareObjects(o, obj));

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
+// Components
 import NavBar from "@/features/Dashboard/components/NavBar";
-import { Wrapper } from "@/styles/wrapper";
 import SearchBar from "@/features/Search/SearchBar";
 import Card from "@/features/Search/Card";
-import { CgSearch } from "react-icons/cg";
-import { AiOutlineExpand, AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
+// Assets
+import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 
 export default function Search() {
   const router = useRouter();
@@ -21,7 +21,6 @@ export default function Search() {
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,7 +63,6 @@ export default function Search() {
         );
         setCardlist(response.data.result);
         setTotalCards(response.data.totalResults);
-        console.log(totalCards);
       } catch (error) {
         console.error("API error:", error);
       }
@@ -125,17 +123,17 @@ export default function Search() {
 
           <div className="flex flex-col items-start w-[75rem] py-[3.75rem] px-0 gap-[3.75rem]">
             <div className="flex flex-col gap-[2rem] items-start self-stretch pt-0 pr-0 pb-10 pl-0 border-b border-[#181818] shadow-1 mb-[0.5rem]">
-              <div className="text-[#181818] leading-trim tracking-tight text-capitalize text-[1.25rem] font-kanit font-semibold">
+              <div className="text-[#181818] leading-trim tracking-tight text-capitalize text-[1.25rem]  font-semibold">
                 in Tags
               </div>
               <div className="flex items-start gap-[1rem] flex-wrap">
                 {taglist.map((tag, index) => (
                   <div
                     key={index}
-                    className={`flex items-center justify-center h-[2rem] py-0 px-[1rem] rounded-md bg-[#254D9B]`}
+                    className={`flex items-center justify-center h-[2rem] py-0 px-[1rem] rounded-md bg-[#254D9B] cursor-pointer`}
                     onClick={() => handleTagClick(tag)}
                   >
-                    <span className="text-base font-semibold tracking-tighter text-white font-kanit leading-150">
+                    <span className="text-base font-semibold tracking-tighter text-white  leading-150">
                       # {tag}
                     </span>
                   </div>
@@ -144,7 +142,7 @@ export default function Search() {
             </div>
 
             <div className="flex flex-col items-start gap-[2rem] self-stretch pb-[2.5rem] border-b border-[#181818] shadow-1 mb-[0.5rem]">
-              <div className="text-[#181818] leading-trim tracking-tight text-capitalize text-[1.25rem] font-kanit font-semibold">
+              <div className="text-[#181818] leading-trim tracking-tight text-capitalize text-[1.25rem]  font-semibold">
                 in Cards
               </div>
 
@@ -152,13 +150,13 @@ export default function Search() {
                 <div className="flex items-center self-stretch justify-between">
                   <>
                     <div className="flex items-center justify-center h-[2rem] py-0 px-[1rem] rounded-md bg-[#254D9B]">
-                      <span className="text-base font-semibold tracking-tighter text-white font-kanit leading-150">
+                      <span className="text-base font-semibold tracking-tighter text-white  leading-150">
                         # {clickedTag}
                       </span>
                     </div>
                     {/* 페이지 네이션 */}
                     <div className="flex items-center gap-[0.5rem]">
-                      <div className="text-[#181818] text-[0.875rem] font-kanit font-weight-[300] leading-[160%] tracking-[-0.02625rem]">
+                      <div className="text-[#181818] text-[0.875rem]  font-weight-[300] leading-[160%] tracking-[-0.02625rem]">
                         {`${Math.min(
                           (currentPage - 1) * cardsPerPage + 1,
                           totalCards
@@ -168,7 +166,7 @@ export default function Search() {
                         )} of ${totalCards}`}
                       </div>
                       <div
-                        className={`flex items-center justify-center w-[1.75rem] h-[1.75rem] rounded-md bg-[#FFF] ${
+                        className={`flex items-center justify-center w-[1.75rem] h-[1.75rem] rounded-md bg-[#FFF]  cursor-pointer${
                           currentPage === 1
                             ? "opacity-50 cursor-not-allowed"
                             : ""
@@ -179,13 +177,13 @@ export default function Search() {
                       >
                         <AiOutlineLeft />
                       </div>
-                      <div className="text-[#181818] text-[0.875rem] font-kanit font-weight-[300] leading-[160%] tracking-[-0.02625rem]">
+                      <div className="text-[#181818] text-[0.875rem]  font-weight-[300] leading-[160%] tracking-[-0.02625rem]">
                         {`${currentPage} / ${Math.ceil(
                           totalCards / cardsPerPage
                         )}`}
                       </div>
                       <div
-                        className={`flex items-center justify-center w-[1.75rem] h-[1.75rem] rounded-md bg-[#FFF] ${
+                        className={`flex items-center justify-center w-[1.75rem] h-[1.75rem] rounded-md bg-[#FFF] cursor-pointer ${
                           currentPage === Math.ceil(totalCards / cardsPerPage)
                             ? "opacity-50 cursor-not-allowed"
                             : ""
@@ -202,10 +200,10 @@ export default function Search() {
                 </div>
                 <div className="flex items-start content-start gap-[0.75rem] flex-1 self-stretch flex-wrap">
                   {cardlist &&
-                    cardlist.map((card: { id: number }) => {
+                    cardlist.map((card: { id: number }, index: number) => {
                       return (
                         <Card
-                          key={card.id}
+                          key={index}
                           card={card}
                           handleExpandClick={handleExpandClick}
                         />

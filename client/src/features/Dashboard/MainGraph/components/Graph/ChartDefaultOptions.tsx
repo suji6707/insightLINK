@@ -4,13 +4,13 @@ import setCategories from "./setCategories";
 const ChartDefaultOptions = (graph: Main_graph_Api_DTO) => {
   return {
     tooltip: {},
-    legend: [
-      {
-        data: setCategories(graph?.cnt).map(function (a) {
-          return a.name;
-        }),
-      },
-    ],
+    // legend: [
+    //   {
+    //     data: setCategories(graph?.cnt).map(function (a) {
+    //       return a.name;
+    //     }),
+    //   },
+    // ],
     animation: true,
     animationDuration: 1500,
     animationEasingUpdate: "quinticInOut",
@@ -32,7 +32,7 @@ const ChartDefaultOptions = (graph: Main_graph_Api_DTO) => {
           hideOverlap: true,
         },
         scaleLimit: {
-          min: 2,
+          min: 1,
           max: 5,
         },
         lineStyle: {
