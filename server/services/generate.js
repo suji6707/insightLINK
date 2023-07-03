@@ -79,7 +79,6 @@ const generatePrompt = async (ocrResult, userId) => {
               Prioritize selecting a category from the given categories, \n
               But if none of the categories are applicable, please select the between 2 to 5 categories that appear to be most relevant. \n
               `;
-              
     prompt += 'Provide them in JSON format.\'{"tags":[]}\'\n';
     prompt += 'Uploaded data:';
     prompt += ocrResult;
