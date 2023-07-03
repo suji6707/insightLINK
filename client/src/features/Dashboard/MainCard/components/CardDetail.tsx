@@ -137,7 +137,7 @@ function CardDetail() {
         </div>
         <div className="relative max-w-full max-h-full w-full h-[25rem] mb-6 flex justify-center items-center">
           <Image
-            src={cardDetailData?.cardImage}
+            src={cardDetailData?.cardImage || ""}
             alt="Card Detail"
             layout="fill"
             objectFit="cover"

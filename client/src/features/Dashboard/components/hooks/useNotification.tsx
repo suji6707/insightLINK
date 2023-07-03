@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 
 import { Header_Notifications_API } from "@/axios/headerApi";
 import { HeaderNoti_DTO } from "@/types/notification.types";
-import exp from "constants";
 
 const useNotification = () => {
   const [notiArr, setNotiArr] = useState<HeaderNoti_DTO[] | null>([]);

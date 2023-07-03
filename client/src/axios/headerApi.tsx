@@ -16,10 +16,11 @@ const axiosInstance = axios.create({
 export const Header_Notifications_API = async (): Promise<HeaderNoti_DTO[]> => {
   try {
     const response = await axiosInstance.get("/api/notification");
+    console.log(response);
     if (response.status === 200) {
       return response.data;
     } else if (response.status === 204) {
-      Header_Notifications_API();
+      return Header_Notifications_API();
     }
   } catch (err) {
     console.error(err);

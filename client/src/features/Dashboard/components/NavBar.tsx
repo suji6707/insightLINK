@@ -118,7 +118,7 @@ export default function NavBar() {
                 1
               </div>
             )}
-            {openAlarm && <AlarmModal notiArr={notiArr} />}
+            {openAlarm && <AlarmModal />}
           </button>
         </div>
         {userProfile ? (

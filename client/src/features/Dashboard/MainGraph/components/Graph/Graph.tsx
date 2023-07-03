@@ -24,7 +24,7 @@ function Graph({ data: graph, editMode }: MainGraphProps) {
   const [nodeName, setNodeName] = useRecoilState(NodeNameAtom);
   const pressTimer = useRef<any>(null);
   const longPressNode = useRef<string | null>(null);
-  const [options, setOptions] = useState(ChartDefaultOptions(graph));
+  const [options, setOptions] = useState<any>(ChartDefaultOptions(graph));
 
   const handleNodeClick = useCallback(
     (nodeName: string) => {
