@@ -10,6 +10,11 @@ const router = express.Router()
 router.get('/info', async (req, res) => {
   const userId = req.query.userId
 
+  if (!userId) {
+    res.status(400).send('Invalid request: userId is missing');
+    return;
+  }
+
   let connection = null
 
   try {
