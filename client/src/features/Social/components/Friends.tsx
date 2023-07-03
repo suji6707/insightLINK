@@ -7,6 +7,8 @@ import CardDetail from "@/features/Social/components/CardDetail";
 import { Friends } from "@/types/social.types";
 // Assets
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
+import { useRecoilState } from "recoil";
+import { SocialImgModalAtom } from "@/recoil/atoms/SocialAtom";
 
 const Friends = () => {
   const [friends, setFriends] = useState([]);
@@ -16,9 +18,9 @@ const Friends = () => {
   const [startX, setStartX] = useState<number>(0);
   const [scrollLeft, setScrollLeft] = useState<number>(0);
   // 모달
-  const [showModal, setShowModal] = useState(false);
-  const [userId, setUserId] = useState(1);
-  const [cardId, setCardId] = useState(1);
+  const [showModal, setShowModal] = useRecoilState(SocialImgModalAtom);
+  const [userId, setUserId] = useState(0);
+  const [cardId, setCardId] = useState(0);
 
   // 최근 업데이트 친구 조회
   const getFriends = async () => {
@@ -88,9 +90,9 @@ const Friends = () => {
                       height={84} // rem to pixel conversion (1rem = 16px)
                       className="rounded-full cursor-pointer"
                       onClick={() => {
-                        setShowModal(true);
                         setCardId(f.cardId);
                         setUserId(f.userId);
+                        setShowModal(true);
                       }}
                     />
                   </div>
@@ -105,7 +107,9 @@ const Friends = () => {
           <BsChevronRight className="text-base leading-normal text-gray-800 font-xeicon" />
         </div>
       </div>
-      {showModal && <CardDetail cardId={cardId} userId={userId} />}
+      {showModal && cardId && userId && (
+        <CardDetail cardId={cardId} userId={userId} />
+      )}
     </div>
   );
 };

@@ -15,8 +15,8 @@ const Feeds = () => {
   const [cards, setCards] = useState<FeedCardData[]>();
   // 모달
   const [showModal, setShowModal] = useRecoilState(SocialImgModalAtom);
-  const [userId, setUserId] = useState(1);
-  const [cardId, setCardId] = useState(1);
+  const [userId, setUserId] = useState(0);
+  const [cardId, setCardId] = useState(0);
 
   const getFeeds = async () => {
     const data = await GET(`social/card`, true);
@@ -63,9 +63,9 @@ const Feeds = () => {
                   objectFit="cover"
                   className="cursor-pointer"
                   onClick={() => {
-                    setShowModal(true);
                     setCardId(c.cardId);
                     setUserId(c.userId);
+                    setShowModal(true);
                   }}
                 />
                 <button
@@ -78,7 +78,9 @@ const Feeds = () => {
             );
           })}
       </div>
-      {showModal && <CardDetail cardId={cardId} userId={userId} />}
+      {showModal && cardId && userId && (
+        <CardDetail cardId={cardId} userId={userId} />
+      )}
     </div>
   );
 };
