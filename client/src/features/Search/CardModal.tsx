@@ -36,8 +36,10 @@ const CardModal: React.FC<CardModalProps> = ({ card, closeModal }) => {
               <Image
                 src={card.imageUrl}
                 alt="Card image"
-                layout="fill"
+                layout="responsive"
                 objectFit="cover"
+                width={500}
+                height={300}
               />
             </div>
 
