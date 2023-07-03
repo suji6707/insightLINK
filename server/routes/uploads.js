@@ -149,15 +149,24 @@ router.post('/', upload.array('photos'),
           else {
             logger.info(`/routes/uploads 폴더, post, No matching element found for ${tag}.`);
             // 3-1. 구글 번역 후 taglist 저장
-            const translatedTag = await translate(tag, {to: 'ko'});   // 한글 키워드
-            const [indexResult] = await connection.query(q5, userId);         // tag_index
-            const tag_index = indexResult[0].last_index + 1;
-            console.log('fr: 신규 taglist 영/한: ', tag, translatedTag);
-            await connection.query(q3, [ userId, tag, translatedTag, tag_index ]);     // englishKeyword, koreanKeyword, tag_index + 1
-            console.log(`fr: 신규 taglist: ${translatedTag} 저장 성공!`);
-            // 3-2. Tag 테이블 저장.
-            await connection.query(q2, [ FileResult.insertId, translatedTag, tag_index ]);          // file_id, tag, tag_index
-            streamTags.push(translatedTag);
+            try {
+              const translatedTag = await translate(tag, {to: 'ko'});   // 한글 키워드
+              const [indexResult] = await connection.query(q5, userId);         // tag_index
+              const tag_index = indexResult[0].last_index + 1;
+              console.log('fr: 신규 taglist 영/한: ', tag, translatedTag);
+
+              try {
+                await connection.query(q3, [ userId, tag, translatedTag, tag_index ]);     // englishKeyword, koreanKeyword, tag_index + 1
+                console.log(`fr: 신규 taglist: ${translatedTag} 저장 성공!`);
+                // 3-2. Tag 테이블 저장.
+                await connection.query(q2, [ FileResult.insertId, translatedTag, tag_index ]);          // file_id, tag, tag_index
+                streamTags.push(translatedTag);
+              } catch (err) {
+                logger.info('/routes/uploads 폴더, post, Tag 테이블 INSERT 쿼리문 에러 발생: ', err);
+              }
+            } catch (err) {
+              logger.info('/routes/uploads 폴더, post, 구글 translate에서 에러 발생: ', err);
+            }
           } 
         }
         /* 프론트 */

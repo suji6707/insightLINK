@@ -7,43 +7,37 @@ import { logger } from '../winston/logger.js';
 
 
 
-function cycleCount(graphLinks, n) {
-  // n은 노드 개수, m은 간선 개수
-  let adj = Array.from({ length: n }, () => []);   // 노드의 개수(n+1)를 기반으로 각 노드에 대해 빈 배열 초기화
-  let visited = Array(n).fill(0);                  // [0] * (n + 1)
-  let count = 0;
+function cycleCount(connections, nodes) {
+  let count = -1;
+  const visited = new Set();
+  const groups = new Map();
 
-  // 양방향 연결 표시. 결국 중복제거 하지만, DFS하려면 어쩔 수 없음.
-  for (let link of graphLinks) {
-    let [a, b] = link.map(num => num - 1); // a and b are 0-based
-    adj[a].push(b);
-    adj[b].push(a);
-  }   
-  let groupList = [];
-
-  for (let i = 0; i < n; i++) {
-    if (visited[i] === 0) {
-      DFS(i, adj, count, visited, groupList);
-      // groupList.push(count);
-      count += 1;
+  for (const node of nodes) {
+    if (!visited.has(node)) {
+      const groupNum = count + 1;
+      DFS(connections, node, visited, groupNum, groups);
+      count++;
     }
   }
-  console.log(groupList);
+
+  // 묶음 번호 리스트 생성
+  const groupList = nodes.map((node) => groups.get(node));
   return groupList;
 }
 
-/* m과 연결된 노드를 방문 */
-function DFS(v, adj, count, visited, groupList) {
-  visited[v] = 1;
-  groupList[v] = count;
+function DFS(connections, node, visited, groupNum, groups) {
+  visited.add(node);
+  groups.set(node, groupNum);
 
-  for (const next_node of adj[v]) {
-    if (visited[next_node] === 0) {
-      DFS(next_node, adj, count, visited, groupList);
+  const neighbors = connections.find((item) => item.node === node).neighbors;
+  if (neighbors.length > 0) {
+    for (const neighbor of neighbors) {
+      if (!visited.has(neighbor)) {
+        DFS(connections, neighbor, visited, groupNum, groups);
+      }
     }
   }
 }
-
 
 
 const router = express.Router();
@@ -119,16 +113,24 @@ const getGraphData = async (userId) => {
       links: sortDirection(graphDirectionResult),
     };
 
-    // ============================================
-    const graphLinks = graph.links.map((link) => [link.source, link.target]);
-    const n = graph.nodes.length;
-    const m = graphLinks.length;
+    //source와 target 중복 값 제거
+    // graph.links = graph.links.filter((link) => link.source !== link.target)
 
-    const categoryList = cycleCount(graphLinks, n);
+    // graph.category
+    const idList = graph.nodes.map((node) => node.id);
+    const graphLinks = graph.links.map((link) => [link.source, link.target]);
+    const connections = idList.map((node) => ({ node, neighbors: [] }));
+    for (const edge of graphLinks) {
+      const [a, b] = edge;
+      const nodeA = connections.find((item) => item.node === a);
+      const nodeB = connections.find((item) => item.node === b);
+      nodeA.neighbors.push(b);
+      nodeB.neighbors.push(a);
+    }
+    const categoryList = cycleCount(connections, idList);
     graph.nodes.forEach((node, index) => {
       node.category = categoryList[index];
-    }); 
-    // ============================================
+    });
 
     // graph.cnt  
     let maxCategory = -Infinity;
