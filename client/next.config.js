@@ -14,6 +14,14 @@ const nextConfig = {
       "search.pstatic.net",
       "cdn.pixabay.com",
     ],
+    remotePatterns: [
+      {
+        // protocol: 'https',
+        hostname: 'sw-jungle-s3.s3.ap-northeast-2.amazonaws.com',
+        // port: '',
+        // pathname: '/account123/**',
+      },
+    ],
   },
   reactStrictMode: true,
   async rewrites() {
