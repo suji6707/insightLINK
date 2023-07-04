@@ -20,10 +20,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const showImgModal = useRecoilValue(ImgModalAtom);
   const isLogin = useRecoilValue(IsLoginAtom);
 
-  const handleHomeClick = () => {
-    router.push("/");
-  };
-
   return (
     <>
       {isLogin ? (
@@ -36,7 +32,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 {children}
                 {openCard && isLogin ? (
                   <CardPanel />
-                ) : token ? (
+                ) : isLogin ? (
                   <></>
                 ) : (
                   <>
@@ -45,7 +41,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                         pathname: "/",
                       }}
                       className="flex flex-col self-stretch text-2xl font-bold tracking-tighter text-center font-ibm-plex-sans leading-150"
-                      onClick={handleHomeClick}
                     >
                       insightLINK
                     </Link>
