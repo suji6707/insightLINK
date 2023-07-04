@@ -31,8 +31,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   });
 
   const searchIconClasses = classNames("h-4", "w-4", {
-    "text-blue-500": isInputFocused,
-    "": !isInputFocused,
+    "text-blue-500 mx-2": isInputFocused,
+    "mx-2": !isInputFocused,
   });
 
   return (
@@ -40,7 +40,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
       <CgSearch className={searchIconClasses} />
       <input
         type="text"
-        className="flex-1 px-2 text-[#181818] text-sm focus:outline-none bg-transparent text-base font-sans font-light leading-[170%]"
+        className="w-full h-10 font-medium bg-transparent outline-none ring-none"
         placeholder="Find your insight"
         value={inputValue}
         onChange={handleInputChange}

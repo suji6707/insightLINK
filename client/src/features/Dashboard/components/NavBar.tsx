@@ -52,30 +52,17 @@ export default function NavBar() {
   `;
 
   const handleShareIconClick = () => {
-    html2canvas(document.documentElement).then((canvas) => {
-      canvas.toBlob((blob) => {
-        if (blob !== null) {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            const imageUrl = reader.result;
-            console.log("Image URL:", imageUrl);
-
-            // Use Kakao.Link.sendDefault to send the image URL to KakaoTalk
-            if (window.Kakao) {
-              window.Kakao.Link.sendDefault({
-                objectType: "text",
-                text: "나의 그래프를 확인해봐요.",
-                link: {
-                  mobileWebUrl: "http://localhost:3000/dashboard/" + loginId,
-                  webUrl: "http://localhost:3000/dashboard/" + loginId,
-                },
-              });
-            }
-          };
-          reader.readAsDataURL(blob);
-        }
+    // Use Kakao.Link.sendDefault to send the image URL to KakaoTalk
+    if (window.Kakao) {
+      window.Kakao.Link.sendDefault({
+        objectType: "text",
+        text: "나의 그래프를 확인해봐요.",
+        link: {
+          mobileWebUrl: "http://localhost:3000/dashboard/" + loginId,
+          webUrl: "http://localhost:3000/dashboard/" + loginId,
+        },
       });
-    });
+    }
   };
 
   const handleOpenAlarm = () => {

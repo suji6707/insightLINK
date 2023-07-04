@@ -6,9 +6,9 @@ export const POST = async (uri: string, data: any, headers: boolean) => {
     let res: AxiosResponse;
     if (headers) {
       const token = getToken();
-      res = await axios.post(`http://localhost:8800/api/${uri}`, data, token);
+      res = await axios.post(`/api/${uri}`, data, token);
     } else {
-      res = await axios.post(`http://localhost:8800/api/${uri}`, data);
+      res = await axios.post(`/api/${uri}`, data);
     }
     console.log(`${uri} - POST 성공`);
     return res;

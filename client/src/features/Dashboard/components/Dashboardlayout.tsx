@@ -33,7 +33,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   useEffect(() => {
     const { userid } = router.query;
-  
+
     if (userid) {
       // Axios request to fetch user name
       axios
@@ -47,7 +47,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         });
     }
   }, [router.query]);
-  
+
+  const handleHomeClick = () => {
+    router.push("/");
+  };
 
   return (
     <>
@@ -63,7 +66,14 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               ) : token ? (
                 <></>
               ) : (
-                <>insightLINK</>
+                <>
+                  <p 
+                  className="flex flex-col self-stretch text-center text-2xl font-ibm-plex-sans font-bold leading-150 tracking-tighter"
+                  onClick={handleHomeClick}
+                  >
+                    insightLINK
+                  </p>
+                </>
               )}
             </>
           </div>
@@ -76,12 +86,20 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           <>
             <div className="flex justify-center items-center">
               <div className="text-center">
-                <p className="mb-2">
-                  {userName} 님의 상세 정보를 보고 싶으시면, 회원가입이나
-                  로그인을 진행해주세요!
-                  <LoginBtn />
-                  <SignupButton />
-                </p>
+                <div className="flex w-[36.25rem] py-12 flex-col justify-center items-center bg-white mt-2 mb-12 rounded-lg border border-gray-100 shadow-md">
+                  <div className="flex flex-col justify-center items-center gap-6">
+                    <p className="flex flex-col self-stretch text-center text-2xl font-ibm-plex-sans font-bold leading-150 tracking-tighter">
+                      <span>
+                        <span style={{ color: "#9A60B4" }}>{userName}</span>{" "}
+                        님의 상세 정보를 보고 싶으시면,{" "}
+                      </span>
+                      <br />
+                      회원가입이나 로그인을 진행해주세요!{" "}
+                    </p>
+                    <LoginBtn />
+                    <SignupButton />
+                  </div>
+                </div>
               </div>
             </div>
           </>

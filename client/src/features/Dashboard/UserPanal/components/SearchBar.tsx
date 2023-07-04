@@ -1,12 +1,16 @@
 import React, { useState, KeyboardEvent, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
+import classNames from "classnames";
 import { FiSearch } from "react-icons/fi";
 
 export default function SearchBar() {
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
-  const [searchBar, setSearchBar] = useState<boolean>(false);
   const [keywords, setKeywords] = useState("");
+
+  const [inputValue, setInputValue] = useState("");
+  const [isInputFocused, setIsInputFocused] = useState(false);
+
   const onKeyPress = (e: KeyboardEvent) => {
     if (e.key == "Enter") {
       e.preventDefault();
@@ -15,27 +19,45 @@ export default function SearchBar() {
         query: { search: keywords.replace(/[^ㄱ-ㅎ가-힣a-zA-Z0-9]/g, " ") },
       });
       setKeywords("");
-      setSearchBar(false);
     }
   };
 
+  const handleInputFocus = () => {
+    setIsInputFocused(true);
+  };
+
+  const handleInputBlur = () => {
+    setIsInputFocused(false);
+  };
+
+  const containerClasses = classNames("flex", "w-[25.5625rem]", "h-[2.75rem]", "px-0.25rem", "justify-between", "items-center", "flex-shrink-0", {
+    "border-b border-blue-500 bg-[#F4F4F4]": isInputFocused,
+    "border-b border-gray-900 bg-white": !isInputFocused,
+  });
+
+  const searchIconClasses = classNames("h-4", "w-4", {
+    "text-blue-500 mx-2": isInputFocused,
+    "mx-2": !isInputFocused,
+  });
+
   return (
     <>
-      <form className="transition-all hover:bg-slate-100 flex items-center px-1 w-[25rem] ring ring-inset ring-gray-100 hover:ring-0 dark:ring-white/20 h-[2rem] border-b-2">
-        <FiSearch size={20} className="mx-2" />
+      <div className={containerClasses}>
+        <FiSearch size={20} className={searchIconClasses} />
         <input
           ref={inputRef}
           type="text"
           className="w-full h-10 font-medium bg-transparent outline-none ring-none"
           value={keywords}
-          placeholder="검색"
+          placeholder="Find your insight"
           onChange={(e) => {
             setKeywords(e.target.value);
           }}
-          onBlur={() => setSearchBar(false)}
+          onFocus={handleInputFocus}
+          onBlur={handleInputBlur}
           onKeyPress={onKeyPress}
         />
-      </form>
+      </div>
     </>
   );
 }

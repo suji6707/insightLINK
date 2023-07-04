@@ -142,7 +142,7 @@ const generateSystemContent = async () => {
 
   let note = 'Note: The data provided by users is extracted from cell phone screenshots using OCR technology. Please be aware that it may contain miscellaneous elements such as cell phone carriers, battery levels, time stamps, and advertisements, which may not contribute to meaningful topics or categories.\n';
 
-  let Behavior = 'Please provide a minimum of 2 to 5 category recommendations that align with the user\'s interests and the provided data.\n';
+  let Behavior = 'Please provide 2 category recommendations that align with the user\'s interests and the provided data.\n';
 
   let responseType = 'Please provide the categories in JSON format using the \'tags\' property: \'{"tags": []}\'.';
   responseType += 'Example format: \'{"tags": ["Category1", "Category2"]}\'.'; 
