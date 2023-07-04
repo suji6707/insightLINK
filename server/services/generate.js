@@ -174,7 +174,7 @@ const generateUserContent = async (ocrResult, userId) => {
     prompt += `While considering the user's general interests, which include ${taglistText}, `;
     prompt += 'feel free to recommend new and exciting ideas that may go beyond the scope of the provided data.';
 
-    console.log('prompt: ', prompt);
+    // console.log('prompt: ', prompt);
     return prompt;
   } catch (err) {
     connection?.release();
