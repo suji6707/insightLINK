@@ -10,11 +10,8 @@ import CardDetail from "@/features/Dashboard/MainCard/components/CardDetail";
 import useCard from "@/features/Dashboard/MainCard/hook/useCard";
 // types
 import { CardData, FeedCardData } from "@/types/dashborad.types";
-import { getQuote } from "html2canvas/dist/types/css/property-descriptors/quotes";
-
 // Assets
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
-import { number } from "echarts";
 
 import { Card_Info_Api } from "@/axios/dashBoardApi";
 

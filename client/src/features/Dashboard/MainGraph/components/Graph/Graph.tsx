@@ -1,7 +1,11 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 // recoil
-import { useRecoilState, useRecoilValue } from "recoil";
-import { DashBoardCardAtom, NodeNameAtom } from "@/recoil/atoms/MainGraphAtom";
+import { useRecoilState } from "recoil";
+import {
+  CardDetailOpenAtom,
+  DashBoardCardAtom,
+  NodeNameAtom,
+} from "@/recoil/atoms/MainGraphAtom";
 // library
 import * as echarts from "echarts";
 // type
@@ -22,6 +26,8 @@ function Graph({ data, editMode }: MainGraphProps) {
   const [lastClickedNode, setLastClickedNode] = useState<string>("");
   const [openCard, setOpenCard] = useRecoilState(DashBoardCardAtom);
   const [nodeName, setNodeName] = useRecoilState(NodeNameAtom);
+  const [detailOpen, setDetailOpen] = useRecoilState(CardDetailOpenAtom);
+
   const pressTimer = useRef<any>(null);
   const longPressNode = useRef<string | null>(null);
   // const [options, setOptions] = useState<any>(ChartDefaultOptions(data));
@@ -35,6 +41,7 @@ function Graph({ data, editMode }: MainGraphProps) {
         // 클릭된 노드 상태 업데이트
         if (isLastClickedNode) {
           setOpenCard(!openCard);
+          setDetailOpen(false);
         } else {
           setOpenCard(true);
           setNodeName(nodeName);
@@ -43,7 +50,18 @@ function Graph({ data, editMode }: MainGraphProps) {
     },
     [editMode, lastClickedNode, openCard]
   );
-  
+
+  const handleCloseCard = useCallback(() => {
+    if (!editMode) {
+      if (
+        chartRef.current &&
+        !chartRef.current.contains(event?.target as Node)
+      ) {
+        setOpenCard(false);
+        setDetailOpen(false);
+      }
+    }
+  }, [editMode, openCard]);
 
   useEffect(() => {
     if (chartRef.current && data) {
@@ -57,7 +75,7 @@ function Graph({ data, editMode }: MainGraphProps) {
         };
       });
       // console.log('options: ', options)
-      
+
       chart.setOption(ChartDefaultOptions(data) as any);
 
       // 마우스 오래 클릭시 태그 병합
@@ -70,6 +88,7 @@ function Graph({ data, editMode }: MainGraphProps) {
 
       const clickHandler = function (params: any) {
         if (params.dataType === "node" && !pressTimer.current) {
+          console.log("노드 클릭");
           handleNodeClick(params.name as string);
         }
       };
@@ -93,7 +112,6 @@ function Graph({ data, editMode }: MainGraphProps) {
     }
   }, [nodeName, openCard]);
 
-
   return (
     <div
       className={
@@ -102,6 +120,7 @@ function Graph({ data, editMode }: MainGraphProps) {
           : "w-[150vh] h-[65vh] left-1/2 transform -translate-x-1/2"
       }
       ref={chartRef}
+      onClick={handleCloseCard}
     ></div>
   );
 }

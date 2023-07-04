@@ -41,10 +41,10 @@ function useGraph() {
     };
     getGraphData();
   }, [router.isReady, router.query.userid, editMode, imgUpLoad]); // add dependencies
- 
-    if(data){
-      return data
-    } 
+
+  if (data) {
+    return data;
+  }
 }
 
 export default useGraph;

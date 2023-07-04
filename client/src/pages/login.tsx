@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 // recoil
 import { useSetRecoilState } from "recoil";
-import { LoginStateAtom } from "@/recoil/atoms/LoginStateAtom";
+import { LoginStateAtom, IsLoginAtom } from "@/recoil/atoms/LoginStateAtom";
 
 import { POST } from "@/axios/POST";
 import { BiArrowBack } from "react-icons/bi";
@@ -14,12 +14,13 @@ export default function Home() {
   const [password, setPassword] = useState("");
 
   const setLoginId = useSetRecoilState(LoginStateAtom);
+  const setIsLogin = useSetRecoilState(IsLoginAtom);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    
+    const token = localStorage.getItem("token");
+
     if (token) {
-      router.push('/dashboard');
+      router.push("/dashboard");
     }
   }, []);
 
@@ -39,9 +40,9 @@ export default function Home() {
       const userId = response.data.userId;
 
       setLoginId(userId);
+      setIsLogin(true);
 
       localStorage.setItem("token", token);
-      localStorage.setItem("userId", userId);
 
       router.push("/dashboard");
     } else {
@@ -65,18 +66,18 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col items-center h-screen w-screen">
-      <div className="flex h-24 px-20 justify-between items-center shrink-0 self-stretch">
+    <div className="flex flex-col items-center w-screen h-screen">
+      <div className="flex items-center self-stretch justify-between h-24 px-20 shrink-0">
         <div className="flex items-center gap-6">
           <BiArrowBack
-            className="text-gray-900 text-2xl font-xeicon font-normal leading-100"
+            className="text-2xl font-normal text-gray-900 font-xeicon leading-100"
             onClick={handleBackClick}
           />
           <p>insightLINK</p>
         </div>
       </div>
       <div className="flex w-[36.25rem] py-12 flex-col justify-center items-center gap-10 bg-white mt-24 rounded-lg border border-gray-100 shadow-md">
-        <p className="flex flex-col self-stretch text-black text-center text-2xl font-ibm-plex-sans font-bold leading-150 tracking-tighter">
+        <p className="flex flex-col self-stretch text-2xl font-bold tracking-tighter text-center text-black font-ibm-plex-sans leading-150">
           로그인
         </p>
 
@@ -101,7 +102,7 @@ export default function Home() {
             />
           </div>
         </div>
-        <div className="flex flex-col justify-center items-center gap-6">
+        <div className="flex flex-col items-center justify-center gap-6">
           <div
             onClick={handleLogin}
             className="flex h-[3.375rem] px-7 justify-center items-center gap-2 rounded bg-gray-900 cursor-pointer"

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { ImgModalAtom, AlarmCntAtom } from "@/recoil/atoms/MainGraphAtom";
 import { LoginStateAtom } from "@/recoil/atoms/LoginStateAtom";
+import { NotiCntAtom } from "@/recoil/atoms/HeaderAtom";
 
 import { GET } from "@/axios/GET";
 import useNotification from "@/features/Dashboard/components/hooks/useNotification";
@@ -31,6 +32,7 @@ export default function NavBar() {
   const [alarmCnt, setAlarmCnt] = useRecoilState(AlarmCntAtom);
 
   const loginId = useRecoilValue(LoginStateAtom);
+  const notiCnt = useRecoilValue(NotiCntAtom);
 
   const getProfileImg = async () => {
     const data = await GET("user/profile", true);
@@ -68,7 +70,6 @@ export default function NavBar() {
   const handleOpenAlarm = () => {
     setOpenAlarm(!openAlarm);
     setAlarmCnt(false);
-    console.log("알람 모달 상태", openAlarm);
   };
 
   useEffect(() => {
@@ -107,10 +108,11 @@ export default function NavBar() {
             <AiTwotoneBell className="text-gray-800 text-[1rem] font-xeicon leading-normal" />
             {alarmCnt && (
               <div className="absolute flex items-center justify-center w-4 h-4 text-xs text-white bg-red-500 rounded-full -right-1 -top-1 z-1">
-                1
+                {notiCnt ? notiCnt : <></>}
               </div>
             )}
-            {openAlarm && <AlarmModal />}
+
+            {openAlarm && notiArr && <AlarmModal notiArr={notiArr} />}
           </button>
         </div>
         {userProfile ? (
