@@ -8,6 +8,7 @@ import Card from "@/features/Search/Card";
 // Assets
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 
+
 const randomColors = [
   "#EE6565",
   "#FB8351",
@@ -29,6 +30,14 @@ export default function Search() {
   const [currentPage, setCurrentPage] = useState(1);
   const [cardsPerPage] = useState(14);
   const [totalCards, setTotalCards] = useState(cardlist.length);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+      router.push('/');
+    }
+  }, []);
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);

@@ -16,6 +16,14 @@ export default function Home() {
   const [emailFormatError, setEmailFormatError] = useState(false);
   const [checkUserEmail, setCheckUserEmail] = useState(false);
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    
+    if (token) {
+      router.push('/dashboard');
+    }
+  }, []);
+
   const doUserRegistration = async (res: any) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/;

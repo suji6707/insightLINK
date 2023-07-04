@@ -16,16 +16,26 @@ export default function Social() {
   const router = useRouter();
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      router.push("/");
+    }
+  }, []);
+
+  useEffect(() => {
     const getUserInfoData = async () => {
       const userid = Array.isArray(router.query.userid)
         ? router.query.userid[0]
         : router.query.userid;
 
-      const response = await User_Info_Api(userid);
-      setFollowCnt(response.followCnt);
+      if (userid) {
+        const response = await User_Info_Api(userid);
+        setFollowCnt(response.followCnt);
+      }
     };
     getUserInfoData();
-  }, []);
+  }, [router.query]);
 
   return (
     <div className="h-screen max-w-[75rem] mx-auto">
