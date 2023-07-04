@@ -4,7 +4,7 @@ import { Configuration, OpenAIApi } from 'openai';
 // import { stringify } from 'uuid';
 // import * as Taglist from './taglist.js'; 
 /* log */
-import { logger } from '../winston/logger.js';
+// import { logger } from '../winston/logger.js';
 
 
 const configuration = new Configuration({
@@ -115,7 +115,7 @@ export const generateConversation = async (req, res, ocrResult, userId) => {
     const completion = await openai.createChatCompletion({
       model: 'gpt-3.5-turbo',
       messages: [{ role: 'system', content: systemContent}, 
-                { role: 'user', content: userContent}],
+        { role: 'user', content: userContent}],
       temperature: 1,
       max_tokens: 250,
       top_p: 0.5,
@@ -138,22 +138,28 @@ export const generateConversation = async (req, res, ocrResult, userId) => {
 
 const generateSystemContent = async () => {
 
-  let prompt = "You are an assistant that helps users discover interesting topics based on their input. Your goal is to provide personalized category recommendations by considering the user's existing interests list and the provided data. Be creative and think outside the box to suggest new and exciting ideas. Engage in a friendly and thoughtful conversation, offering insights and suggestions beyond the predefined category list.\n";
+  let prompt = 'You are an assistant that helps users discover interesting topics based on their input. Your goal is to provide personalized category recommendations by considering the user\'s existing interests list and the provided data. Be creative and think outside the box to suggest new and exciting ideas. Engage in a friendly and thoughtful conversation, offering insights and suggestions beyond the predefined category list.\n';
 
-  let note = "Note: The data provided by users is extracted from cell phone screenshots using OCR technology. Please be aware that it may contain miscellaneous elements such as cell phone carriers, battery levels, time stamps, and advertisements, which may not contribute to meaningful topics or categories.\n";
+  let note = 'Note: The data provided by users is extracted from cell phone screenshots using OCR technology. Please be aware that it may contain miscellaneous elements such as cell phone carriers, battery levels, time stamps, and advertisements, which may not contribute to meaningful topics or categories.\n';
 
-  let Behavior = "Please provide a minimum of 2 to 5 category recommendations that align with the user's interests and the provided data.\n";
+  let Behavior = 'Please provide a minimum of 2 to 5 category recommendations that align with the user\'s interests and the provided data.\n';
 
-  let responseType = `Please provide the categories in JSON format using the 'tags' property: '{"tags": []}'.`;
-  responseType += `Example format: '{"tags": ["Category1", "Category2"]}'.`; 
+  let responseType = 'Please provide the categories in JSON format using the \'tags\' property: \'{"tags": []}\'.';
+  responseType += 'Example format: \'{"tags": ["Category1", "Category2"]}\'.'; 
 
   const systemContent = prompt + note + Behavior + responseType;
-  console.log('System: ', systemContent);
+  // console.log('System: ', systemContent);
   return systemContent;
 };
 
 
 const generateUserContent = async (ocrResult, userId) => {
+  
+  // value = client.get(key)
+  // if (value) {
+  //   taglist = value
+  // } 
+
   let connection = null;
   try {
     connection = await db.getConnection();
@@ -162,11 +168,11 @@ const generateUserContent = async (ocrResult, userId) => {
     const taglist = rows.map(row => row.englishKeyword);   // taglist 테이블의 englishKeywords를 리스트로.
     const taglistText = taglist.map(tag => JSON.stringify(tag)).join(',');
 
-    let prompt = `Please suggest relevant categories or topics based on the provided data.\n`;
+    let prompt = 'Please suggest relevant categories or topics based on the provided data.\n';
     prompt += 'Data:';
-    prompt += ocrResult;+`\n`;
+    prompt += ocrResult;+'\n';
     prompt += `While considering the user's general interests, which include ${taglistText}, `;
-    prompt += `feel free to recommend new and exciting ideas that may go beyond the scope of the provided data.`;
+    prompt += 'feel free to recommend new and exciting ideas that may go beyond the scope of the provided data.';
 
     console.log('prompt: ', prompt);
     return prompt;

@@ -10,12 +10,13 @@ import { processOCR } from '../services/naverOCR.js';
 import path from 'path';
 /* OCR ENDED */
 /* Tag LINE ADDED */
-import { generateConversation } from '../services/generate.js';
+import { generate } from '../services/generate.js';
+// import { generateConversation } from '../services/generate.js';
 import { extractJson } from '../services/jsonUtils.js';
 // import { combinedList }  from '../services/taglist.js';  
 import translate from 'translate-google';
 /* Tag ENDED */
-import { setTimeout } from 'timers/promises';   
+// import { setTimeout } from 'timers/promises';   
 
 /* log */
 import { logger } from '../winston/logger.js';
@@ -60,17 +61,18 @@ const extractTagFromImage = async (imgUrl, req, res, userId) => {
   // res.write(JSON.stringify({imgUrl: imgUrl, status: 'process OCR FINISEHD'}));
   let tagJSON = '<Image>';  
   if (!isImage(sumText)) {
-    const tag = await generateConversation(req, res, sumText, userId); 
+    const tag = await generate(req, res, sumText, userId);
+    // const tag = await generateConversation(req, res, sumText, userId);    
     tagJSON = extractJson(tag);
     console.log('fr: extractTagFromImage: ', tagJSON);
 
     if (!tagJSON || !tagJSON.tags) {
       logger.error('Invalid JSON data. No "tags" property found in extractTagFromImage.');
-      return { imgUrl, sumText, tagJSON, };
+      return { imgUrl, sumText, tagJSON };
     }
     if (tagJSON.tags == null || tagJSON.tags.some(tag => tag == null)) {
       logger.error('/routes/uploads 폴더, post, Some tags are null in extractTagFromImage.');
-      return { imgUrl, sumText, tagJSON, };
+      return { imgUrl, sumText, tagJSON };
     }
 
     
@@ -93,20 +95,16 @@ router.post('/', upload.array('photos'),
     const userId = user.user_id;
     const imgUrlList = req.body;
     
-    // for (let imgUrl of imgUrlList) {
-    //   let tag_result = extractTagFromImage(imgUrl, req, res, userId)
-    //   console.log(tag_result);
-    // }
     let connection = null;
     try {
       connection = await db.getConnection();  
       const q1 = 'INSERT INTO File (user_id, img_url, content) VALUES (?, ?, ?)';                         // SQL - File 
       const q2 = 'INSERT INTO Tag (file_id, tag, tag_index) VALUES (?, ?, ?)';                            // SQL - Tag   
       const q3 = 'INSERT INTO taglist (user_id, englishKeyword, koreanKeyword, tag_index) VALUES (?, ?, ?, ?)';       // SQL - taglist
-      const q4 = "SELECT t.koreanKeyword, t.tag_index FROM taglist AS t WHERE user_id = ? AND replace(ucase(englishKeyword), ' ', '') = ?";        // 영어, 대문자로, 공백제거 -> 한글
+      const q4 = 'SELECT t.koreanKeyword, t.tag_index FROM taglist AS t WHERE user_id = ? AND replace(ucase(englishKeyword), \' \', \'\') = ?';        // 영어, 대문자로, 공백제거 -> 한글
       const q5 = 'SELECT MAX(tag_index) AS last_index FROM taglist WHERE user_id = ?';
       
-    //   /* 모든 이미지를 S3로 저장, sumText.length != 0 인 것만 OCR 및 태그 추출 후 저장 */
+      //   /* 모든 이미지를 S3로 저장, sumText.length != 0 인 것만 OCR 및 태그 추출 후 저장 */
       const promises = [];
       for (const imgUrl of imgUrlList) {
         promises.push(extractTagFromImage(imgUrl, req, res, userId));
