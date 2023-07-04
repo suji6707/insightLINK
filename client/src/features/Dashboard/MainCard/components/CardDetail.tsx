@@ -57,6 +57,7 @@ function CardDetail() {
     if (detailData) {
       setCardDetailData(detailData);
     }
+    console.log(cardDetailData)
   }, [detailOpen, detailData]);
 
   useEffect(() => {
