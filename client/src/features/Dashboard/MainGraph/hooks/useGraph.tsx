@@ -32,7 +32,7 @@ function useGraph() {
         const token = localStorage.getItem("token");
         if (token) {
           graphData = await Main_graph_Api(userid);
-        } else {
+        } else if (!token && userid) {
           graphData = await Share_graph_Api(userid);
         }
         setData(graphData);

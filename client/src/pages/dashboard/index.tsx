@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useRouter } from "next/router";
 
 import { useRecoilState } from "recoil";
 import { UploadingAtom } from "@/recoil/atoms/ImageUploadAtom";
@@ -12,9 +13,19 @@ import GraphLoading from "@/features/Dashboard/MainGraph/components/Loading/Grap
 import useGraph from "@/features/Dashboard/MainGraph/hooks/useGraph";
 
 export default function Dashboard() {
-  const [uploading, setUploading] = useRecoilState(UploadingAtom);
+  const router = useRouter();
 
+  const [uploading, setUploading] = useRecoilState(UploadingAtom);
   const graphData = useGraph();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const userid = router.query.userid;
+    
+    if (!token && ! userid) {
+      router.push('/');
+    }
+  }, []);
 
   return (
     <>
