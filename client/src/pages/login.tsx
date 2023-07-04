@@ -15,6 +15,14 @@ export default function Home() {
 
   const setLoginId = useSetRecoilState(LoginStateAtom);
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    
+    if (token) {
+      router.push('/dashboard');
+    }
+  }, []);
+
   const handleLogin = async () => {
     const response: any = await POST(
       "login/generic",
