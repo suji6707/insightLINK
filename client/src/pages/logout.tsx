@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 // Component
-import NavBar from "@/features/Dashboard/components/NavBar";
 import { Wrapper } from "@/styles/wrapper";
 
 export default function Home() {
@@ -10,6 +9,10 @@ export default function Home() {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
+
+    if (!storedToken) {
+      router.push('/');
+    }
     setToken(storedToken);
   }, []);
 
@@ -21,7 +24,6 @@ export default function Home() {
 
   return (
     <Wrapper>
-      <NavBar />
       <div className="flex flex-col items-center justify-center h-screen">
         <div className="container flex flex-col items-end max-w-md mx-auto">
           {/* Updated class */}
@@ -30,7 +32,7 @@ export default function Home() {
           {token ? (
             <button
               onClick={handleLogout}
-              className="px-4 py-2 mr-4 font-bold text-white bg-black rounded"
+              className="px-4 py-2 mr-4 font-bold text-white bg-black rounded cursor-pointer"
             >
               로그아웃
             </button>

@@ -8,3 +8,8 @@ export const LoginStateAtom = atom({
   default: 0,
   effects_UNSTABLE: [persistAtom],
 });
+
+export const FollowCntAtom = atom({
+  key: "FollowCntAtom",
+  default: 0,
+});

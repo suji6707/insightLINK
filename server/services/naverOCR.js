@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
+import { logger } from '../winston/logger.js';
 
 export const processOCR = async(imgUrl) => {
 
@@ -48,7 +49,7 @@ export const processOCR = async(imgUrl) => {
     return sumText;
   
   } catch (err) {
-    console.log(err);
+    logger.info('/services/naverOCR 폴더, post, Rate limit: ', err);
     return null;
   }
 };

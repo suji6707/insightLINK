@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 // recoil
-import { useRecoilValue } from "recoil";
-import { LoginStateAtom } from "@/recoil/atoms/LoginStateAtom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { FollowCntAtom, LoginStateAtom } from "@/recoil/atoms/LoginStateAtom";
 
 import { useRouter } from "next/router";
 // components
@@ -15,6 +15,7 @@ export default function UserInfo() {
   const [userInfo, setUserInfo] = useState<UserInfo_DTO>();
   const [isLogin, setIsLogin] = useState<boolean>(false);
   const loginId = useRecoilValue(LoginStateAtom);
+  const [followCnt, setFollowCnt] = useRecoilState(FollowCntAtom);
   const router = useRouter();
 
   useEffect(() => {
@@ -25,7 +26,7 @@ export default function UserInfo() {
 
       const response = await User_Info_Api(userid);
       setUserInfo(response);
-
+      setFollowCnt(response.followCnt);
       if (userid) {
         if (loginId == userid) {
           setIsLogin(true);

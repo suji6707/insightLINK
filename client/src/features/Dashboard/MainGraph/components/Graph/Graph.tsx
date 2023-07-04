@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 // recoil
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { DashBoardCardAtom, NodeNameAtom } from "@/recoil/atoms/MainGraphAtom";
 // library
 import * as echarts from "echarts";
@@ -17,14 +17,14 @@ type MainGraphProps = {
   editMode: boolean;
 };
 
-function Graph({ data: graph, editMode }: MainGraphProps) {
+function Graph({ data, editMode }: MainGraphProps) {
   const chartRef = useRef<HTMLDivElement>(null);
   const [lastClickedNode, setLastClickedNode] = useState<string>("");
   const [openCard, setOpenCard] = useRecoilState(DashBoardCardAtom);
   const [nodeName, setNodeName] = useRecoilState(NodeNameAtom);
   const pressTimer = useRef<any>(null);
   const longPressNode = useRef<string | null>(null);
-  const [options, setOptions] = useState<any>(ChartDefaultOptions(graph));
+  // const [options, setOptions] = useState<any>(ChartDefaultOptions(data));
 
   const handleNodeClick = useCallback(
     (nodeName: string) => {
@@ -43,23 +43,22 @@ function Graph({ data: graph, editMode }: MainGraphProps) {
     },
     [editMode, lastClickedNode, openCard]
   );
-  useEffect(() => {
-    setOptions(ChartDefaultOptions(graph));
-  }, [graph]);
+  
 
   useEffect(() => {
-    if (chartRef.current) {
+    if (chartRef.current && data) {
       const chart = echarts.init(chartRef.current);
 
-      graph.nodes.forEach((node: any) => {
+      data.nodes.forEach((node: any) => {
         node.label = {
           show: node.symbolSize >= 10,
           fontSize: node.symbolSize >= 10 ? 17 : 15,
           // color: (params: any) => params.data.itemStyle.color,
         };
       });
-
-      chart.setOption(options);
+      // console.log('options: ', options)
+      
+      chart.setOption(ChartDefaultOptions(data) as any);
 
       // 마우스 오래 클릭시 태그 병합
       const handleMouseDown = (params: any) => {
@@ -82,7 +81,7 @@ function Graph({ data: graph, editMode }: MainGraphProps) {
         chart.getZr().off("mousedown", handleMouseDown);
       };
     }
-  }, [editMode, handleNodeClick, options]);
+  }, [editMode, handleNodeClick, data, chartRef]);
 
   // Add a new useEffect for resizing
   useEffect(() => {
@@ -94,7 +93,17 @@ function Graph({ data: graph, editMode }: MainGraphProps) {
     }
   }, [nodeName, openCard]);
 
-  return <div className="w-full h-[65vh]" ref={chartRef}></div>;
+
+  return (
+    <div
+      className={
+        openCard
+          ? "w-full h-[65vh]"
+          : "w-[150vh] h-[65vh] left-1/2 transform -translate-x-1/2"
+      }
+      ref={chartRef}
+    ></div>
+  );
 }
 
 export default Graph;

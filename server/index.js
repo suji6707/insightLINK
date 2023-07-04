@@ -5,6 +5,7 @@ import cors from 'cors';
 import morgan from 'morgan'; // log
 import bodyParser from 'body-parser'; // 요청정보 처리
 import { logger } from './winston/logger.js';
+import { db } from './connect.js';
 
 /* Router */
 import uploadRouter from './routes/uploads.js';
@@ -25,6 +26,8 @@ import otherRouter from './routes/other.js';
 import dummyRouter from './routes/z_dummy.js';
 import dummyRouter2 from './routes/z_dummy_category.js';
 
+import userNameRouter from './routes/userName.js';
+
 
 import { authMiddleware } from './middlewares/auth-middleware.js';
 import { setTimeout } from 'timers/promises';
@@ -39,7 +42,7 @@ app.use(cors());
 // app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(morgan(':method :status :url :response-time ms', {stream : logger.stream}))
+app.use(morgan(':method :status :url :response-time ms', {stream : logger.stream}));
 
 /* Routing */
 app.use('/api/upload', authMiddleware, uploadRouter);
@@ -59,14 +62,30 @@ app.use('/api/other',authMiddleware,otherRouter);
 app.use('/api/dummy', dummyRouter);
 app.use('/api/dummy2', dummyRouter2);
 
+/* 카카오톡 공유하기 */
+app.use('/api/share', [graphRouter, userNameRouter]);
 
-/* NGINX test */
+/* 도메인 연결 test */
 app.get('/hello', async (req, res) => {
   logger.info('hello test');
   res.write('hello');
   await setTimeout(500);
   res.write('world');
   res.end();
+});
+
+/* 태그 리스트 test */
+app.get('/taglist', async (req, res) => {
+  let connection = null;
+  try {
+    connection = await db.getConnection(); 
+    
+    const [rows] = await connection.query('SELECT englishKeyword FROM taglist');
+    const englishKeywords = rows.map(row => row.englishKeyword);
+    console.log(englishKeywords);
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 
