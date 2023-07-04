@@ -8,8 +8,8 @@ export const extractJson = (str) => {
       const extracted = str.slice(start, end);
       const array = JSON.parse(`[${extracted}]`);
       
-      const limitedArray = array.slice(0, 5);
-      console.log('fr: 5개 제한 array: ', limitedArray);
+      const limitedArray = array.slice(0, 2);
+      console.log('fr: 2개 제한 array: ', limitedArray);
 
       return { tags: limitedArray };
     } else {

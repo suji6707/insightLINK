@@ -57,7 +57,11 @@ const isImage = (ocrResult) => {
 
 
 const extractTagFromImage = async (imgUrl, req, res, userId) => {
+  const time = Date.now();
   const sumText = await processOCR(imgUrl);
+  const arrival = Date.now() - time;
+  console.log('arrival: ', arrival);
+
   // res.write(JSON.stringify({imgUrl: imgUrl, status: 'process OCR FINISEHD'}));
   let tagJSON = '<Image>';  
   if (!isImage(sumText)) {
@@ -75,7 +79,6 @@ const extractTagFromImage = async (imgUrl, req, res, userId) => {
       return { imgUrl, sumText, tagJSON };
     }
 
-    
     /* 프론트 */
     // res.write(JSON.stringify({imgUrl: imgUrl, status: 'extract JSON FINISHED', data: tagJSON}));
   }
@@ -111,8 +114,12 @@ router.post('/', upload.array('photos'),
       }
       const tagList = await Promise.all(promises);  // promise 배열을 한번에 풀어줌. 푸는 순서를 보장하지 않지만 n개를 동시에 풀어줌.
       
+      // console.log('tagList: ', tagList);
+      // console.log('length: ', tagList.length);
+
       /* for문 1) 각 이미지에 대해 */
       for (const result of tagList) {
+
         /* null값 에러처리 */
         if (result == null) {
           logger.error('tagJSON null이 제대로 return null 처리됨 in router.post upload.');
