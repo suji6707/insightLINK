@@ -9,9 +9,9 @@ export const GET = async (
     let res: AxiosResponse;
     if (headers) {
       const token = getToken();
-      res = await axios.get(`http://localhost:8800/api/${uri}`, token);
+      res = await axios.get(`/api/${uri}`, token);
     } else {
-      res = await axios.get(`http://localhost:8800/api/${uri}`);
+      res = await axios.get(`/api/${uri}`);
     }
     console.log(`${uri} - GET 성공`);
     return res;

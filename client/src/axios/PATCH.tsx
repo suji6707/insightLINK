@@ -6,9 +6,9 @@ export const PATCH = async (uri: string, data: any, headers: boolean) => {
     let res: AxiosResponse;
     if (headers) {
       const token = getToken();
-      res = await axios.patch(`http://localhost:8800/api/${uri}`, data, token);
+      res = await axios.patch(`/api/${uri}`, data, token);
     } else {
-      res = await axios.patch(`http://localhost:8800/api/${uri}`, data);
+      res = await axios.patch(`/api/${uri}`, data);
     }
     console.log(`${uri} - PATCH 성공`);
     return res;
