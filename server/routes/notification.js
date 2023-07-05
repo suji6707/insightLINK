@@ -38,7 +38,8 @@ router.get('/', async (req, res) => {
       if (userNotification[userId].length > 0) {
         clearTimeout(timeout)
 
-        if (!res.headersSent) { // 응답 헤더를 중복해서 전송하는 것을 방지하기 위해
+        if (!res.headersSent) {
+          // 응답 헤더를 중복해서 전송하는 것을 방지하기 위해
           res.json(userNotification[userId])
           await connection.query(deleteAlarmQuery(userId))
         }
@@ -49,7 +50,7 @@ router.get('/', async (req, res) => {
         connection.release()
         setTimeout(async () => {
           res.status(204).end() // 응답이 없는 경우 204 No Content로 응답
-        }, 30000)
+        }, 5000)
       }
     }
     checkNotifications()

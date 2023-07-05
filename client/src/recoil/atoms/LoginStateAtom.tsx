@@ -9,6 +9,12 @@ export const LoginStateAtom = atom({
   effects_UNSTABLE: [persistAtom],
 });
 
+export const IsLoginAtom = atom({
+  key: "IsLoginAtom",
+  default: false,
+  effects_UNSTABLE: [persistAtom],
+});
+
 export const FollowCntAtom = atom({
   key: "FollowCntAtom",
   default: 0,

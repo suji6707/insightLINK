@@ -49,7 +49,7 @@ export const processOCR = async(imgUrl) => {
     return sumText;
   
   } catch (err) {
-    logger.info('/services/naverOCR 폴더, post, Rate limit: ', err);
+    logger.info('/services/naverOCR 폴더, post, Rate limit: ');
     return null;
   }
 };
