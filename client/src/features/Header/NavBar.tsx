@@ -94,13 +94,13 @@ export default function NavBar() {
 
   return (
     <div className="flex items-center self-stretch justify-between flex-shrink-0 h-20 py-0 ">
-      <div className="flex flex-row gap-3 ml-4 md:hidden">
+      <div className="flex flex-row items-center justify-center md:hidden">
         <BurgerMenu />
-        <Link href="/dashboard">
+        <Link href="/dashboard" className="ml-2">
           <Image
             src="/insightLINK_logo.svg"
             alt="InsightLINK Logo"
-            width={230}
+            width={180}
             height={230}
           />
         </Link>

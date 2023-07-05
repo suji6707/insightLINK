@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { Add_Follow_API, Cancel_Follow_API } from "@/axios/dashBoardApi";
 
+import { BiPlus, BiMinus } from "react-icons/bi";
+
 interface FollowBtnProps {
   follow: boolean | undefined;
 }
@@ -37,11 +39,12 @@ export default function FollowBtn({ follow }: FollowBtnProps) {
           onClick={handleCancelFollow}
           className="cursor-pointer follow-btn"
         >
+          <BiMinus className="mr-1" />
           팔로우 취소
         </button>
       ) : (
         <button onClick={handleAddFollow} className="cursor-pointer follow-btn">
-          팔로우
+          <BiPlus className="mr-1" /> 팔로우
         </button>
       )}
     </>
