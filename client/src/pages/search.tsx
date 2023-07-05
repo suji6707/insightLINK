@@ -8,7 +8,6 @@ import Card from "@/features/Search/Card";
 // Assets
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 
-
 const randomColors = [
   "#EE6565",
   "#FB8351",
@@ -18,7 +17,7 @@ const randomColors = [
   "#73C0DE",
   "#5470C6",
   "#9A60B4",
-  "#FFC0CB",
+  "#FF88E0",
 ];
 
 export default function Search() {
@@ -32,10 +31,10 @@ export default function Search() {
   const [totalCards, setTotalCards] = useState(cardlist.length);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    
+    const token = localStorage.getItem("token");
+
     if (!token) {
-      router.push('/');
+      router.push("/");
     }
   }, []);
 

@@ -74,7 +74,6 @@ function Graph({ data, editMode }: MainGraphProps) {
           // color: (params: any) => params.data.itemStyle.color,
         };
       });
-      // console.log('options: ', options)
 
       chart.setOption(ChartDefaultOptions(data) as any);
 
