@@ -23,11 +23,16 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const showImgModal = useRecoilValue(ImgModalAtom);
   const isLogin = useRecoilValue(IsLoginAtom);
 
+  let token: any;
+  if (typeof window !== "undefined") {
+    token = localStorage.getItem("token");
+  }
+
   const graphData = useGraph();
 
   return (
     <>
-      {isLogin ? (
+      {token ? (
         <div className="h-screen max-w-[75rem] mx-auto max-md:px-4">
           <NavBar />
           <div className="max-w-[75rem] flex flex-col items-center justify-between m-auto">
@@ -35,7 +40,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             <div className="flex flex-row justify-between w-full">
               <>
                 {children}
-                {openCard && isLogin ? (
+                {openCard && token ? (
                   <CardPanel />
                 ) : isLogin ? (
                   <></>
