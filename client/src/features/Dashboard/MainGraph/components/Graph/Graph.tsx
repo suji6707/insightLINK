@@ -94,23 +94,30 @@ function Graph({ data, editMode }: MainGraphProps) {
       const handleMouseDown = (params: any) => {
         if (editMode) {
           setModalContent(
-            <div>
-              <button onClick={() => handleEditTag(params, chart)}>
+            <>
+              <div>
+                <button
+                  onClick={() => handleMerge(params, chart, longPressNode)}
+                  className="mr-4"
+                >
+                  태그 병합
+                </button>
+                <button onClick={closeModal}>닫기</button>
+              </div>
+              {/* <button onClick={() => handleEditTag(params, chart)}>
                 Edit Tag
               </button>
               <button onClick={() => handleDeleteTag(params, chart)}>
                 Delete Tag
               </button>
-              <button onClick={() => handleMerge(params, chart, longPressNode)}>
-                Merge Tag
-              </button>
+            
               <button onClick={() => handleConnect(params, chart)}>
                 Connect Tag
               </button>
               <button onClick={() => handleDisconnect(params, chart)}>
                 Disconnect Tag
-              </button>
-            </div>
+              </button> */}
+            </>
           );
           const containerRect = chartRef.current?.getBoundingClientRect();
           const nodeRect = params.event.event.target.getBoundingClientRect();
@@ -157,24 +164,20 @@ function Graph({ data, editMode }: MainGraphProps) {
   };
 
   return (
-    <div
-      className={
-        openCard
-          ? "w-full h-[65vh]"
-          : "w-[150vh] h-[65vh] left-1/2 transform -translate-x-1/2"
-      }
-      ref={chartRef}
-      onClick={handleCloseCard}
-    >
+    <div className="flex flex-col items-center justify-center">
       {modalVisible && modalPosition && (
         <div
           className="modal"
           style={{ left: modalPosition.left, top: modalPosition.top }}
         >
           {modalContent}
-          <button onClick={closeModal}>Close</button>
         </div>
       )}
+      <div
+        className={openCard ? "w-full h-[65vh]" : "w-[150vh] h-[65vh]"}
+        ref={chartRef}
+        onClick={handleCloseCard}
+      ></div>
     </div>
   );
 }

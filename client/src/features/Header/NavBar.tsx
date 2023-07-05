@@ -144,11 +144,14 @@ export default function NavBar() {
             onClick={handleOpenAlarm}
           >
             <AiTwotoneBell className="text-gray-800 text-[1rem] font-xeicon leading-normal" />
-            {alarmCnt && (
-              <div className="absolute flex items-center justify-center w-4 h-4 text-xs text-white bg-red-500 rounded-full -right-1 -top-1 z-1">
-                {notiCnt ? notiCnt : <></>}
-              </div>
-            )}
+            {alarmCnt &&
+              (notiCnt ? (
+                <div className="absolute flex items-center justify-center w-4 h-4 text-xs text-white bg-red-500 rounded-full -right-1 -top-1 z-1">
+                  notiCnt
+                </div>
+              ) : (
+                <></>
+              ))}
 
             {openAlarm && notiArr && <AlarmModal notiArr={notiArr} />}
           </button>

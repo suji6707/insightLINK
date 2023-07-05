@@ -41,7 +41,7 @@ const ChartDefaultOptions = (graph: Main_graph_Api_DTO) => {
   }));
 
   return {
-    tooltip: {},
+    tooltip: false,
     animation: true,
     animationDuration: 1500,
     animationEasingUpdate: "quinticInOut",
