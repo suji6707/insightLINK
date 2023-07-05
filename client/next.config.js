@@ -24,6 +24,7 @@ const nextConfig = {
       "encrypted-tbn0.gstatic.com",
       "search.pstatic.net",
       "cdn.pixabay.com",
+      "i.imgur.com",
     ],
     remotePatterns: [
       {
