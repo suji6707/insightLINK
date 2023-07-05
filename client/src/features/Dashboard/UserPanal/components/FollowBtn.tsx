@@ -35,15 +35,12 @@ export default function FollowBtn({ follow }: FollowBtnProps) {
       {isFollow ? (
         <button
           onClick={handleCancelFollow}
-          className="follow-btn  cursor-pointer"
+          className="cursor-pointer follow-btn"
         >
           팔로우 취소
         </button>
       ) : (
-        <button
-          onClick={handleAddFollow}
-          className="follow-btn  cursor-pointer"
-        >
+        <button onClick={handleAddFollow} className="cursor-pointer follow-btn">
           팔로우
         </button>
       )}
