@@ -11,6 +11,9 @@ import CardPanel from "@/features/Dashboard/MainCard/components/CardPanel";
 import ImageUpload from "@/features/ImageUpload/ImageUpload";
 import NeedLogin from "@/features/Dashboard/components/NeedLogin";
 
+import MainGraph from "@/features/Dashboard/MainGraph/components/MainGraph/MainGraph";
+import useGraph from "@/features/Dashboard/MainGraph/hooks/useGraph";
+
 interface DashboardLayoutProps {
   children: ReactNode;
 }
@@ -19,6 +22,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const openCard = useRecoilValue(DashBoardCardAtom);
   const showImgModal = useRecoilValue(ImgModalAtom);
   const isLogin = useRecoilValue(IsLoginAtom);
+
+  const graphData = useGraph();
 
   return (
     <>
@@ -52,7 +57,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           {showImgModal && <ImageUpload />}
         </div>
       ) : (
+        <>
+        <MainGraph data={graphData} />
         <NeedLogin />
+        </>
       )}
     </>
   );

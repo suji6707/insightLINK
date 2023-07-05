@@ -19,6 +19,8 @@ export default function Home() {
   const handleLogout = () => {
     alert("Logout successful!");
     localStorage.removeItem("token");
+    localStorage.removeItem("recoil-persist");
+    localStorage.removeItem("userId");
     router.push("/");
   };
 
