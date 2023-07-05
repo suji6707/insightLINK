@@ -9,17 +9,17 @@ import { LoginStateAtom } from "@/recoil/atoms/LoginStateAtom";
 import { NotiCntAtom } from "@/recoil/atoms/HeaderAtom";
 
 import { GET } from "@/axios/GET";
-import useNotification from "@/features/Dashboard/components/hooks/useNotification";
+import useNotification from "@/features/Header/hooks/useNotification";
 // Components
 import UserModal from "@/features/User/UserModal";
+import BurgerMenu from "@/features/Header/componenets/BurgerMenu";
 // Assets
 import { AiOutlineUpload, AiTwotoneBell } from "react-icons/ai";
 import { BiUser } from "react-icons/bi";
 import { BsShareFill } from "react-icons/bs";
 
 import tw from "tailwind-styled-components";
-import html2canvas from "html2canvas";
-import AlarmModal from "@/features/Dashboard/components/AlarmModal";
+import AlarmModal from "@/features/Header/componenets/AlarmModal";
 
 export default function NavBar() {
   const { systemTheme, theme, setTheme } = useTheme();
@@ -76,11 +76,37 @@ export default function NavBar() {
     getProfileImg();
   }, []);
 
+  const imgUpLoad = () => {
+    return (
+      <div
+        className="flex items-center justify-center h-10 gap-1 px-4 bg-gray-900 rounded cursor-pointer"
+        onClick={() => setShowImgModal(true)}
+      >
+        <AiOutlineUpload className="text-white text-[1rem] font-xeicon leading-normal" />
+        <p className="text-white text-[1.125rem] font-kanit font-semibold leading-normal tracking-tighter">
+          업로드
+        </p>
+      </div>
+    );
+  };
+
   const notiArr = useNotification();
 
   return (
     <div className="flex items-center self-stretch justify-between flex-shrink-0 h-20 py-0 ">
-      <Link href="/dashboard">
+      <div className="flex flex-row gap-3 ml-4 md:hidden">
+        <BurgerMenu />
+        <Link href="/dashboard">
+          <Image
+            src="/insightLINK_logo.svg"
+            alt="InsightLINK Logo"
+            width={230}
+            height={230}
+          />
+        </Link>
+      </div>
+
+      <Link href="/dashboard" className="max-md:hidden">
         <Image
           src="/insightLINK_logo.svg"
           alt="InsightLINK Logo"
@@ -88,12 +114,24 @@ export default function NavBar() {
           height={230}
         />
       </Link>
-      <div>
+
+      <div className="hidden md:block">
         <Link href="/social">
           <CategoryLink>소셜</CategoryLink>
         </Link>
       </div>
-      <div className="flex items-center gap-4">
+
+      <div
+        className="flex items-center justify-center h-10 gap-1 px-4 bg-gray-900 rounded cursor-pointer md:hidden md:ml-auto"
+        onClick={() => setShowImgModal(true)}
+      >
+        <AiOutlineUpload className="text-white text-[1rem] font-xeicon leading-normal" />
+        <p className="text-white text-[1.125rem] font-kanit font-semibold leading-normal tracking-tighter">
+          업로드
+        </p>
+      </div>
+
+      <div className="flex items-center gap-4 max-md:hidden">
         <div className="flex items-center self-stretch gap-4">
           <div className="flex flex-col items-center justify-center w-7 h-7">
             <BsShareFill

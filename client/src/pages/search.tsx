@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 // Components
-import NavBar from "@/features/Dashboard/components/NavBar";
+import NavBar from "@/features/Header/NavBar";
 import SearchBar from "@/features/Search/SearchBar";
 import Card from "@/features/Search/Card";
 // Assets

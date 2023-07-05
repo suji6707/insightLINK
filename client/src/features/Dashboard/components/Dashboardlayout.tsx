@@ -5,7 +5,7 @@ import { useRecoilValue } from "recoil";
 import { DashBoardCardAtom, ImgModalAtom } from "@/recoil/atoms/MainGraphAtom";
 import { IsLoginAtom } from "@/recoil/atoms/LoginStateAtom";
 // Component
-import NavBar from "@/features/Dashboard/components/NavBar";
+import NavBar from "@/features/Header/NavBar";
 import UserPanel from "@/features/Dashboard/UserPanal/UserPanel";
 import CardPanel from "@/features/Dashboard/MainCard/components/CardPanel";
 import ImageUpload from "@/features/ImageUpload/ImageUpload";
@@ -28,7 +28,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <>
       {isLogin ? (
-        <div className="h-screen max-w-[75rem] mx-auto">
+        <div className="h-screen max-w-[75rem] mx-auto max-md:px-4">
           <NavBar />
           <div className="max-w-[75rem] flex flex-col items-center justify-between m-auto">
             <UserPanel />
