@@ -25,6 +25,7 @@ const nextConfig = {
       "search.pstatic.net",
       "cdn.pixabay.com",
       "i.imgur.com",
+      "ca.slack-edge.com",
     ],
     remotePatterns: [
       {
