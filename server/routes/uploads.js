@@ -10,11 +10,10 @@ import { processOCR } from '../services/naverOCR.js';
 import path from 'path';
 /* OCR ENDED */
 /* Tag LINE ADDED */
-import { generate } from '../services/generate.js';
-// import { generateConversation } from '../services/generate.js';
+// import { generate } from '../services/generate.js';
+import { generateConversation } from '../services/generate.js';
 import { extractJson } from '../services/jsonUtils.js';
 // import { combinedList }  from '../services/taglist.js';  
-import translate from 'translate-google';
 /* Tag ENDED */
 // import { setTimeout } from 'timers/promises';   
 
@@ -65,8 +64,8 @@ const extractTagFromImage = async (imgUrl, req, res, userId) => {
   // res.write(JSON.stringify({imgUrl: imgUrl, status: 'process OCR FINISEHD'}));
   let tagJSON = '<Image>';  
   if (!isImage(sumText)) {
-    const tag = await generate(req, res, sumText, userId);
-    // const tag = await generateConversation(req, res, sumText, userId);    
+    // const tag = await generate(req, res, sumText, userId);
+    const tag = await generateConversation(req, res, sumText, userId);    
     tagJSON = extractJson(tag);
     console.log('fr: extractTagFromImage: ', tagJSON);
 
@@ -155,13 +154,12 @@ router.post('/', upload.array('photos'),
             logger.info(`/routes/uploads 폴더, post, No matching element found for ${tag}.`);
             // 3-1. 구글 번역 후 taglist 저장
             try {
-              const translatedTag = await translate(tag, {to: 'ko'});   // 한글 키워드
               const [indexResult] = await connection.query(q5, userId);         // tag_index
               const tag_index = indexResult[0].last_index + 1;
-              console.log('fr: 신규 taglist 영/한: ', tag, translatedTag);
+              console.log('fr: 신규 taglist 영/한: ', tag, tag);
 
               try {
-                await connection.query(q3, [ userId, tag, translatedTag, tag_index ]);     // englishKeyword, koreanKeyword, tag_index + 1
+                await connection.query(q3, [ userId, tag, tag, tag_index ]);     // englishKeyword, koreanKeyword, tag_index + 1
                 console.log(`fr: 신규 taglist: ${translatedTag} 저장 성공!`);
                 // 3-2. Tag 테이블 저장.
                 await connection.query(q2, [ FileResult.insertId, translatedTag, tag_index ]);          // file_id, tag, tag_index

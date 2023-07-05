@@ -142,40 +142,38 @@ const generateSystemContent = async () => {
 
   let note = 'Note: The data provided by users is extracted from cell phone screenshots using OCR technology. Please be aware that it may contain miscellaneous elements such as cell phone carriers, battery levels, time stamps, and advertisements, which may not contribute to meaningful topics or categories.\n';
 
-  let Behavior = 'Please provide 2 category recommendations that align with the user\'s interests and the provided data.\n';
+  note += 'Also, please note that the user is Korean and would like the tag extraction to be performed in Korean, taking into account the Korean context.\n';
+
+  let behavior = 'Please provide 2 category recommendations that align with the user\'s interests and the provided data.\n';
 
   let responseType = 'Please provide the categories in JSON format using the \'tags\' property: \'{"tags": []}\'.';
   responseType += 'Example format: \'{"tags": ["Category1", "Category2"]}\'.'; 
 
-  const systemContent = prompt + note + Behavior + responseType;
-  // console.log('System: ', systemContent);
+  const systemContent = prompt + note + behavior + responseType;
+  console.log('System: ', systemContent);
   return systemContent;
 };
 
-
 const generateUserContent = async (ocrResult, userId) => {
-  
-  // value = client.get(key)
-  // if (value) {
-  //   taglist = value
-  // } 
 
   let connection = null;
   try {
     connection = await db.getConnection();
-    const [rows] = await connection.query(`SELECT englishKeyword FROM taglist WHERE user_id = ${userId}`);
+    const [rows] = await connection.query(`SELECT koreanKeyword FROM taglist WHERE user_id = ${userId}`);
     connection.release();
     const taglist = rows.map(row => row.englishKeyword);   // taglist 테이블의 englishKeywords를 리스트로.
     const taglistText = taglist.map(tag => JSON.stringify(tag)).join(',');
 
-    let prompt = 'Please suggest relevant categories or topics based on the provided data.\n';
-    prompt += 'Data:';
-    prompt += ocrResult;+'\n';
-    prompt += `While considering the user's general interests, which include ${taglistText}, `;
-    prompt += 'feel free to recommend new and exciting ideas that may go beyond the scope of the provided data.';
+    let behavior = '제공된 데이터를 기반으로 관련된 카테고리나 주제를 제안해주세요.\n';
+    let data = '데이터:';
+    data += ocrResult +'\n';
+    let note = '유저의 일반적인 관심사를 고려하며, ' 
+    note += `${taglistText}와 같은 카테골가 있음을 감안하여, `;
+    note += '제공된 데이터의 범위를 넘어서도 새롭고 흥미로운 아이디어를 추천할 수 있습니다. 또한, 유저의 일반적인 관심사에 겹치는 부분이 있다면 해당 카테고리를 우선적으로 추천해도 됩니다.';
 
-    // console.log('prompt: ', prompt);
-    return prompt;
+    const userContent = behavior + data + note;
+    console.log('userContent: ', userContent);
+    return userContent;
   } catch (err) {
     connection?.release();
     console.log(err);
