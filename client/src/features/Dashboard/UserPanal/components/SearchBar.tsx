@@ -7,10 +7,12 @@ import FollowBtn from "@/features/Dashboard/UserPanal/components/FollowBtn";
 // types
 import { UserInfo_DTO } from "@/types/dashborad.types";
 
-export default function SearchBar(
-  { userInfo }: UserInfo_DTO | undefined,
-  { isLogin }: boolean
-) {
+interface UserInfoProps {
+  userInfo: UserInfo_DTO | undefined;
+  isLogin: boolean;
+}
+
+export default function SearchBar({ userInfo, isLogin }: UserInfoProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const [keywords, setKeywords] = useState("");

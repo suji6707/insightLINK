@@ -7,6 +7,7 @@ import { FollowCntAtom, LoginStateAtom } from "@/recoil/atoms/LoginStateAtom";
 // components
 import UserInfo from "@/features/Dashboard/UserPanal/components/UserInfo";
 import SearchBar from "@/features/Dashboard/UserPanal/components/SearchBar";
+import GraphEditBtn from "@/features/Dashboard/UserPanal/components/GraphEditBtn";
 
 import { User_Info_Api } from "@/axios/dashBoardApi";
 // types
@@ -41,14 +42,22 @@ export default function UserPanel() {
     getUserInfoData();
   }, []);
 
+  console.log("로그인", isLogin);
   return (
     <>
-      <div className="flex justify-between w-full mb-[5rem] max-md:flex-col">
+      <div className="flex justify-between w-full mb-[1rem] max-md:flex-col">
         <UserInfo userInfo={userInfo} isLogin={isLogin} />
         <div className="flex items-end justify-end w-full max-md:justify-center">
           <SearchBar userInfo={userInfo} isLogin={isLogin} />
         </div>
       </div>
+      {isLogin ? (
+        <div className="flex justify-start w-full mb-[1rem]">
+          <GraphEditBtn />
+        </div>
+      ) : (
+        <></>
+      )}
     </>
   );
 }

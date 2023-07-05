@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-// recoil
-import { useRecoilState, useRecoilValue } from "recoil";
-import { FollowCntAtom, LoginStateAtom } from "@/recoil/atoms/LoginStateAtom";
 // components
 import FollowBtn from "@/features/Dashboard/UserPanal/components/FollowBtn";
-import GraphEditBtn from "@/features/Dashboard/UserPanal/components/GraphEditBtn";
-import { User_Info_Api } from "@/axios/dashBoardApi";
 // types
 import { UserInfo_DTO } from "@/types/dashborad.types";
+import { ConfigurationServicePlaceholders } from "aws-sdk/lib/config_service_placeholders";
 
-export default function UserInfo(
-  { userInfo }: UserInfo_DTO | undefined,
-  { isLogin }: boolean
-) {
+interface UserInfoProps {
+  userInfo: UserInfo_DTO | undefined;
+  isLogin: boolean;
+}
+
+export default function UserInfo({ userInfo, isLogin }: UserInfoProps) {
   return (
     <>
       <div className="flex flex-col w-full">
