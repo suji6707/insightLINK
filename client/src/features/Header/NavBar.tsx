@@ -60,8 +60,8 @@ export default function NavBar() {
         objectType: "text",
         text: "나의 그래프를 확인해봐요.",
         link: {
-          mobileWebUrl: "http://localhost:3000/dashboard/" + loginId,
-          webUrl: "http://localhost:3000/dashboard/" + loginId,
+          mobileWebUrl: "https://insight-link-ten.vercel.app/dashboard/" + loginId,
+          webUrl: "https://insight-link-ten.vercel.app/dashboard/" + loginId,
         },
       });
     }

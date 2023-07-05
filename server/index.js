@@ -32,6 +32,8 @@ import userNameRouter from './routes/userName.js';
 import { authMiddleware } from './middlewares/auth-middleware.js';
 import { setTimeout } from 'timers/promises';
 
+import { createProxyMiddleware } from 'http-proxy-middleware';
+
 const app = express();
 const server = http.createServer(app);
 const port = process.env.PORT || 8000;
@@ -102,4 +104,16 @@ app.get('/api/users/me', authMiddleware, async (req, res) => {
 /* Server */
 server.listen(port, () => {
   logger.info(`Server Start Listening on port ${port}`);
+});
+
+/* Proxy */
+const devProxy = {
+  '/api': {
+    target: 'http://localhost:8800', // 실제 서버 주소로 변경해야 합니다.
+    changeOrigin: true,
+  },
+};
+
+Object.keys(devProxy).forEach((context) => {
+  app.use(createProxyMiddleware(context, devProxy[context]));
 });
