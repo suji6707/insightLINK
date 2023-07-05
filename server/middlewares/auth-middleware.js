@@ -36,7 +36,7 @@ export const authMiddleware = async (req, res, next) => {
     logger.info(`auth-middleware 통과, userid : ${userId}`)
     next();
   } catch (err) {
-    logger.error(`auth-middleware, userid : ${userId}, err : `, err);
+    logger.error(`auth-middleware, err : `, err);
     res.status(401).send({
       errorMessage: '로그인 후 이용 가능한 기능입니다.',
     });
