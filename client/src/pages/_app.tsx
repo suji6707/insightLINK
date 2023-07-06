@@ -28,11 +28,6 @@ const kanit = Kanit({
   variable: "--font-inter",
 });
 
-const iBM_Plex_Sans_KR = IBM_Plex_Sans_KR({
-  preload: false,
-  weight: ["100", "200", "300", "400", "500", "600"],
-});
-
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <RecoilRoot>
@@ -48,7 +43,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
           />
         </Head>
-        <main className={`${kanit.variable} ${iBM_Plex_Sans_KR.variable}`}>
+        <main className={`${kanit.variable}`}>
           <Component {...pageProps} />
         </main>
       </ThemeProvider>
