@@ -131,6 +131,8 @@ function Graph({ data, editMode }: MainGraphProps) {
       };
 
       const clickHandler = function (params: any) {
+        console.log(params);
+        console.log(params.color);
         if (params.dataType === "node") {
           console.log("노드 클릭");
           if (!editMode) {

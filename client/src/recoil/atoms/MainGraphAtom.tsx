@@ -76,3 +76,8 @@ export const AlarmCntAtom = atom({
   key: "alarmCntAtom",
   default: true,
 });
+
+export const RefreshGraphAtom = atom({
+  key: "RefreshGraphAtom",
+  default: false,
+});

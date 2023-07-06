@@ -2,7 +2,7 @@ import { RecoilRoot } from "recoil";
 import "@/styles/globals.css";
 import { ThemeProvider } from "next-themes";
 import { AppProps } from "next/app";
-import { Kanit } from "next/font/google";
+import { Kanit, IBM_Plex_Sans_KR } from "next/font/google";
 import Script from "next/script";
 import { NextSeo } from "next-seo";
 import Head from "next/head";
@@ -28,6 +28,11 @@ const kanit = Kanit({
   variable: "--font-inter",
 });
 
+const iBM_Plex_Sans_KR = IBM_Plex_Sans_KR({
+  preload: false,
+  weight: ["100", "200", "300", "400", "500", "600"],
+});
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <RecoilRoot>
@@ -43,7 +48,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
           />
         </Head>
-        <main className={`${kanit.variable} font-sans`}>
+        <main className={`${kanit.variable} ${iBM_Plex_Sans_KR.variable}`}>
           <Component {...pageProps} />
         </main>
       </ThemeProvider>
