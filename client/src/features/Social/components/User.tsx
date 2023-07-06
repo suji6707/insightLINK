@@ -73,7 +73,8 @@ const User = () => {
               <div className="flex justify-between items-center self-stretch">
                 <div className="flex justify-center items-center gap-6">
                   <img
-                    src={u.img}
+                    // src={u.img}
+                    src="/insightLINK_profile.png"
                     className="w-[2rem] h-[2rem] rounded-full cursor-pointer"
                     alt="profile"
                     onClick={() => {
