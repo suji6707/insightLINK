@@ -9,7 +9,7 @@ import { LoginStateAtom } from "@/recoil/atoms/LoginStateAtom";
 import { NotiCntAtom } from "@/recoil/atoms/HeaderAtom";
 
 import { GET } from "@/axios/GET";
-import useNotification from "@/features/Header/hooks/useNotification";
+// import useNotification from "@/features/Header/hooks/useNotification";
 // Components
 import UserModal from "@/features/User/UserModal";
 import BurgerMenu from "@/features/Header/componenets/BurgerMenu";
