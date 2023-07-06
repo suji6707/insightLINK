@@ -23,7 +23,6 @@ const Feeds = () => {
     if (data.status === 200) {
       setCards(data.data);
     }
-    console.log(data.data);
     if (data.response?.status === 400) {
       setCards([]);
     }
