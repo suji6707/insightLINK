@@ -34,3 +34,17 @@ export const findTobeConnQuery =
 export const tagInsertQuery = 
 `INSERT INTO Tag (file_id, tag, tag_index)
   VALUES (?, ?, ?)`;
+
+
+/*************************** 태그 수정  ************************/
+
+export const chgtaglistQuery = 
+`UPDATE taglist
+  SET taglist.koreanKeyword = ?
+  WHERE taglist.koreanKeyword = ? AND user_id = ?`;
+
+export const chgTagQuery = 
+`UPDATE Tag
+  JOIN taglist ON Tag.tag_index = taglist.tag_index
+  SET Tag.tag = ?
+  WHERE taglist.koreanKeyword = ? AND taglist.user_id = ?`;

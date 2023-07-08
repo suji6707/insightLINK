@@ -130,30 +130,23 @@ function Graph({ data, editMode }: MainGraphProps) {
       const handleMouseDown = (params: any) => {
         if (editMode) {
           setModalContent(
-            <>
-              <div>
-                <button
-                  onClick={() => handleMerge(params, chart, longPressNode)}
-                  className="mr-4"
-                >
-                  태그 병합
-                </button>
-                <button onClick={closeModal}>닫기</button>
-              </div>
-              {/* <button onClick={() => handleEditTag(params, chart)}>
+            <div>
+              <button onClick={() => handleEditTag(params, chart)}>
                 Edit Tag
               </button>
               <button onClick={() => handleDeleteTag(params, chart)}>
                 Delete Tag
               </button>
-            
+              <button onClick={() => handleMerge(params, chart, longPressNode)}>
+                Merge Tag
+              </button>
               <button onClick={() => handleConnect(params, chart)}>
                 Connect Tag
               </button>
               <button onClick={() => handleDisconnect(params, chart)}>
                 Disconnect Tag
-              </button> */}
-            </>
+              </button>
+            </div>
           );
           const containerRect = chartRef.current?.getBoundingClientRect();
           const nodeRect = params.event.event.target.getBoundingClientRect();

@@ -5,7 +5,7 @@ import { db } from '../connect.js';
 /* log */
 import { logger } from '../winston/logger.js';
 import { getGraphData } from '../middlewares/graphUtils.js';
-import { disconnQuery, existQuery, findToConnQuery, findTobeConnQuery, tagInsertQuery } from '../db/connectQueries.js';
+import { disconnQuery, existQuery, findToConnQuery, findTobeConnQuery, tagInsertQuery, chgtaglistQuery, chgTagQuery } from '../db/connectQueries.js';
 
 const router = express.Router();
 
@@ -108,7 +108,6 @@ router.post('/connect', async (req, res) => {
     for (const file of fileList) {
       await connection.query(tagInsertQuery, [file.file_id, tag2, tagIndex[0].tag_index]);
     }
-    
     connection.release();
     console.log(`태그 [${tag1}]와 [${tag2}] 연결 성공!`);
     res.status(200).send(`태그 [${tag1}]와 [${tag2}] 연결 성공!`);
@@ -118,6 +117,34 @@ router.post('/connect', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
+
+/*************************** 태그 수정  ************************/
+
+
+
+router.put('/modify', async(req, res) => {
+  const { user } = res.locals;
+  const userId = user.user_id;
+
+  const tagBefore = req.query.tag1;
+  const tagAfter = req.query.tag2;
+
+  let connection = null;
+  try {
+    connection = await db.getConnection();
+    await connection.query(chgtaglistQuery, [tagAfter, tagBefore, userId]);
+    await connection.query(chgTagQuery, [tagAfter, tagBefore, userId]);
+    connection.release();
+    console.log(`태그 [${tagBefore}] -> [${tagAfter}] 바꾸기 성공!`);
+    res.status(200).send(`태그 [${tagBefore}] -> [${tagAfter}] 바꾸기 성공!`);
+  } catch (err) {
+    connection?.release();
+    logger.error('/routes/graphs/ 폴더 router_put 함수, post, err : ', err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 
 
 

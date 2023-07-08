@@ -1,10 +1,9 @@
 import '../dotenv.js';
 import { db } from '../connect.js';
 import { Configuration, OpenAIApi } from 'openai';
-// import { stringify } from 'uuid';
-// import * as Taglist from './taglist.js'; 
-/* log */
-// import { logger } from '../winston/logger.js';
+import Redis from 'ioredis';
+
+const redis = new Redis();    // Redis connection settings
 
 
 const configuration = new Configuration({
@@ -27,8 +26,6 @@ export const generate = async (req, res, ocr, userId) => {
     
   } try {
     let prompt = await generatePrompt(ocr, userId);
-
-    // console.log(typeof prompt, prompt);
 
     const completion = await openai.createChatCompletion({
       model: 'gpt-3.5-turbo',
@@ -55,40 +52,39 @@ export const generate = async (req, res, ocr, userId) => {
 };
 
 
-const generatePrompt = async (ocrResult, userId) => {
-  let connection = null;
-  try {
-    connection = await db.getConnection();
-    const [rows] = await connection.query(`SELECT englishKeyword FROM taglist WHERE user_id = ${userId}`);
-    connection.release();
-    const taglist = rows.map(row => row.englishKeyword);   // taglist 테이블의 englishKeywords를 리스트로.
-    const taglistText = taglist.map(tag => JSON.stringify(tag)).join(',');
+const getUserKeywords = async (userId) => {
+  // Fetch all keys matching the pattern
+  const keys = await redis.keys(`taglist:${userId}:*`);
+  // Extract the englishKeywords from the keys
+  const englishKeyword = keys.map(key => key.split(':')[2]);
+  return englishKeyword;
+};
 
-    // let prompt = `Given ${taglist.length} categories: `; 
-    // prompt += `${taglistText}.`; 
+
+const generatePrompt = async (ocrResult, userId) => {
+  try {
+  // 레디스에서 한번에 가져옴. 
+    const cachedTaglist = await getUserKeywords(userId);
+    console.log('fr: cachedTaglist: ', cachedTaglist);
+
     let exportTagCount = process.env.EXPORT_TAG_COUNT;  // 프롬프트에 2~5 제시
-    /* user_id=1 */
-    // let prompt = `Please brainstorm and select ${exportTagCount} new and unique categories that best describe the uploaded data. \n
-    //               Do this even if you think some categories might already be covered in the existing list (${taglistText}). \n
-    //               However, if the new categories exactly match any in the existing list, those from the list will be used. \n`;
+    let prompt = `Please brainstorm and select ${exportTagCount} new and unique categories that best describe the uploaded data.
+                  Do this even if you think some categories might already be covered in the existing list (${cachedTaglist}).
+                  However, if the new categories exactly match any in the existing list, those from the list will be used.`;
     
-    /* user_id=3 */
-    let prompt = `Given ${taglist.length} categories: `; 
-    prompt += `${taglistText}.`;
-    prompt = `Please select between 2 to 5 categories that best describe the uploaded data. \n
-              Prioritize selecting a category from the given categories, \n
-              But if none of the categories are applicable, please select the between 2 to 5 categories that appear to be most relevant. \n
-              `;
+    // let prompt = `Given ${cachedTaglist.length} categories: `; 
+    // prompt += `[${cachedTaglist}], `;
+    // prompt += `Please select between 2 to 5 categories that best describe the uploaded data.
+    //           Prioritize selecting a category from the given categories,
+    //           But if none of the categories are applicable, please select the between 2 to 5 categories that appear to be most relevant. `;
     prompt += 'Provide them in JSON format.\'{"tags":[]}\'\n';
     prompt += 'Uploaded data:';
     prompt += ocrResult;
 
-    // console.log('prompt: ', prompt);
+    console.log('prompt: ', prompt);
     return prompt;
   } catch (err) {
-    connection?.release();
-    console.log(err);
-    throw new Error('generate FAILED');
+    throw new Error('generate FAILED', err);
   }
 };
 
@@ -167,7 +163,7 @@ const generateUserContent = async (ocrResult, userId) => {
     let behavior = '제공된 데이터를 기반으로 관련된 카테고리나 주제를 제안해주세요.\n';
     let data = '데이터:';
     data += ocrResult +'\n';
-    let note = '유저의 일반적인 관심사를 고려하며, ' 
+    let note = '유저의 일반적인 관심사를 고려하며, '; 
     note += `${taglistText}와 같은 카테골가 있음을 감안하여, `;
     note += '제공된 데이터의 범위를 넘어서도 새롭고 흥미로운 아이디어를 추천할 수 있습니다. 또한, 유저의 일반적인 관심사에 겹치는 부분이 있다면 해당 카테고리를 우선적으로 추천해도 됩니다.';
 
@@ -180,4 +176,41 @@ const generateUserContent = async (ocrResult, userId) => {
     throw new Error('generateUserContent FAILED');
   }
 };
+
+/* 백업 */
+// const generatePrompt = async (ocrResult, userId) => {
+//   let connection = null;
+//   try {
+//     connection = await db.getConnection();
+//     const [rows] = await connection.query(`SELECT englishKeyword FROM taglist WHERE user_id = ${userId}`);
+//     connection.release();
+//     const taglist = rows.map(row => row.englishKeyword);   // taglist 테이블의 englishKeywords를 리스트로.
+//     const taglistText = taglist.map(tag => JSON.stringify(tag)).join(',');
+
+
+//     // let exportTagCount = process.env.EXPORT_TAG_COUNT;  // 프롬프트에 2~5 제시
+//     // let prompt = `Please brainstorm and select ${exportTagCount} new and unique categories that best describe the uploaded data. \n
+//     //               Do this even if you think some categories might already be covered in the existing list (${taglistText}). \n
+//     //               However, if the new categories exactly match any in the existing list, those from the list will be used. \n`;
+    
+//     let prompt = `Given ${taglist.length} categories: `; 
+//     prompt += `${taglistText}.`;
+//     prompt = `Please select between 2 to 5 categories that best describe the uploaded data. \n
+//               Prioritize selecting a category from the given categories, \n
+//               But if none of the categories are applicable, please select the between 2 to 5 categories that appear to be most relevant. \n
+//               `;
+//     prompt += 'Provide them in JSON format.\'{"tags":[]}\'\n';
+//     prompt += 'Uploaded data:';
+//     prompt += ocrResult;
+
+//     // console.log('prompt: ', prompt);
+//     return prompt;
+//   } catch (err) {
+//     connection?.release();
+//     console.log(err);
+//     throw new Error('generate FAILED');
+//   }
+// };
+
+
 

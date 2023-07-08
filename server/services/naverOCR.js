@@ -2,7 +2,7 @@ import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import { logger } from '../winston/logger.js';
 
-export const processOCR = async(imgUrl) => {
+export const ocrLogic = async(imgUrl) => {
 
   const config = {
     headers: {
@@ -42,9 +42,9 @@ export const processOCR = async(imgUrl) => {
       sumText += ' ' + element.inferText; 
     });
   
-    // console.log("-------------------");
+    // console.log('-------------------');
     // console.log(sumText);
-    // console.log("-------------------");
+    // console.log('-------------------');
   
     return sumText;
   
