@@ -24,9 +24,8 @@
 - 팔로우 및 공유/알람
 - 다른 유저 그래프 조회
 - 카드 복제, 내 그래프로 가져오기
-<br/>
+
 ![insightLINK_README](https://github.com/suji6707/insightLINK/assets/111227732/1009b031-ecc5-405f-932d-6d05e499acf7)
-<br/>
 
 # Project Architecture
 사진 업로드 >> OCR >> 태그 추출 >> 그래프 연산 
