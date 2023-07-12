@@ -1,4 +1,4 @@
-### InsightLINK
+# InsightLINK
 갤러리속 스크린샷에서 인사이트를 발견하세요!
 ![image](https://github.com/suji6707/insightLINK/assets/111227732/78e62b54-13e5-4b71-ae24-ccf33513c218)
 스마트폰에 방치된 수십, 수백개의 스크린샷을 올려보세요. 
