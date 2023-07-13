@@ -100,5 +100,3 @@ cd client
 npm run dev
 ```
 
-
-[<img src="https://github.com/{{ suji6707 }}.png" width="60px;"/><br /><sub><ahref="https://github.com/{{ suji6707 }}">{{ suji6707 }}</a></sub>](https://github.com/{{ suji6707 }}/{{ insightLINK }}
