@@ -13,13 +13,13 @@
 ### 소셜 페이지에서는 친구들의 카드를 구경하고, 다른 사람 그래프를 조회하며 
 ### 마음에 드는 카드를 내 그래프로 가져와 인사이트를 확장하세요.
 
-<br/>
+<br/><br/>
 
 # Table of contents
-- Major Functions
-- Project Architecture
-- Technologies used
-- Getting started
+### - Major Functions
+### - Project Architecture
+### - Technologies used
+### - Getting started
 
 <br/>
 
@@ -37,7 +37,7 @@
 <br/>
 
 # Project Architecture
-사진 업로드 >> OCR >> 태그 추출 >> 그래프 연산 
+### 사진 업로드 >> OCR >> 태그 추출 >> 그래프 연산 
 <br/>
 ![image](https://github.com/suji6707/insightLINK/assets/111227732/912defb4-8d7b-4611-a24a-a5a1e2d4a8e5)
 
