@@ -4,7 +4,8 @@
 ### 갤러리속 스크린샷에서 인사이트를 발견하세요!
 <br/><br/>
 
-![image](https://github.com/suji6707/insightLINK/assets/111227732/78e62b54-13e5-4b71-ae24-ccf33513c218)
+![insightLINK_README](https://github.com/suji6707/insightLINK/assets/111227732/1009b031-ecc5-405f-932d-6d05e499acf7)
+
 <br/>
 
 ### 스마트폰에 방치된 수십, 수백개의 스크린샷을 올려보세요.<br/>
@@ -33,7 +34,7 @@
 
 <br/>
 
-![insightLINK_README](https://github.com/suji6707/insightLINK/assets/111227732/1009b031-ecc5-405f-932d-6d05e499acf7)
+![image](https://github.com/suji6707/insightLINK/assets/111227732/78e62b54-13e5-4b71-ae24-ccf33513c218)
 
 
 <br/>
